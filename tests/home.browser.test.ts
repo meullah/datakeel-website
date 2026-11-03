@@ -221,3 +221,197 @@ test('hero story: scrolled off-screen, the clock stops; back on screen, the same
     await context.close();
   }
 });
+
+// Story 2.3 matrix: logo collapse on scroll (desktop and 360px), pause survives, load mid-page, reduced-motion fade.
+for (const { width, height } of [
+  { width: 1280, height: 800 },
+  { width: 360, height: 640 },
+]) {
+  test(`hero story at ${width}x${height}: scrolling docks into the header logo and back`, async () => {
+    const context = await browser.newContext({ viewport: { width, height } });
+    try {
+      const page = await context.newPage();
+      await page.addInitScript(() => {
+        (window as any).__dock = [];
+        document.addEventListener('dk:hero-story:dock', (e) => (window as any).__dock.push((e as CustomEvent).detail.progress));
+      });
+      await page.goto(home(), { waitUntil: 'load' });
+      const pause = page.locator('[data-hero-story-pause]');
+      await pause.waitFor({ state: 'visible' });
+      const opacity = () => page.evaluate(() => getComputedStyle(document.querySelector('[data-dock-target]')!).opacity);
+      const frames = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      assert.equal(await opacity(), '1');
+
+      // Most of the way: canvas raised above the header, mark dimmed, particles landing on it.
+      await page.evaluate((y) => scrollTo(0, y), Math.round(height * 0.55 * 0.75));
+      await page.evaluate(frames);
+      assert.equal(await page.locator('[data-hero-story-canvas].is-docking').count(), 1);
+      assert.ok(Number(await opacity()) < 0.5, 'header mark dimmed mid-dock');
+      const nearMark = await page.evaluate(() => {
+        const c = document.querySelector<HTMLCanvasElement>('[data-hero-story-canvas]')!;
+        const r = document.querySelector('[data-dock-target]')!.getBoundingClientRect();
+        const k = c.width / c.clientWidth;
+        const d = c.getContext('2d')!.getImageData(Math.floor(r.left * k), Math.floor(r.top * k), Math.ceil(r.width * k), Math.ceil(r.height * k)).data;
+        let n = 0;
+        for (let i = 3; i < d.length; i += 4) if (d[i]) n++;
+        return n;
+      });
+      assert.ok(nearMark > 20, `particles landing on the mark (${nearMark})`);
+      // Stacking: nothing on the hero isolates the canvas, and it rises above the header (z 50) while docking.
+      const stack = await page.evaluate(() => ({
+        isolation: getComputedStyle(document.querySelector('.hero')!).isolation,
+        canvas: getComputedStyle(document.querySelector('[data-hero-story-canvas]')!).zIndex,
+        header: getComputedStyle(document.querySelector('[data-header]')!).zIndex,
+      }));
+      assert.equal(stack.isolation, 'auto');
+      assert.ok(Number(stack.canvas) > Number(stack.header), `canvas z ${stack.canvas} above header z ${stack.header}`);
+
+      // Fully docked: cleared, logo back, loop stopped (no more events while scrolling further down).
+      await page.evaluate((y) => scrollTo(0, y), Math.ceil(height * 0.55) + 5);
+      await page.evaluate(frames);
+      assert.equal((await page.evaluate(painted)).n, 0, 'canvas cleared');
+      assert.equal(await opacity(), '1');
+      const events = await page.evaluate(() => (window as any).__dock.length);
+      await page.evaluate(() => scrollBy(0, 20));
+      await page.evaluate(frames);
+      assert.equal(await page.evaluate(() => (window as any).__dock.length), events, 'stopped once docked');
+      assert.equal(await page.evaluate(() => (window as any).__dock.at(-1)), 1);
+      assert.equal(await page.locator('[data-hero-story-canvas].is-docking').count(), 0, 'cleared canvas drops back below the header');
+
+      // Back to the top while paused: un-docks, stays paused.
+      await page.evaluate(() => scrollTo(0, 0));
+      await page.evaluate(frames);
+      await pause.click();
+      // Paused, the dock still follows the scroll.
+      await page.evaluate((y) => scrollTo(0, y), Math.round(height * 0.55 * 0.75));
+      await page.evaluate(frames);
+      assert.equal(await page.locator('[data-hero-story-canvas].is-docking').count(), 1, 'paused story docks');
+      assert.ok((await page.evaluate(() => (window as any).__dock.at(-1))) > 0);
+      assert.ok(Number(await opacity()) < 0.5, 'mark dimmed while a paused story docks');
+      await page.evaluate(() => scrollTo(0, 0));
+      await page.evaluate(frames);
+      assert.equal(await page.evaluate(() => (window as any).__dock.at(-1)), 0);
+      assert.equal(await pause.getAttribute('data-paused'), '', 'still paused');
+      const held = await page.evaluate(painted);
+      assert.ok(held.n > 500, 'story drawn again at the top');
+      await page.waitForTimeout(300);
+      assert.deepEqual(await page.evaluate(painted), held, 'paused frame holds after docking');
+      assert.equal(await opacity(), '1');
+      assert.equal(await page.locator('[data-hero-story-canvas].is-docking').count(), 0);
+    } finally {
+      await context.close();
+    }
+  });
+}
+
+test('hero story: loading mid-page starts docked, no particles, logo visible', async () => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  try {
+    // Page already long and scrolled before any script runs, as a restored scroll position would be.
+    await context.addInitScript(() =>
+      document.addEventListener('DOMContentLoaded', () => {
+        document.body.style.minHeight = '400vh'; // Epic 5 sections will make the page this long
+        scrollTo(0, 1200);
+      }),
+    );
+    const page = await context.newPage();
+    await page.goto(home(), { waitUntil: 'load' });
+    assert.ok((await page.evaluate(() => scrollY)) >= 1200, 'scrolled before the island boots');
+    await page.locator('[data-hero-story-indicator]').waitFor({ state: 'visible' });
+    await page.waitForTimeout(100);
+    assert.equal((await page.evaluate(painted)).n, 0);
+    assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('[data-dock-target]')!).opacity), '1');
+  } finally {
+    await context.close();
+  }
+});
+
+test('hero story: reduced motion fades the still scene on scroll, header logo untouched', async () => {
+  const context = await browser.newContext({ viewport: { width: 360, height: 640 }, reducedMotion: 'reduce' });
+  try {
+    const page = await context.newPage();
+    await page.goto(home(), { waitUntil: 'load' });
+    await page.locator('[data-hero-story-indicator]').waitFor({ state: 'visible' });
+    await page.evaluate(() => scrollTo(0, Math.round(innerHeight * 0.55 * 0.5)));
+    await page.waitForTimeout(100);
+    const m = await page.evaluate(() => ({
+      canvas: Number(getComputedStyle(document.querySelector('[data-hero-story-canvas]')!).opacity),
+      logo: getComputedStyle(document.querySelector('[data-dock-target]')!).opacity,
+      dock: document.documentElement.hasAttribute('data-hero-dock'),
+    }));
+    assert.ok(Math.abs(m.canvas - 0.5) < 0.05, `canvas half faded (${m.canvas})`);
+    assert.equal(m.logo, '1');
+    assert.equal(m.dock, false);
+  } finally {
+    await context.close();
+  }
+});
+
+test('hero story: resize and theme switch mid-dock still land on the mark; unpaused story resumes at the top', async () => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  try {
+    const page = await context.newPage();
+    await page.goto(home(), { waitUntil: 'load' });
+    await page.locator('[data-hero-story-pause]').waitFor({ state: 'visible' });
+    const frames = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    const onMark = () =>
+      page.evaluate(() => {
+        const c = document.querySelector<HTMLCanvasElement>('[data-hero-story-canvas]')!;
+        const r = document.querySelector('[data-dock-target]')!.getBoundingClientRect();
+        const k = c.width / c.clientWidth;
+        const d = c.getContext('2d')!.getImageData(Math.floor(r.left * k), Math.floor(r.top * k), Math.ceil(r.width * k), Math.ceil(r.height * k)).data;
+        let n = 0;
+        for (let i = 3; i < d.length; i += 4) if (d[i]) n++;
+        return n;
+      });
+    const midDock = async () => {
+      await page.evaluate(() => scrollTo(0, Math.round(innerHeight * 0.55 * 0.75)));
+      await page.evaluate(frames);
+    };
+
+    await midDock();
+    await page.setViewportSize({ width: 360, height: 640 }); // header logo moves and shrinks
+    await midDock();
+    assert.ok((await onMark()) > 20, 'lands on the mark after resize');
+
+    await page.evaluate(() => (document.querySelector('[data-theme-toggle]:not([hidden])') as HTMLElement).click());
+    await midDock();
+    assert.ok((await onMark()) > 20, 'lands on the mark after a theme switch');
+
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.evaluate(frames);
+    const a = await page.evaluate(painted);
+    await page.waitForTimeout(300);
+    assert.notDeepEqual(await page.evaluate(painted), a, 'story loops again at the top');
+  } finally {
+    await context.close();
+  }
+});
+
+test('hero story: a failure mid-dock hands the header logo back', async () => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  try {
+    const page = await context.newPage();
+    await page.goto(home(), { waitUntil: 'load' });
+    await page.locator('[data-hero-story-pause]').waitFor({ state: 'visible' });
+    await page.evaluate(() => scrollTo(0, Math.round(innerHeight * 0.55 * 0.6)));
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    assert.ok(await page.evaluate(() => document.documentElement.hasAttribute('data-hero-dock')), 'docking');
+    await page.evaluate(() => {
+      CanvasRenderingContext2D.prototype.fillRect = () => {
+        throw new Error('boom');
+      };
+      scrollBy(0, 10);
+    });
+    await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
+    const m = await page.evaluate(() => ({
+      hook: document.documentElement.hasAttribute('data-hero-dock'),
+      logo: getComputedStyle(document.querySelector('[data-dock-target]')!).opacity,
+      canvas: document.querySelector('[data-hero-story-canvas]')!.matches('.is-docking, [data-docking]'),
+      pause: document.querySelector<HTMLElement>('[data-hero-story-pause]')!.hidden,
+    }));
+    assert.deepEqual(m, { hook: false, logo: '1', canvas: false, pause: true });
+  } finally {
+    await context.close();
+  }
+});

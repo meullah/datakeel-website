@@ -34,6 +34,19 @@ import { SCENE_LABELS } from '../lib/pure/story-scenes.ts';
     width: 100%;
     height: 100%;
   }
+  /* Logo collapse (set by the island unless reduced motion): pinned to the viewport at the hero's size, so the
+     scene draws where it always does and can fly into the header logo. Above the header (50) only while docking. */
+  .hero-canvas[data-docking] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: auto;
+    height: max(620px, 100vh);
+    height: max(620px, 100svh);
+  }
+  .hero-canvas.is-docking {
+    z-index: 60;
+  }
   /* Indicator and pause share one 36px row at the bottom, above the shade. */
   .hero-indicator,
   .hero-pause {

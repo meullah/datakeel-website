@@ -1,5 +1,6 @@
 // header-scroll island: owns the header's solid/transparent state, and the Hero Story dock hook (Epic 2).
 import { HERO_STORY_DOCK } from '../lib/pure/events.ts';
+import { logoOpacity } from '../lib/pure/dock.ts';
 import { dockProgress, SOLID_AFTER } from '../lib/pure/nav.ts';
 
 const header = document.querySelector<HTMLElement>('[data-header]');
@@ -23,7 +24,8 @@ if (header?.hasAttribute('data-transparent')) {
   update();
 }
 
-// Inert until Epic 2's Hero Story dispatches the event.
+// Hero Story logo collapse: the logo dims while the particles fly in and fades back in as they land.
+// Only ever changes in response to the event, so without a running story the logo stays fully visible.
 document.addEventListener(HERO_STORY_DOCK, (e) => {
   if (!header) return;
   const progress = dockProgress((e as CustomEvent).detail);
@@ -34,5 +36,5 @@ document.addEventListener(HERO_STORY_DOCK, (e) => {
     return;
   }
   document.documentElement.dataset.heroDock = '';
-  header.style.setProperty('--hero-dock', String(progress));
+  header.style.setProperty('--hero-dock', String(logoOpacity(progress)));
 });

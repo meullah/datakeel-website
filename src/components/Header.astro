@@ -120,8 +120,9 @@ const industriesCurrent = industryLinks.some((l) => l.current) ? 'true' : undefi
     --logo-width: clamp(110px, 8.59375vw + 22px, 132px);
     margin-inline-end: clamp(var(--space-3), 4.6875vw - 36px, var(--space-5));
   }
-  /* Hero Story (Epic 2) fades the header logo by dock progress. */
-  :global(html[data-hero-dock]) .header-logo {
+  /* Hero Story logo collapse: header-scroll sets --hero-dock to the mark's opacity for the dock progress.
+     Only the mark fades (the particles replace it); the wordmark stays put. */
+  :global(html[data-hero-dock]) .header-logo :global([data-dock-target]) {
     opacity: var(--hero-dock, 1);
   }
 

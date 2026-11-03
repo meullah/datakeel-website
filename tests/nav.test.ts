@@ -262,12 +262,14 @@ test('header-scroll island: solid after 8px only on a transparent header', async
   assert.equal(solid.win.listeners.scroll, undefined, 'no scroll listener without data-transparent');
 });
 
-test('header-scroll island: dock hook sets and clears html[data-hero-dock] and --hero-dock', async () => {
+test('header-scroll island: dock hook sets and clears html[data-hero-dock] and --hero-dock (logo opacity)', async () => {
   const h = await loadHeaderScroll(false, 'dock');
   const dataset = h.doc.documentElement.dataset;
   h.dock({ progress: 0.6 });
   assert.ok('heroDock' in dataset);
-  assert.equal(h.style['--hero-dock'], '0.6');
+  assert.equal(h.style['--hero-dock'], '0', 'logo hidden while the particles land (logoOpacity)');
+  h.dock({ progress: 1 });
+  assert.equal(h.style['--hero-dock'], '1', 'docked: the real logo has taken over');
   h.dock({ progress: 'x' });
   assert.ok(!('heroDock' in dataset), 'invalid detail clears the hook');
   assert.equal(h.style['--hero-dock'], undefined);

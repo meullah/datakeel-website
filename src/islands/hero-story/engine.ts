@@ -1,6 +1,7 @@
 // Hero Story canvas engine, ported from prototypes/landing-story/story-engine.js (autoplay mode only).
 // The clock only advances while playing, visible and the tab is shown, so the story never jumps ahead.
-import { clamp, createStory, easeInOut, logoT, POINTS, position, smooth, timeline, TONE_NAMES, type Slot, type ToneName } from '../../lib/pure/story-scenes.ts';
+import { particleAlpha } from '../../lib/pure/dock.ts';
+import { clamp, createStory, easeInOut, logoT, POINTS, position, timeline, TONE_NAMES, type Slot, type ToneName } from '../../lib/pure/story-scenes.ts';
 
 type RGB = number[];
 export interface Layout {
@@ -8,9 +9,9 @@ export interface Layout {
   cy: number;
   size: number;
 }
-/** Kept for Story 2.3 (logo collapse): scrolling `distance()` px shrinks the cloud into `target()`. */
+/** Logo collapse (2.3): `progress()` 0..1 from the scroll position swarms the cloud into `target()` (viewport px). */
 export interface Dock {
-  distance(): number;
+  progress(): number;
   target(): { cx: number; cy: number; half: number };
 }
 export interface EngineOptions {
@@ -21,9 +22,10 @@ export interface EngineOptions {
   autoplay?: number; // seconds per scene
   reduced?: boolean; // hold the logo scene, never animate
   dock?: Dock | null;
+  onDock?(progress: number): void; // called only when the progress changes
 }
 
-export function createEngine({ canvas, layout, onStep, onFail, autoplay = 4, reduced = false, dock = null }: EngineOptions) {
+export function createEngine({ canvas, layout, onStep, onFail, onDock, autoplay = 4, reduced = false, dock = null }: EngineOptions) {
   const context = canvas.getContext('2d');
   if (!context) throw new Error('hero-story: no 2d context');
   const { scenes, dockLogo, stagger } = createStory();
@@ -65,7 +67,15 @@ export function createEngine({ canvas, layout, onStep, onFail, autoplay = 4, red
     raf = 0,
     paused = false,
     visible = true,
-    dead = false;
+    dead = false,
+    reported = -1; // last progress sent to onDock
+
+  // Tells the page (header logo) the dock progress, only when it changed: at most once per frame.
+  function report(p: number) {
+    if (p === reported) return;
+    reported = p;
+    onDock?.(p);
+  }
 
   function draw() {
     const ctx = context!;
@@ -75,18 +85,15 @@ export function createEngine({ canvas, layout, onStep, onFail, autoplay = 4, red
       current = nearest;
       onStep?.(nearest);
     }
-    let docked = 0,
-      target = null;
-    if (dock) {
-      docked = clamp(scrollY / dock.distance(), 0, 1);
-      canvas.classList.toggle('is-docking', docked > 0);
-      if (docked > 0) target = dock.target();
-    }
+    const docked = dock ? dock.progress() : 0;
+    // Raised above the header while docking, so the particles stay visible where they land.
+    canvas.classList.toggle('is-docking', docked > 0);
+    const target = docked > 0 ? dock!.target() : null;
     const { cx, cy, size } = layout(width, height);
     const half = size / 2;
     ctx.clearRect(0, 0, width, height);
     // Fade out over the last stretch of docking so the real logo takes over.
-    ctx.globalAlpha = docked > 0.82 ? 1 - smooth((docked - 0.82) / 0.18) : 1;
+    ctx.globalAlpha = particleAlpha(docked);
     const a = scenes[from],
       b = scenes[to],
       colorA = colors[from],
@@ -120,6 +127,7 @@ export function createEngine({ canvas, layout, onStep, onFail, autoplay = 4, red
       ctx.fillStyle = `rgb(${r | 0},${gr | 0},${bl | 0})`;
       ctx.fillRect(sx - dot / 2, sy - dot / 2, dot, dot);
     }
+    if (dock) report(docked); // after a good frame only, so a failed one never dims the header logo
   }
 
   // Any runtime error: stop and leave the canvas empty (the server HTML is untouched).
@@ -128,6 +136,8 @@ export function createEngine({ canvas, layout, onStep, onFail, autoplay = 4, red
     if (raf) cancelAnimationFrame(raf);
     raf = 0;
     context!.clearRect(0, 0, width, height);
+    canvas.classList.remove('is-docking');
+    if (reported > 0) onDock?.(0); // hand the header logo back
     onFail?.();
   }
   function paint() {
@@ -139,14 +149,15 @@ export function createEngine({ canvas, layout, onStep, onFail, autoplay = 4, red
     }
   }
 
-  // Docking keeps running while paused so a paused story still collapses on scroll (2.3).
-  const wanted = () => !dead && !reduced && visible && !document.hidden && (!paused || !!dock);
+  const wanted = () => !dead && !reduced && visible && !document.hidden && !paused;
   function frame(now: number) {
     raf = 0;
     // ponytail: delta capped at 100ms, so a stall or a hidden tab never jumps the story ahead.
     if (!paused && !document.hidden) clock += clamp(now - last, 0, 100);
     last = now;
-    if (dock && scrollY >= dock.distance()) {
+    if (dock && dock.progress() >= 1) {
+      report(1);
+      canvas.classList.remove('is-docking'); // cleared canvas no longer needs to sit above the header
       // Fully collapsed into the logo: clear and stop until the visitor scrolls back up.
       context!.clearRect(0, 0, width, height);
       return;
@@ -172,9 +183,21 @@ export function createEngine({ canvas, layout, onStep, onFail, autoplay = 4, red
   addEventListener('resize', () => {
     resize();
     refresh();
+    start(); // a resize can un-dock (taller viewport) without a scroll
   });
   document.addEventListener('visibilitychange', start);
-  if (dock) addEventListener('scroll', start, { passive: true });
+  // Scroll drives the dock even while paused: one frame per scroll event (the clock stays still), and nothing
+  // once fully docked until the visitor scrolls back up.
+  if (dock)
+    addEventListener(
+      'scroll',
+      () => {
+        if (raf || dead || (reported === 1 && dock.progress() >= 1)) return;
+        last = performance.now();
+        raf = requestAnimationFrame(frame);
+      },
+      { passive: true },
+    );
 
   return {
     count,

@@ -28,8 +28,8 @@ import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
     display: flex;
     min-height: max(620px, 100vh);
     min-height: max(620px, 100svh);
+    /* No isolation/z-index here: the docking canvas must stack above the sticky header. */
     overflow: hidden;
-    isolation: isolate;
   }
   .hero-glow,
   .hero-shade {
