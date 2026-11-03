@@ -1,0 +1,110 @@
+---
+// Homepage hero (prototype E). Copy is server-rendered; Story 2.2 mounts the Hero Story into [data-hero-visual].
+import { cta } from '../lib/config.ts';
+import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-glow" aria-hidden="true"></div>
+  {/* Decorative only. 2.2's pause button must sit outside this aria-hidden, pointer-events:none box. */}
+  <div class="hero-visual" data-hero-visual aria-hidden="true"></div>
+  <div class="hero-shade" aria-hidden="true"></div>
+  <div class="hero-copy">
+    <p class="eyebrow">Data engineering for AI</p>
+    <h1 id="hero-title" class="display-hero">The data <span class="gradient-text">backbone</span> your AI runs on.</h1>
+    <p class="lead">We design, build and run modern data platforms: pipelines, lakehouses and governance, so your reports agree and your AI works on data you can trust.</p>
+    <p class="hero-ctas">
+      <a class="btn btn-primary" href={readinessReviewUrl()}>{cta.primary}</a>
+      <a class="btn btn-ghost" href={contactUrl()}>{cta.secondary}</a>
+    </p>
+  </div>
+</section>
+
+<style>
+  .hero {
+    /* Left edge of .container (founder decision 2026-11-03: hero copy lines up with the header logo). */
+    --hero-pad-x: max(var(--gutter), (100% - var(--content-max)) / 2);
+    position: relative;
+    display: flex;
+    min-height: max(620px, 100vh);
+    min-height: max(620px, 100svh);
+    overflow: hidden;
+    isolation: isolate;
+  }
+  .hero-glow,
+  .hero-visual,
+  .hero-shade {
+    position: absolute;
+    pointer-events: none;
+  }
+  .hero-glow {
+    width: 64vmin;
+    height: 64vmin;
+    right: 8vw;
+    top: 50%;
+    transform: translateY(-50%);
+    background: radial-gradient(closest-side, color-mix(in srgb, var(--color-brand-hot) 14%, transparent), transparent);
+  }
+  /* Reserved box for the Hero Story (2.2); absolute, so mounting into it never shifts the copy. */
+  .hero-visual {
+    inset: 0 0 0 40%;
+  }
+  .hero-shade {
+    inset: 0;
+    background: linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-background) 95%, transparent) 0%,
+      color-mix(in srgb, var(--color-background) 75%, transparent) max(34%, calc(var(--hero-pad-x) + 400px)),
+      /* px floor: the 700px copy column stays shaded on tablets and small laptops */
+      transparent max(58%, calc(var(--hero-pad-x) + 760px))
+    );
+  }
+  .hero-copy {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: calc(var(--hero-pad-x) + 700px);
+    /* Header is pulled over the hero (transparent header); clear it plus breathing room. */
+    padding: calc(var(--header-height) + var(--space-5)) var(--gutter) var(--space-8) var(--hero-pad-x);
+  }
+  .hero-copy h1 {
+    text-wrap: balance;
+  }
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+
+  @media (max-width: 767px) {
+    .hero-glow {
+      right: 50%;
+      top: 26%;
+      transform: translate(50%, -50%);
+    }
+    /* Visual above, copy at the bottom. */
+    .hero-visual {
+      inset: var(--header-height) 0 50% 0;
+    }
+    .hero-shade {
+      background: linear-gradient(
+        0deg,
+        color-mix(in srgb, var(--color-background) 97%, transparent) 0%,
+        color-mix(in srgb, var(--color-background) 80%, transparent) 50%,
+        color-mix(in srgb, var(--color-background) 10%, transparent) 72%
+      );
+    }
+    .hero-copy {
+      justify-content: flex-end;
+      /* Bottom room for 2.2's scene indicator and pause button. */
+      padding-bottom: calc(var(--space-8) + var(--space-3));
+    }
+    .hero-copy .lead {
+      margin-top: var(--space-4);
+    }
+    .hero-ctas {
+      margin-top: var(--space-5);
+    }
+  }
+</style>
