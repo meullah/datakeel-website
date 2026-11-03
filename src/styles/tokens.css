@@ -106,7 +106,7 @@
   --gutter-mobile: 16px;
   --gutter: clamp(16px, 4vw, 40px);
   --section-y: clamp(64px, 9vw, 120px);
-  --content-max: 1160px;
+  --content-max: 1280px; /* founder decision 2026-11-03: was 1160px, side margins felt too wide */
   --reading-max: 720px;
 
   /* Radius */

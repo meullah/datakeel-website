@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { createStory, POINTS, position, SCENE_LABELS, SCENE_NAMES, timeline } from '../src/lib/pure/story-scenes.ts';
+import { createStory, POINTS, position, SCENE_EXTENT, SCENE_LABELS, SCENE_NAMES, timeline } from '../src/lib/pure/story-scenes.ts';
 
 test('story: 9 scenes in order, labels to match', () => {
   assert.deepEqual(SCENE_NAMES, ['computer', 'data', 'intelligence', 'datakeel', 'pipelines', 'lakehouse', 'governance', 'aiReady', 'logo']);
@@ -16,8 +16,14 @@ test('story: deterministic for seed 7, finite and inside the scene box', () => {
   const a = coords();
   assert.deepEqual(a, coords());
   assert.notDeepEqual(a, createStory(8).scenes.flatMap((s) => s.flatMap((slot) => [...position(slot, 0), ...position(slot, 3.7)])));
-  // Unit space is roughly -1..1; the governance rain and the waves reach out to 1.65 (prototype geometry).
-  for (const v of a) assert.ok(Number.isFinite(v) && Math.abs(v) <= 1.7, `coordinate ${v}`);
+  for (const v of a) assert.ok(Number.isFinite(v), `coordinate ${v}`);
+  // Layout keeps a ±SCENE_EXTENT box inside the content edges, so no scene may draw past it horizontally.
+  for (const [i, scene] of createStory().scenes.entries())
+    for (const slot of scene)
+      for (const t of [0, 1.3, 2.9, 4.4]) {
+        const x = position(slot, t)[0];
+        assert.ok(Math.abs(x) <= SCENE_EXTENT + 1e-9, `${SCENE_NAMES[i]} x=${x}`);
+      }
 });
 
 test('timeline: 4s per scene, morph in the last 40%, loops', () => {

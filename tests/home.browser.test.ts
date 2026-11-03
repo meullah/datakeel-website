@@ -415,3 +415,25 @@ test('hero story: a failure mid-dock hands the header logo back', async () => {
     await context.close();
   }
 });
+
+for (const width of [1280, 1440, 1920]) {
+  test(`hero story at ${width}px: particles stay inside the content edges`, async () => {
+    const context = await browser.newContext({ viewport: { width, height: 900 } });
+    try {
+      const page = await context.newPage();
+      await page.goto(home(), { waitUntil: 'load' });
+      await page.locator('[data-hero-story-pause]').waitFor({ state: 'visible' });
+      const m = await page.evaluate(() => {
+        const c = document.querySelector<HTMLCanvasElement>('[data-hero-story-canvas]')!;
+        const k = c.width / c.clientWidth;
+        const d = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data;
+        let maxX = 0;
+        for (let i = 3; i < d.length; i += 4) if (d[i]) maxX = Math.max(maxX, ((i - 3) / 4) % c.width);
+        return { maxX: maxX / k, contentRight: document.querySelector('.header-cta')!.getBoundingClientRect().right };
+      });
+      assert.ok(m.maxX <= m.contentRight + 2, `particles reach x=${m.maxX}, content edge ${m.contentRight}`);
+    } finally {
+      await context.close();
+    }
+  });
+}

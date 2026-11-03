@@ -3,6 +3,8 @@
 // ponytail: the prototype's unused wheel/keel/engine scenes and scroll-driven mode are not ported.
 
 export const POINTS = 2000;
+/** Every scene stays inside ±SCENE_EXTENT of its size, so layout can keep it within the content edges. */
+export const SCENE_EXTENT = 1.15;
 export const SEED = 7;
 export const SCENE_NAMES = ['computer', 'data', 'intelligence', 'datakeel', 'pipelines', 'lakehouse', 'governance', 'aiReady', 'logo'] as const;
 export const SCENE_LABELS = ['Computation', 'Data', 'AI', 'The keel', 'Pipelines', 'Lakehouse', 'Governance', 'AI-ready', 'DataKeel'];
@@ -190,8 +192,8 @@ function shipPaths({ dx = 0, dy = 0, s = 1, keelWeight = 2.6, sea = 'calm' } = {
     paths.push(P([[-0.08 + v * 0.02, y], [0.13 - v * 0.1, y]], { tone: 'hot', weight: keelWeight * 0.25 }));
   }
   const rough = sea === 'storm';
-  paths.push(P(wavePts(0.05, rough ? 0.045 : 0.018, rough ? 7 : 5, -1.4, 1.4), { tone: 'dim', speed: rough ? 0.09 : 0.03, weight: rough ? 1.6 : 1 }));
-  if (rough) paths.push(P(wavePts(0.16, 0.05, 5.5, -1.4, 1.4), { tone: 'dim', speed: -0.07, weight: 1 }));
+  paths.push(P(wavePts(0.05, rough ? 0.045 : 0.018, rough ? 7 : 5, -1.15 / s, 1.15 / s), { tone: 'dim', speed: rough ? 0.09 : 0.03, weight: rough ? 1.6 : 1 }));
+  if (rough) paths.push(P(wavePts(0.16, 0.05, 5.5, -1.15 / s, 1.15 / s), { tone: 'dim', speed: -0.07, weight: 1 }));
   return paths;
 }
 
@@ -284,7 +286,7 @@ function lakehouse(random: () => number) {
 function governance() {
   const paths = shipPaths({ s: 0.78, dy: 0.26, sea: 'storm' });
   for (let i = 0; i < 16; i++) {
-    const x = -1.35 + i * 0.18;
+    const x = -0.85 + (i * 2) / 15; // slanted rain kept inside ±1.15 (SCENE_EXTENT)
     paths.push(path([[x, -1.2], [x - 0.3, 1.05]], { tone: 'dim', speed: 0.8, weight: 0.1 }));
   }
   // A protective shield with a check mark, above the ship.
