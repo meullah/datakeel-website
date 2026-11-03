@@ -1,0 +1,86 @@
+---
+// Case study "Project summary": a sticky side panel from 1024px, a summary block under the title below that (layout is the page's).
+import type { CollectionEntry } from 'astro:content';
+import { cta } from '../lib/config.ts';
+import { readinessReviewUrl } from '../lib/urls.ts';
+
+export type Props = {
+  entry: CollectionEntry<'caseStudies'>;
+  /** Display name of the case's industry. */
+  industry: string;
+  class?: string;
+};
+
+const { entry, industry, class: className } = Astro.props;
+const { data } = entry;
+const stats = data.stats ?? [];
+---
+<aside class:list={['case-summary', className]} aria-label="Project summary">
+  {data.framingLabel && <p class="pill">{data.framingLabel}</p>}
+  <dl>
+    <dt>Industry</dt>
+    <dd>{industry}</dd>
+    <dt>Service</dt>
+    <dd>{data.serviceLabel}</dd>
+    <dt>Stack</dt>
+    <dd>
+      <ul class="chip-list">
+        {data.stack.map((tool) => <li class="chip">{tool}</li>)}
+      </ul>
+    </dd>
+    {stats.length > 0 && (
+      <>
+        <dt>Key outcomes</dt>
+        <dd>
+          <ul class="case-summary-stats">
+            {stats.map((s) => <li><span class="case-summary-stat tabular">{s.display}</span> <span class="small muted">{s.label}</span></li>)}
+          </ul>
+        </dd>
+      </>
+    )}
+  </dl>
+  <a class="btn btn-primary case-summary-cta" href={readinessReviewUrl()}>{cta.primary}</a>
+</aside>
+
+<style>
+  .case-summary {
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+  }
+  .pill {
+    margin-bottom: var(--space-5);
+  }
+  dt {
+    margin-bottom: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    line-height: var(--type-label-line);
+  }
+  dd {
+    margin-bottom: var(--space-5);
+  }
+  .case-summary-stats {
+    display: grid;
+    gap: var(--space-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .case-summary-stats li {
+    display: grid;
+    gap: var(--space-1);
+  }
+  .case-summary-stat {
+    color: var(--color-accent-text);
+    font-size: var(--type-stat-size);
+    font-weight: var(--type-stat-weight);
+    line-height: var(--type-stat-line);
+    letter-spacing: var(--type-stat-tracking);
+  }
+  .case-summary-cta {
+    width: 100%;
+  }
+</style>

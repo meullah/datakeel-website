@@ -1,35 +1,200 @@
 ---
-// Minimal detail page; Story 3.3 adds the full story, side panel and related cases.
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseCard from '../../components/CaseCard.astro';
+import CaseSummary from '../../components/CaseSummary.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { getPublished } from '../../lib/content.ts';
-import { caseStudiesUrl, caseStudyUrl, homeUrl } from '../../lib/urls.ts';
+import { getIndustries, getPublished } from '../../lib/content.ts';
+import { inlineMd } from '../../lib/pure/inline-md.ts';
+import { pickRelated } from '../../lib/pure/related.ts';
+import { defaultOgImage } from '../../lib/config.ts';
+import { ORGANIZATION_ID, webPageId } from '../../lib/seo.ts';
+import { absoluteUrl, caseStudiesUrl, caseStudyUrl, homeUrl } from '../../lib/urls.ts';
 
 export async function getStaticPaths() {
-  return (await getPublished('caseStudies')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+  const all = await getPublished('caseStudies');
+  return all.map((entry) => ({ params: { id: entry.id }, props: { entry, related: pickRelated(entry, all) } }));
 }
 
-const { id, data } = Astro.props.entry;
+const { entry, related } = Astro.props;
+const { id, data } = entry;
+const path = caseStudyUrl(id);
+const industry = (await getIndustries()).find((i) => i.id === data.industry.id);
+if (!industry) throw new Error(`caseStudies/${id}: unknown industry "${data.industry.id}"`);
+
 const breadcrumbs = [
   { name: 'Case studies', url: caseStudiesUrl() },
-  { name: data.headline, url: caseStudyUrl(id) },
+  { name: data.headline, url: path },
 ];
+const trail = [{ name: 'Home', url: homeUrl() }, ...breadcrumbs];
+
+const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+const article = {
+  '@type': 'Article',
+  '@id': `${absoluteUrl(path)}#article`,
+  headline: data.headline,
+  description: data.metaDescription,
+  datePublished: isoDate(data.published),
+  dateModified: isoDate(data.updated),
+  author: { '@id': ORGANIZATION_ID },
+  publisher: { '@id': ORGANIZATION_ID },
+  mainEntityOfPage: { '@id': webPageId(path) },
+  image: absoluteUrl(defaultOgImage),
+  inLanguage: 'en',
+  about: { '@type': 'Thing', name: industry.data.name },
+};
+
+const md = inlineMd;
+
+// Visual slot: Story 3.4 adds one component per `visual.id` under src/components/visuals/.
+const visuals = import.meta.glob<{ default: any }>('../../components/visuals/*.astro', { eager: true });
+const Visual = data.visual && visuals[`../../components/visuals/${data.visual.id}.astro`]?.default;
 ---
-<BaseLayout fullTitle={data.seoTitle} description={data.metaDescription} breadcrumbs={breadcrumbs}>
-  <section class="section">
-    <div class="container">
-      <nav aria-label="Breadcrumb" class="small muted breadcrumb">
-        <a href={homeUrl()}>Home</a> / <a href={caseStudiesUrl()}>Case studies</a> / <span aria-current="page">{data.headline}</span>
-      </nav>
-      <h1 class="display">{data.headline}</h1>
-      <p class="lead">{data.subtitle}</p>
+<BaseLayout
+  fullTitle={data.seoTitle}
+  description={data.metaDescription}
+  ogDescription={data.cardSummary}
+  breadcrumbs={breadcrumbs}
+  graph={[article]}
+>
+  <div class="container case">
+    <nav aria-label="Breadcrumb" class="small muted case-crumbs">
+      <ol>
+        {trail.map((c, i) => (
+          <li>{i === trail.length - 1 ? <span aria-current="page">{c.name}</span> : <a href={c.url}>{c.name}</a>}</li>
+        ))}
+      </ol>
+    </nav>
+
+    <div class="case-layout">
+      <div class="case-head">
+        <p class="case-tags muted">{industry.data.name} · {data.serviceLabel}</p>
+        {data.framingLabel && <p class="pill">{data.framingLabel}</p>}
+        <h1 class="display">{data.headline}</h1>
+        <p class="lead" set:html={md(data.subtitle)} />
+        {data.client && <p class="case-client"><strong>Client:</strong> <span set:html={md(data.client)} /></p>}
+      </div>
+
+      <CaseSummary entry={entry} industry={industry.data.name} class="case-side" />
+
+      <article class="case-body">
+        <section aria-labelledby="before">
+          <h2 id="before">Before</h2>
+          <p set:html={md(data.before)} />
+        </section>
+        <section aria-labelledby="built">
+          <h2 id="built">What we built</h2>
+          <p set:html={md(data.built)} />
+        </section>
+        <section aria-labelledby="found">
+          <h2 id="found">What we found</h2>
+          <p set:html={md(data.found)} />
+        </section>
+        <section aria-labelledby="after">
+          <h2 id="after">After</h2>
+          <ul class="case-after">
+            {data.after.map((line) => <li set:html={md(line)} />)}
+          </ul>
+        </section>
+        <section aria-labelledby="stack">
+          <h2 id="stack">Stack</h2>
+          <ul class="chip-list">
+            {data.stack.map((tool) => <li class="chip">{tool}</li>)}
+          </ul>
+        </section>
+        {Visual && <Visual />}
+      </article>
     </div>
-  </section>
+  </div>
+
+  {related.length > 0 && (
+    <section class="section section-surface" aria-labelledby="more">
+      <div class="container">
+        <h2 id="more">More case studies</h2>
+        <div class="case-grid case-related">
+          {related.map((r) => <CaseCard entry={r} level={3} />)}
+        </div>
+      </div>
+    </section>
+  )}
   <ClosingCta />
 </BaseLayout>
 
 <style>
-  .breadcrumb {
+  .case {
+    padding-bottom: var(--section-y);
+  }
+  .case-crumbs ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0;
+    padding: var(--space-6) 0 0;
+    list-style: none;
+  }
+  .case-crumbs li + li::before {
+    content: '/' / '';
+    margin-right: var(--space-2);
+  }
+  .case-crumbs a {
+    color: inherit;
+  }
+  .case-layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: 'head' 'side' 'body';
+    gap: var(--space-7);
+    margin-top: var(--space-7);
+  }
+  .case-head {
+    grid-area: head;
+    max-width: 900px;
+  }
+  .case-head > * + * {
+    margin-top: var(--space-4);
+  }
+  .case-tags {
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    line-height: var(--type-label-line);
+  }
+  /* :global: the class is passed to the CaseSummary component, where page-scoped styles would not reach it. */
+  .case-layout :global(.case-side) {
+    grid-area: side;
+  }
+  .case-body {
+    grid-area: body;
+    max-width: var(--reading-max);
+  }
+  .case-body section + section {
+    margin-top: var(--space-8);
+  }
+  .case-body h2 {
     margin-bottom: var(--space-4);
+    font-size: var(--type-heading-2-reading-size);
+    font-weight: var(--type-heading-2-reading-weight);
+    line-height: var(--type-heading-2-reading-line);
+    letter-spacing: var(--type-heading-2-reading-tracking);
+  }
+  .case-after {
+    padding-left: 1.25em;
+  }
+  .case-after li + li {
+    margin-top: var(--space-2);
+  }
+  .case-related {
+    margin-top: var(--space-6);
+  }
+  @media (width >= 1024px) {
+    .case-layout {
+      grid-template-columns: minmax(0, 720px) 400px; /* 400px: the full Primary label fits on one line */
+      justify-content: space-between; /* panel on the right content edge */
+      grid-template-areas: 'head head' 'body side';
+      column-gap: var(--space-7);
+    }
+    .case-layout :global(.case-side) {
+      position: sticky;
+      top: calc(var(--header-height) + var(--space-5));
+      align-self: start;
+    }
   }
 </style>

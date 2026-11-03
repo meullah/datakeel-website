@@ -24,7 +24,7 @@ const VIEWPORTS = [360, 1024];
 const SERIOUS_IMPACTS = new Set(['critical', 'serious']);
 const TIMEOUTS = { operation: 10_000, navigation: 30_000, cleanup: 5_000 };
 
-export const KEY_PAGES = ['/', '/case-studies/', '/readiness-review/', '/self-assessment/', '/about/'];
+export const KEY_PAGES = ['/', '/case-studies/', '/case-studies/health-claims-review-proof-of-concept/', '/readiness-review/', '/self-assessment/', '/about/'];
 
 export function routeFromHtmlFile(file, distDir = DIST_DIR) {
   const local = relative(resolve(distDir), resolve(file));

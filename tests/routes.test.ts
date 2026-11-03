@@ -55,14 +55,29 @@ test('each route has one h1, a unique title and description, no noindex and no p
   }
 });
 
+const breadcrumbList = (r: string) => {
+  const ld = JSON.parse(match(read(r), /<script type="application\/ld\+json">([^<]*)<\/script>/, 'JSON-LD', r));
+  const list = ld['@graph'].find((n: { '@type': string }) => n['@type'] === 'BreadcrumbList');
+  assert.ok(list, `${r}: no BreadcrumbList`);
+  return list.itemListElement.map((i: { name: string; item: string }) => [i.name, i.item]);
+};
+
 test('non-home BreadcrumbList is exactly Home / {page}', skip, () => {
   for (const [r, name] of trails) {
     if (name === null) continue;
-    const ld = JSON.parse(match(read(r), /<script type="application\/ld\+json">([^<]*)<\/script>/, 'JSON-LD', r));
-    const list = ld['@graph'].find((n: { '@type': string }) => n['@type'] === 'BreadcrumbList');
-    assert.ok(list, `${r}: no BreadcrumbList`);
-    const got = list.itemListElement.map((i: { name: string; item: string }) => [i.name, i.item]);
-    assert.deepEqual(got, [['Home', u.absoluteUrl('/')], [name, u.absoluteUrl(r)]], r);
+    assert.deepEqual(breadcrumbList(r), [['Home', u.absoluteUrl('/')], [name, u.absoluteUrl(r)]], r);
+  }
+});
+
+test('case study BreadcrumbList is exactly Home / Case studies / {headline}', skip, () => {
+  for (const id of caseStudyIds) {
+    const r = u.caseStudyUrl(id);
+    const headline = match(read(r), /<h1[^>]*>([^<]*)<\/h1>/, 'h1', r);
+    assert.deepEqual(breadcrumbList(r), [
+      ['Home', u.absoluteUrl('/')],
+      ['Case studies', u.absoluteUrl(u.caseStudiesUrl())],
+      [headline, u.absoluteUrl(r)],
+    ], r);
   }
 });
 
