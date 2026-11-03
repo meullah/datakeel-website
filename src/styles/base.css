@@ -22,6 +22,8 @@ button, input, select, textarea {
 }
 
 html {
+  /* Keep anchor targets and focused elements clear of the sticky header. */
+  scroll-padding-top: var(--header-height);
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }

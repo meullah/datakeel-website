@@ -10,13 +10,15 @@ export type Props = {
   label?: string;
   /** Wraps the mark in [data-dock-target] for the Hero Story (Epic 2). One per page. */
   dockTarget?: boolean;
+  /** Marks the link aria-current="page" (the header logo on Home). */
+  current?: boolean;
 };
 
-const { id, href = homeUrl(), label = 'DataKeel AI home', dockTarget = false } = Astro.props;
+const { id, href = homeUrl(), label = 'DataKeel AI home', dockTarget = false, current = false } = Astro.props;
 const g0 = `${id}-g0`;
 const g1 = `${id}-g1`;
 ---
-<a class="logo" href={href} aria-label={label}>
+<a class="logo" href={href} aria-label={label} aria-current={current ? 'page' : undefined}>
   <svg width="527.61" height="101.66" viewBox="40.44 89.67 527.61 101.66" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <g data-dock-target={dockTarget ? '' : undefined}>
       <path d="M70.936 185.332H46.4441V95.6676H70.936V185.332Z" fill={`url(#${g0})`} />

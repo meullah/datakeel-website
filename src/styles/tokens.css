@@ -111,6 +111,7 @@
   --control-height: 48px;
   --control-height-sm: 40px;
   --touch-min: 44px;
+  --header-height: 72px;
   --color-focus: var(--color-accent-text);
   --focus-ring: 2px solid var(--color-focus);
   --duration: 180ms;

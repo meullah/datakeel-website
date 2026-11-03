@@ -1,8 +1,9 @@
 ---
 // The only place that renders <head>, landmarks and JSON-LD (AD-4). Never renders an <h1>.
 import { Font } from 'astro:assets';
+import Header from '../components/Header.astro';
 import { companyName, defaultOgImage, email, themeColor, themeColorDark } from '../lib/config.ts';
-import { absoluteUrl, homeUrl, isNoindexPath } from '../lib/urls.ts';
+import { absoluteUrl, isNoindexPath } from '../lib/urls.ts';
 import {
   assertDescription,
   assertTitle,
@@ -26,9 +27,11 @@ export type Props = ({ title: string; fullTitle?: never } | { fullTitle: string;
   noindex?: boolean;
   /** Extra JSON-LD nodes (e.g. FAQPage) appended to the page's @graph. */
   graph?: GraphNode[];
+  /** Homepage only: header stays transparent until the page scrolls. */
+  transparentHeader?: boolean;
 };
 
-const { title, fullTitle, description, breadcrumbs, ogDescription, ogImage, ogImageAlt, noindex: noindexProp = false, graph = [] } = Astro.props;
+const { title, fullTitle, description, breadcrumbs, ogDescription, ogImage, ogImageAlt, noindex: noindexProp = false, graph = [], transparentHeader = false } = Astro.props;
 const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
 
 const noindex = noindexProp || isNoindexPath(path);
@@ -76,9 +79,7 @@ const jsonLd = serializeGraph(buildGraph({ path, title: pageTitle, description, 
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <slot name="header">
-      <header class="container site-header">
-        <a href={homeUrl()}>{companyName}</a>
-      </header>
+      <Header current={path} transparent={transparentHeader} />
     </slot>
     <main id="main" tabindex="-1">
       <slot />
@@ -92,8 +93,7 @@ const jsonLd = serializeGraph(buildGraph({ path, title: pageTitle, description, 
 </html>
 
 <style>
-  /* ponytail: placeholder chrome until the Header (1.6) and Footer (1.8) components land. */
-  .site-header,
+  /* ponytail: placeholder footer until the Footer component (1.8) lands. */
   .site-footer {
     padding-block: var(--space-5);
   }
