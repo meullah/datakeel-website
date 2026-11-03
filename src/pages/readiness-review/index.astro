@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ClosingCta from '../../components/ClosingCta.astro';
 import { email } from '../../lib/config.ts';
 import { readinessReviewUrl } from '../../lib/urls.ts';
 
@@ -17,4 +18,5 @@ const name = 'Data & AI Readiness Review';
       <p>To request a review now, email us at <a href={`mailto:${email}`}>{email}</a>.</p>
     </div>
   </section>
+  <ClosingCta variant="review" />
 </BaseLayout>

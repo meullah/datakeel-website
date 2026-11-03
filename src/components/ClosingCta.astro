@@ -1,0 +1,74 @@
+---
+import { cta } from '../lib/config.ts';
+import { contactUrl, guidesUrl, readinessReviewUrl, selfAssessmentUrl } from '../lib/urls.ts';
+
+export type Props = {
+  variant?: 'default' | 'review' | 'snapshot';
+};
+
+const { variant = 'default' } = Astro.props;
+const content = {
+  default: {
+    heading: 'Ready to see where your data stands?',
+    links: [
+      { label: cta.primary, href: readinessReviewUrl(), primary: true },
+      { label: cta.secondary, href: contactUrl(), primary: false },
+    ],
+  },
+  review: {
+    heading: 'Not ready for a review yet?',
+    links: [
+      { label: cta.secondary, href: contactUrl(), primary: false },
+      { label: 'Take the Self-Assessment', href: selfAssessmentUrl(), primary: false },
+    ],
+  },
+  snapshot: {
+    heading: 'Want to take the next step?',
+    links: [
+      { label: cta.secondary, href: contactUrl(), primary: false },
+      { label: 'Read the Guides', href: guidesUrl(), primary: false },
+    ],
+  },
+}[variant];
+---
+<section class="closing-cta" data-closing-cta={variant}>
+  <div class="container closing-cta-inner">
+    <h2>{content.heading}</h2>
+    <div class="closing-cta-actions">
+      {content.links.map((link) => (
+        <a class:list={['btn', link.primary ? 'btn-primary' : 'btn-ghost']} href={link.href}>{link.label}</a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .closing-cta {
+    padding-block: var(--space-8);
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+  .closing-cta-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--space-6);
+  }
+  .closing-cta h2 {
+    max-width: 720px;
+  }
+  .closing-cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--space-3);
+  }
+  @media (width < 768px) {
+    .closing-cta-inner {
+      grid-template-columns: 1fr;
+    }
+    .closing-cta-actions {
+      justify-content: flex-start;
+    }
+  }
+</style>

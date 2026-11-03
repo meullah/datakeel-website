@@ -1,8 +1,9 @@
 ---
 // The only place that renders <head>, landmarks and JSON-LD (AD-4). Never renders an <h1>.
 import { Font } from 'astro:assets';
+import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { companyName, defaultOgImage, email, themeColor, themeColorDark } from '../lib/config.ts';
+import { companyName, defaultOgImage, themeColor, themeColorDark } from '../lib/config.ts';
 import { absoluteUrl, isNoindexPath } from '../lib/urls.ts';
 import {
   assertDescription,
@@ -85,16 +86,7 @@ const jsonLd = serializeGraph(buildGraph({ path, title: pageTitle, description, 
       <slot />
     </main>
     <slot name="footer">
-      <footer class="container site-footer small">
-        <p>{companyName} · <a href={`mailto:${email}`}>{email}</a></p>
-      </footer>
+      <Footer />
     </slot>
   </body>
 </html>
-
-<style>
-  /* ponytail: placeholder footer until the Footer component (1.8) lands. */
-  .site-footer {
-    padding-block: var(--space-5);
-  }
-</style>

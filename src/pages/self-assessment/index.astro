@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ClosingCta from '../../components/ClosingCta.astro';
 import { selfAssessmentUrl } from '../../lib/urls.ts';
 
 const name = 'Where does your week go?';
@@ -15,4 +16,5 @@ const name = 'Where does your week go?';
       <p class="lead">Our Self-Assessment is a short, friendly check on how your team builds reports and works with data. It takes under two minutes, gives you a rough snapshot of where you stand with a few plain next steps, and never asks for your email.</p>
     </div>
   </section>
+  <ClosingCta variant="snapshot" />
 </BaseLayout>

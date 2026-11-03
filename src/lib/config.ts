@@ -5,6 +5,10 @@ export const positioningLine =
   'Microsoft Fabric and Databricks lakehouse specialists: we build the data platform first, then the AI on top.';
 export const siteUrl = 'https://datakeelai.com';
 export const email = 'hello@datakeelai.com';
+// ponytail: founder to supply the official profile URL.
+export const linkedinUrl = '';
+export const officialProfilesFor = (url: string) => url ? [{ label: 'LinkedIn', href: url }] as const : [];
+export const officialProfiles = officialProfilesFor(linkedinUrl);
 
 export const cta = {
   primary: 'Request a Data & AI Readiness Review',
@@ -19,4 +23,4 @@ export const themeColor = '#F6F6F3';
 export const themeColorDark = '#0F1115';
 
 /** Official profiles for Organization.sameAs; empty until the founder confirms them. */
-export const sameAs: readonly string[] = [];
+export const sameAs: readonly string[] = officialProfiles.map((profile) => profile.href);

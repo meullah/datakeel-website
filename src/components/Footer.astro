@@ -1,0 +1,159 @@
+---
+import Logo from './Logo.astro';
+import { companyName, email, officialProfiles, positioningLine } from '../lib/config.ts';
+import { industries } from '../lib/industries.ts';
+import {
+  aboutUrl,
+  caseStudiesUrl,
+  contactUrl,
+  guidesUrl,
+  howWeWorkUrl,
+  industryUrl,
+  privacyUrl,
+  readinessReviewUrl,
+  selfAssessmentUrl,
+  standardUrl,
+  termsUrl,
+  whatWeDoUrl,
+} from '../lib/urls.ts';
+
+const year = new Date().getFullYear();
+const columns = [
+  {
+    heading: 'Work',
+    links: [
+      { label: 'What We Do', href: whatWeDoUrl() },
+      { label: 'How We Work', href: howWeWorkUrl() },
+      { label: 'Case Studies', href: caseStudiesUrl() },
+    ],
+  },
+  {
+    heading: 'Industries',
+    links: industries.map((industry) => ({ label: industry.name, href: industryUrl(industry.id) })),
+  },
+  {
+    heading: 'Resources',
+    links: [
+      { label: 'Guides', href: guidesUrl() },
+      { label: 'Standard', href: standardUrl() },
+      { label: 'Readiness Review', href: readinessReviewUrl() },
+      { label: 'Self-Assessment', href: selfAssessmentUrl() },
+    ],
+  },
+  {
+    heading: 'Company',
+    links: [
+      { label: 'About', href: aboutUrl() },
+      { label: 'Contact', href: contactUrl() },
+      { label: 'Privacy', href: privacyUrl() },
+      { label: 'Terms', href: termsUrl() },
+    ],
+  },
+] as const;
+---
+<footer class="site-footer small">
+  <div class="container footer-grid">
+    <div class="footer-intro">
+      <Logo id="footer" />
+      <p class="muted">{positioningLine}</p>
+      <a href={`mailto:${email}`}>{email}</a>
+    </div>
+
+    <nav class="footer-links" aria-label="Footer">
+      {columns.map((column) => (
+        <div>
+          <h2>{column.heading}</h2>
+          <ul>
+            {column.links.map((link) => <li><a href={link.href}>{link.label}</a></li>)}
+            {column.heading === 'Company' && officialProfiles.map((profile) => <li><a href={profile.href}>{profile.label}</a></li>)}
+          </ul>
+        </div>
+      ))}
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <p>&copy; {year} {companyName}</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    padding-block: var(--space-8) var(--space-5);
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(220px, 1fr) minmax(0, 2fr);
+    gap: var(--space-8);
+  }
+  .footer-intro {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+    max-width: 360px;
+    --logo-width: 148px;
+  }
+  .footer-intro > a {
+    display: inline-flex;
+    align-items: center;
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
+  }
+  .footer-links {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-5);
+  }
+  .footer-links h2 {
+    margin-bottom: var(--space-3);
+    font-size: var(--type-label-size);
+    line-height: var(--type-label-line);
+    letter-spacing: 0;
+  }
+  .footer-links ul {
+    display: grid;
+    gap: var(--space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    min-width: var(--touch-min);
+    min-height: var(--touch-min);
+    color: var(--color-text-muted);
+  }
+  .footer-links a:hover {
+    color: var(--color-text);
+  }
+  .footer-bottom {
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    color: var(--color-text-muted);
+    border-top: 1px solid var(--color-border);
+  }
+  @media (width < 1024px) {
+    .footer-grid {
+      grid-template-columns: minmax(200px, 1fr) minmax(0, 1.5fr);
+    }
+    .footer-links {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (width < 768px) {
+    .site-footer {
+      padding-top: var(--space-7);
+    }
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-7);
+    }
+    .footer-links {
+      grid-template-columns: 1fr;
+      gap: var(--space-5);
+    }
+  }
+</style>

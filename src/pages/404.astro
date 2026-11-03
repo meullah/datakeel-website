@@ -1,0 +1,43 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { companyName } from '../lib/config.ts';
+import { caseStudiesUrl, homeUrl, notFoundUrl, readinessReviewUrl, selfAssessmentUrl } from '../lib/urls.ts';
+
+const links = [
+  { label: 'Home', href: homeUrl() },
+  { label: 'Case Studies', href: caseStudiesUrl() },
+  { label: 'Readiness Review', href: readinessReviewUrl() },
+  { label: 'Self-Assessment', href: selfAssessmentUrl() },
+];
+---
+<BaseLayout
+  title="Page Not Found"
+  description={`The page you requested could not be found. Visit the ${companyName} home page or continue to a useful place.`}
+  breadcrumbs={[{ name: '404', url: notFoundUrl() }]}
+  noindex
+>
+  <section class="section not-found">
+    <div class="container">
+      <h1>We couldn't find that page.</h1>
+      <p class="lead">The link may be out of date, but these pages can help you find your way.</p>
+      <nav class="not-found-links" aria-label="Helpful pages">
+        {links.map((link) => <a class="btn btn-ghost" href={link.href}>{link.label}</a>)}
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .not-found .container {
+    max-width: calc(var(--reading-max) + 2 * var(--gutter));
+  }
+  .not-found .lead {
+    margin-top: var(--space-5);
+  }
+  .not-found-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+</style>

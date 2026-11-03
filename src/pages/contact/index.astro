@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ClosingCta from '../../components/ClosingCta.astro';
 import { email } from '../../lib/config.ts';
 import { contactUrl } from '../../lib/urls.ts';
 
@@ -16,4 +17,5 @@ const name = 'Talk to us';
       <p class="lead">Have a question about your data, a platform or an AI idea? We’re happy to talk it through. Email us at <a href={`mailto:${email}`}>{email}</a> and we’ll get back to you.</p>
     </div>
   </section>
+  <ClosingCta />
 </BaseLayout>

@@ -26,13 +26,14 @@ export const contactUrl = () => path('contact');
 export const contactSentUrl = () => path('contact', 'sent');
 export const privacyUrl = () => path('privacy');
 export const termsUrl = () => path('terms');
+export const notFoundUrl = () => path('404');
 
 /** Absolute URL for canonicals, sitemaps and JSON-LD. */
 export const absoluteUrl = (p: string) => siteUrl + (p.startsWith('/') ? p : '/' + p);
 export const styleguideUrl = () => path('styleguide');
 
 /** Pages that carry `noindex` and stay out of the sitemap, plus any path ending in /sent/. */
-export const noindexPaths: readonly string[] = ['/404/', styleguideUrl()];
+export const noindexPaths: readonly string[] = [notFoundUrl(), styleguideUrl()];
 
 /** Tolerates "/404", "/404/" and "/404.html". */
 export const isNoindexPath = (p: string) => {

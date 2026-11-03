@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ClosingCta from '../../components/ClosingCta.astro';
 import { industries } from '../../lib/industries.ts';
 import { homeUrl, industryUrl } from '../../lib/urls.ts';
 
@@ -21,4 +22,5 @@ const breadcrumbs = [{ name: industry.h1, url: industryUrl(industry.id) }];
       <p class="lead">{industry.summary}</p>
     </div>
   </section>
+  <ClosingCta />
 </BaseLayout>
