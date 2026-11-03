@@ -35,6 +35,8 @@ const pages = existsSync(dist)
 const pathOf = (f: string) => '/' + f.replace(/(^|\/)index\.html$/, '$1').replace(/\.html$/, '/');
 
 const navHrefs = [u.whatWeDoUrl(), u.howWeWorkUrl(), u.caseStudiesUrl(), ...industries.map((i) => u.industryUrl(i.id)), u.guidesUrl(), u.standardUrl(), u.aboutUrl(), u.readinessReviewUrl()];
+const mobileHrefs = [...navHrefs, u.contactUrl(), u.selfAssessmentUrl()];
+const mobileMainHrefs = [u.whatWeDoUrl(), u.howWeWorkUrl(), u.caseStudiesUrl(), ...industries.map((i) => u.industryUrl(i.id)), u.guidesUrl(), u.standardUrl(), u.aboutUrl()];
 /** Paths the header can mark current: home (logo), each nav item and its section, the CTA target. */
 const markable = (p: string) => p === u.homeUrl() || navHrefs.some((h) => isCurrent(p, h));
 
@@ -63,6 +65,34 @@ test('industry pages mark the Industries trigger and their own dropdown link', s
     const header = readFileSync(file, 'utf8').match(/<header[\s\S]*?<\/header>/)![0];
     assert.match(header, /<button[^>]*aria-current="true"[^>]*>\s*Industries/);
     assert.match(header, new RegExp(`<a[^>]*href="${u.industryUrl(i.id)}"[^>]*aria-current="page"`));
+  }
+});
+
+test('every built page contains the complete server-rendered mobile menu in IA order', skip, () => {
+  for (const f of pages) {
+    const html = readFileSync(join(dist, f), 'utf8');
+    assert.match(html, /<button[^>]*data-mobile-menu-trigger[^>]*hidden[^>]*>/, `${f}: no-JS trigger is hidden`);
+    const menu = html.match(/<dialog[^>]*data-mobile-menu[\s\S]*?<\/dialog>/)?.[0];
+    assert.ok(menu, `${f}: mobile dialog is present in HTML`);
+    assert.match(menu, /role="dialog"/);
+    assert.match(menu, /aria-modal="true"/);
+    assert.match(menu, /aria-label="Menu"/);
+    const main = menu.match(/<nav[^>]*aria-label="Main"[^>]*>[\s\S]*?<\/nav>/)?.[0];
+    assert.ok(main, `${f}: missing Main navigation landmark`);
+    const mainHrefs = [...main.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+    assert.deepEqual(mainHrefs, mobileMainHrefs, `${f}: mobile IA order`);
+    assert.match(main, /<span[^>]*id="mobile-menu-industries"[^>]*>Industries<\/span>/, `${f}: Industries is a label`);
+    assert.doesNotMatch(main, /<a[^>]*>Industries<\/a>/, `${f}: Industries must not be a link`);
+    const hrefs = [...menu.matchAll(/href="([^"]+)"/g)].map((match) => match[1]);
+    for (const href of [u.homeUrl(), ...mobileHrefs]) assert.ok(hrefs.includes(href), `${f}: mobile menu missing ${href}`);
+    for (const href of hrefs) assert.match(href, /\/$/, `${f}: ${href} has no trailing slash`);
+    assert.match(menu, new RegExp(`<a[^>]*href="${u.readinessReviewUrl()}"[^>]*>Request a Data &amp; AI Readiness Review<\\/a>`));
+    assert.match(menu, /data-theme-toggle/, `${f}: missing theme control`);
+
+    const path = pathOf(f);
+    const currentHrefs = [...menu.matchAll(/<a[^>]*href="([^"]+)"[^>]*aria-current="(?:page|true)"[^>]*>/g)].map((match) => match[1]);
+    const expectedCurrent = [u.homeUrl(), ...mobileHrefs].filter((href) => isCurrent(path, href));
+    assert.deepEqual(currentHrefs, expectedCurrent, `${f} (${path}): mobile aria-current`);
   }
 });
 

@@ -2,6 +2,7 @@
 // Site header: logo, main nav in IA order, Industries dropdown, theme toggle, short Primary CTA.
 // Islands: nav-dropdown (Industries) and header-scroll (homepage solid state + Hero Story dock hook).
 import Logo from './Logo.astro';
+import MobileMenu from './MobileMenu.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { cta } from '../lib/config.ts';
 import { industries } from '../lib/industries.ts';
@@ -58,9 +59,15 @@ const industriesCurrent = industryLinks.some((l) => l.current) ? 'true' : undefi
     <div class="actions">
       <ThemeToggle />
       <a class="btn btn-primary btn-sm header-cta" href={readinessReviewUrl()} aria-current={isCurrent(current, readinessReviewUrl())}>{cta.primaryShort}</a>
+      <button class="menu-trigger" type="button" data-mobile-menu-trigger aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu" hidden>
+        <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
+          <path d="M3 5.5h14M3 10h14M3 14.5h14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </button>
     </div>
   </div>
 </header>
+<MobileMenu current={current} />
 
 <script>
   import '../islands/nav-dropdown.ts';
@@ -217,6 +224,18 @@ const industriesCurrent = industryLinks.some((l) => l.current) ? 'true' : undefi
   .header-cta {
     white-space: nowrap;
   }
+  .menu-trigger {
+    display: none;
+    place-items: center;
+    width: var(--touch-min);
+    height: var(--touch-min);
+    padding: 0;
+    background: transparent;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+  }
 
   /* The small Primary is 40px; extend its hit area to 44px. */
   .header-cta {
@@ -228,7 +247,7 @@ const industriesCurrent = industryLinks.some((l) => l.current) ? 'true' : undefi
     inset: calc((var(--control-height-sm) - var(--touch-min)) / 2) 0;
   }
 
-  /* Below 1024px: logo and theme toggle only (Story 1.7 adds the menu button). */
+  /* Story 1.6 moved the compact header breakpoint from 768px to 1024px. */
   @media (width < 1024px) {
     .nav,
     .header-cta {
@@ -239,6 +258,9 @@ const industriesCurrent = industryLinks.some((l) => l.current) ? 'true' : undefi
     }
     .header-logo {
       --logo-width: 132px;
+    }
+    .menu-trigger:not([hidden]) {
+      display: inline-grid;
     }
   }
 </style>
