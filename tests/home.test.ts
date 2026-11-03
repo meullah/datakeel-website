@@ -21,7 +21,7 @@ test('home hero: exact copy, one h1, gradient on "backbone" only', skip, () => {
   assert.doesNotMatch(text(html), /\bBook\b/);
 });
 
-test('home hero: CTAs and empty, hidden visual area', skip, () => {
+test('home hero: CTAs, text-free hidden visual area, pause button outside it', skip, () => {
   const hero = html.match(/<section\b[^>]*class="[^"]*\bhero\b[\s\S]*?<\/section>/)?.[0] ?? '';
   const link = (cls: string) => hero.match(new RegExp(`<a\\b[^>]*class="[^"]*\\b${cls}\\b[^"]*"[^>]*>([\\s\\S]*?)</a>`));
   const primary = link('btn-primary');
@@ -31,7 +31,14 @@ test('home hero: CTAs and empty, hidden visual area', skip, () => {
   assert.match(ghost?.[0] ?? '', /href="\/contact\/"/);
   assert.equal(text(ghost?.[1] ?? ''), 'Talk to us');
   const visual = hero.match(/<div\b[^>]*data-hero-visual[^>]*>([\s\S]*?)<\/div>/);
+  // The visual area holds no <div>, so the lazy match ends at its own closing tag.
   assert.ok(visual, 'visual area present');
   assert.match(visual[0], /aria-hidden="true"/);
-  assert.equal(visual[1].trim(), '', 'no text in the visual area');
+  assert.match(visual[1], /<canvas\b/);
+  assert.equal(text(visual[1]), '', 'no text in the visual area');
+  assert.doesNotMatch(visual[1], /<(button|a)\b/, 'nothing focusable under aria-hidden');
+  const pause = hero.match(/<button\b[^>]*data-hero-story-pause[^>]*>/)?.[0] ?? '';
+  assert.doesNotMatch(pause, /aria-pressed/, "label alone carries the state");
+  assert.match(pause, /aria-label="Pause background animation"/);
+  assert.match(pause, /\shidden\b/, 'pause stays hidden until the island runs');
 });

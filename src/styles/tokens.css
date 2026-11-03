@@ -18,6 +18,15 @@
   --gradient-text: linear-gradient(35deg, var(--color-brand-hot) 0%, var(--color-accent-text) 100%);
   --shadow-primary: 0 8px 30px rgba(255, 72, 0, 0.25);
   --shadow-primary-hover: 0 10px 36px rgba(255, 72, 0, 0.38);
+  /* Hero Story particle tones as "r g b" (read by the hero-story island). hot, orange, bronze are fixed. */
+  --tone-hot: 255 51 0;
+  --tone-orange: 255 72 0;
+  --tone-bronze: 214 120 62;
+  --tone-light: 38 42 50;
+  --tone-dim: 178 182 190;
+  --tone-warm: 240 128 40;
+  --tone-gold: 214 150 40;
+  --tone-silver: 120 128 140;
 
   /* Neutrals and feedback (light) */
   --color-background: #F6F6F3;
@@ -133,4 +142,9 @@
   --gradient-text: var(--gradient-brand);
   --color-error: #FF7A6E;
   --color-success: #4CC38A;
+  --tone-light: 232 236 241;
+  --tone-dim: 84 92 104;
+  --tone-warm: 255 169 83;
+  --tone-gold: 255 190 96;
+  --tone-silver: 214 218 224;
 }

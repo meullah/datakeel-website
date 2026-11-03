@@ -1,22 +1,23 @@
 ---
-// Homepage hero (prototype E). Copy is server-rendered; Story 2.2 mounts the Hero Story into [data-hero-visual].
+// Homepage hero (prototype E). Copy is server-rendered; the Hero Story (HeroStory) sits behind the shade.
 import { cta } from '../lib/config.ts';
+import HeroStory from './HeroStory.astro';
 import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
 ---
-<section class="hero" aria-labelledby="hero-title">
+<section class="hero" aria-labelledby="hero-title" data-hero-story>
   <div class="hero-glow" aria-hidden="true"></div>
-  {/* Decorative only. 2.2's pause button must sit outside this aria-hidden, pointer-events:none box. */}
-  <div class="hero-visual" data-hero-visual aria-hidden="true"></div>
-  <div class="hero-shade" aria-hidden="true"></div>
-  <div class="hero-copy">
-    <p class="eyebrow">Data engineering for AI</p>
-    <h1 id="hero-title" class="display-hero">The data <span class="gradient-text">backbone</span> your AI runs on.</h1>
-    <p class="lead">We design, build and run modern data platforms: pipelines, lakehouses and governance, so your reports agree and your AI works on data you can trust.</p>
-    <p class="hero-ctas">
-      <a class="btn btn-primary" href={readinessReviewUrl()}>{cta.primary}</a>
-      <a class="btn btn-ghost" href={contactUrl()}>{cta.secondary}</a>
-    </p>
-  </div>
+  <HeroStory>
+    <div class="hero-shade" aria-hidden="true"></div>
+    <div class="hero-copy">
+      <p class="eyebrow">Data engineering for AI</p>
+      <h1 id="hero-title" class="display-hero">The data <span class="gradient-text">backbone</span> your AI runs on.</h1>
+      <p class="lead">We design, build and run modern data platforms: pipelines, lakehouses and governance, so your reports agree and your AI works on data you can trust.</p>
+      <p class="hero-ctas">
+        <a class="btn btn-primary" href={readinessReviewUrl()}>{cta.primary}</a>
+        <a class="btn btn-ghost" href={contactUrl()}>{cta.secondary}</a>
+      </p>
+    </div>
+  </HeroStory>
 </section>
 
 <style>
@@ -31,7 +32,6 @@ import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
     isolation: isolate;
   }
   .hero-glow,
-  .hero-visual,
   .hero-shade {
     position: absolute;
     pointer-events: none;
@@ -43,10 +43,6 @@ import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
     top: 50%;
     transform: translateY(-50%);
     background: radial-gradient(closest-side, color-mix(in srgb, var(--color-brand-hot) 14%, transparent), transparent);
-  }
-  /* Reserved box for the Hero Story (2.2); absolute, so mounting into it never shifts the copy. */
-  .hero-visual {
-    inset: 0 0 0 40%;
   }
   .hero-shade {
     inset: 0;
@@ -83,10 +79,6 @@ import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
       top: 26%;
       transform: translate(50%, -50%);
     }
-    /* Visual above, copy at the bottom. */
-    .hero-visual {
-      inset: var(--header-height) 0 50% 0;
-    }
     .hero-shade {
       background: linear-gradient(
         0deg,
@@ -97,7 +89,7 @@ import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
     }
     .hero-copy {
       justify-content: flex-end;
-      /* Bottom room for 2.2's scene indicator and pause button. */
+      /* Bottom room for the Hero Story's scene indicator and pause button. */
       padding-bottom: calc(var(--space-8) + var(--space-3));
     }
     .hero-copy .lead {
