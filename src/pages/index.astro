@@ -1,5 +1,8 @@
 ---
+import { Font } from 'astro:assets';
 import { companyName, positioningLine } from '../lib/config.ts';
+import '../styles/tokens.css';
+import '../styles/base.css';
 ---
 <!doctype html>
 <html lang="en">
@@ -7,6 +10,7 @@ import { companyName, positioningLine } from '../lib/config.ts';
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{companyName}</title>
+    <Font cssVariable="--font-geist" preload={[{ weight: 400 }, { weight: 600 }]} />
   </head>
   <body>
     <h1>{companyName}</h1>

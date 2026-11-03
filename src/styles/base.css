@@ -1,0 +1,306 @@
+/* Element defaults and shared primitives (DESIGN.md Components). var(--…) only. */
+
+/* Reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body,
+h1, h2, h3, h4, h5, h6,
+p, figure, blockquote, ul, ol, dl, dd {
+  margin: 0;
+}
+img, svg, video, canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  background: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  font-size: var(--type-body-size);
+  font-weight: var(--type-body-weight);
+  line-height: var(--type-body-line);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Geist everywhere, code included. */
+code, pre, kbd, samp {
+  font-family: var(--font-sans);
+  font-size: 1em;
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 600;
+  text-wrap: balance;
+}
+h1,
+.display {
+  font-size: var(--type-display-size);
+  font-weight: var(--type-display-weight);
+  line-height: var(--type-display-line);
+  letter-spacing: var(--type-display-tracking);
+}
+h1.display-hero,
+.display-hero {
+  font-size: var(--type-display-hero-size);
+  font-weight: var(--type-display-hero-weight);
+  line-height: var(--type-display-hero-line);
+  letter-spacing: var(--type-display-hero-tracking);
+}
+h2 {
+  font-size: var(--type-heading-2-size);
+  font-weight: var(--type-heading-2-weight);
+  line-height: var(--type-heading-2-line);
+  letter-spacing: var(--type-heading-2-tracking);
+}
+.reading h2 {
+  font-size: var(--type-heading-2-reading-size);
+  font-weight: var(--type-heading-2-reading-weight);
+  line-height: var(--type-heading-2-reading-line);
+  letter-spacing: var(--type-heading-2-reading-tracking);
+}
+h3 {
+  font-size: var(--type-heading-3-size);
+  font-weight: var(--type-heading-3-weight);
+  line-height: var(--type-heading-3-line);
+  letter-spacing: var(--type-heading-3-tracking);
+}
+
+/* Text */
+p, li, dd, figcaption {
+  text-wrap: pretty;
+}
+.lead {
+  font-size: var(--type-body-lg-size);
+  font-weight: var(--type-body-lg-weight);
+  line-height: var(--type-body-lg-line);
+}
+.small {
+  font-size: var(--type-small-size);
+  font-weight: var(--type-small-weight);
+  line-height: var(--type-small-line);
+}
+.muted {
+  color: var(--color-text-muted);
+}
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
+.stat {
+  font-size: var(--type-stat-size);
+  font-weight: var(--type-stat-weight);
+  line-height: var(--type-stat-line);
+  letter-spacing: var(--type-stat-tracking);
+  font-variant-numeric: tabular-nums;
+}
+
+a {
+  color: var(--color-accent-text);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  transition: color var(--duration) ease;
+}
+a:hover {
+  color: var(--color-text);
+}
+
+/* Focus: 2px ring on every interactive element (accent-text in light, brand-warm in dark) */
+:focus-visible {
+  outline: var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Layout */
+.container {
+  width: 100%;
+  max-width: calc(var(--content-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.reading {
+  width: 100%;
+  max-width: calc(var(--reading-max) + 2 * var(--gutter));
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+.section {
+  padding-block: var(--section-y);
+}
+.section-surface {
+  background: var(--color-surface);
+}
+
+/* Eyebrow: label type in accent-text, sentence case */
+.eyebrow {
+  display: block;
+  margin-bottom: var(--space-3);
+  color: var(--color-accent-text);
+  font-size: var(--type-label-size);
+  font-weight: var(--type-label-weight);
+  line-height: var(--type-label-line);
+}
+
+/* At most one gradient display word per page */
+.gradient-text {
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: var(--control-height);
+  padding: var(--space-2) 22px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-full);
+  font-family: var(--font-sans);
+  font-size: var(--type-button-size);
+  font-weight: var(--type-button-weight);
+  line-height: 1.2;
+  text-align: center;
+  max-width: 100%;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    transform var(--duration) ease,
+    box-shadow var(--duration) ease,
+    border-color var(--duration) ease,
+    color var(--duration) ease;
+}
+.btn-primary {
+  background: var(--gradient-brand);
+  color: var(--color-on-gradient);
+  box-shadow: var(--shadow-primary);
+}
+.btn-primary:hover {
+  color: var(--color-on-gradient);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-primary-hover);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--color-text);
+  border-color: var(--color-border);
+}
+.btn-ghost:hover {
+  color: var(--color-text);
+  border-color: var(--color-brand-warm);
+}
+.btn-sm {
+  min-height: var(--control-height-sm);
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--type-small-size);
+}
+.btn:is(:disabled, [aria-disabled="true"]) {
+  cursor: not-allowed;
+  opacity: 0.6;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Chip: tool names and filters */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px var(--space-3);
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-full);
+  font-size: var(--type-small-size);
+  font-weight: var(--type-small-weight);
+  line-height: var(--type-small-line);
+  text-decoration: none;
+  transition:
+    background-color var(--duration) ease,
+    border-color var(--duration) ease,
+    color var(--duration) ease;
+}
+:is(button, a).chip {
+  min-height: var(--touch-min);
+  padding-inline: var(--space-4);
+  cursor: pointer;
+}
+:is(button, a).chip:hover {
+  border-color: var(--color-brand-warm);
+}
+.chip:is([aria-pressed="true"], .is-selected),
+.chip:is([aria-pressed="true"], .is-selected):hover {
+  background: var(--color-text);
+  color: var(--color-surface);
+  border-color: var(--color-text);
+}
+
+/* Card: flat, 1px border, no shadow */
+.card {
+  background: var(--color-card);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  transition: border-color var(--duration) ease;
+}
+.card-interactive {
+  display: block;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.card-interactive:hover,
+.card-interactive:focus-within {
+  border-color: var(--color-text-muted);
+}
+.card-interactive:hover :is(h2, h3, .card-title),
+.card-interactive:focus-within :is(h2, h3, .card-title) {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-4);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
+  }
+  .btn-primary:hover {
+    transform: none;
+  }
+}
