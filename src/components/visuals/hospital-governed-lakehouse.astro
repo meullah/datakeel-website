@@ -1,0 +1,37 @@
+---
+// Case 1 Visual: scattered hospital systems → one governed lakehouse → executive dashboards.
+import CaseVisual from '../CaseVisual.astro';
+const { kind } = Astro.props as { kind: 'diagram' | 'dashboard' };
+---
+<CaseVisual kind={kind} caption="Separate hospital systems feed one governed lakehouse, and executive dashboards read from it.">
+  <svg viewBox="0 0 330 276" role="img" aria-labelledby="vis-hgl-title" aria-describedby="vis-hgl-desc">
+    <title id="vis-hgl-title">Scattered hospital systems flow into one governed lakehouse, which feeds executive dashboards.</title>
+    <desc id="vis-hgl-desc">Epic EHR data, operational files and demographic data each flow into one governed lakehouse. The lakehouse then feeds executive dashboards.</desc>
+    <defs>
+      <linearGradient id="vis-hgl-flow" gradientUnits="userSpaceOnUse" x1="0" y1="82" x2="0" y2="226">
+        <stop offset="0" class="dg-stop-warm" /><stop offset="1" class="dg-stop-hot" />
+      </linearGradient>
+    </defs>
+    <text class="dg-label" x="165" y="16" text-anchor="middle">Separate hospital systems</text>
+    <g class="dg-flow" stroke="url(#vis-hgl-flow)">
+      <path d="M52 82 C52 108 165 104 165 130" />
+      <path d="M165 82 L165 130" />
+      <path d="M278 82 C278 108 165 104 165 130" />
+      <path d="M165 186 L165 226" />
+    </g>
+    <rect class="dg-node" x="1" y="30" width="102" height="52" rx="8" />
+    <rect class="dg-node" x="114" y="30" width="102" height="52" rx="8" />
+    <rect class="dg-node" x="227" y="30" width="102" height="52" rx="8" />
+    <text x="52" y="61" text-anchor="middle">Epic EHR</text>
+    <text x="165" y="52" text-anchor="middle">Operational</text>
+    <text x="165" y="70" text-anchor="middle">files</text>
+    <text x="278" y="52" text-anchor="middle">Demographic</text>
+    <text x="278" y="70" text-anchor="middle">data</text>
+    <rect class="dg-node" x="1" y="130" width="328" height="56" rx="12" />
+    <text class="dg-strong" x="165" y="164" text-anchor="middle">One governed lakehouse</text>
+    <rect class="dg-node" x="55" y="226" width="220" height="48" rx="12" />
+    <text class="dg-strong" x="165" y="256" text-anchor="middle">Executive dashboards</text>
+    <circle class="dg-dot" cx="165" cy="130" r="3" />
+    <circle class="dg-dot" cx="165" cy="226" r="3" />
+  </svg>
+</CaseVisual>

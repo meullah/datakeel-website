@@ -1,0 +1,41 @@
+---
+// Case 2 Visual: five feed formats, by web link or SFTP → one inventory model → Google.
+import CaseVisual from '../CaseVisual.astro';
+const { kind } = Astro.props as { kind: 'diagram' | 'dashboard' };
+---
+<CaseVisual kind={kind} caption="Every feed format lands in one model before anything reaches Google.">
+  <svg viewBox="0 0 330 316" role="img" aria-labelledby="vis-dfg-title" aria-describedby="vis-dfg-desc">
+    <title id="vis-dfg-title">Five kinds of dealer feed flow into one inventory model, which publishes to Google Vehicle Ads.</title>
+    <desc id="vis-dfg-desc">Dealer feeds arrive by web link or SFTP as CSV files, XML files, JSON files, APIs or webhooks. All five flow into one inventory model, which publishes to Google Vehicle Ads.</desc>
+    <defs>
+      <linearGradient id="vis-dfg-flow" gradientUnits="userSpaceOnUse" x1="0" y1="70" x2="0" y2="266">
+        <stop offset="0" class="dg-stop-warm" /><stop offset="1" class="dg-stop-hot" />
+      </linearGradient>
+    </defs>
+    <text class="dg-label" x="165" y="16" text-anchor="middle">Dealer feeds, by web link or SFTP</text>
+    <g class="dg-flow" stroke="url(#vis-dfg-flow)">
+      <path d="M52 70 L52 128 C52 152 165 146 165 170" />
+      <path d="M165 70 L165 170" />
+      <path d="M278 70 L278 128 C278 152 165 146 165 170" />
+      <path d="M108 120 C108 148 165 142 165 170" />
+      <path d="M222 120 C222 148 165 142 165 170" />
+      <path d="M165 226 L165 266" />
+    </g>
+    <rect class="dg-node" x="4" y="30" width="96" height="40" rx="8" />
+    <rect class="dg-node" x="117" y="30" width="96" height="40" rx="8" />
+    <rect class="dg-node" x="230" y="30" width="96" height="40" rx="8" />
+    <rect class="dg-node" x="60" y="80" width="96" height="40" rx="8" />
+    <rect class="dg-node" x="174" y="80" width="96" height="40" rx="8" />
+    <text x="52" y="55" text-anchor="middle">CSV files</text>
+    <text x="165" y="55" text-anchor="middle">XML files</text>
+    <text x="278" y="55" text-anchor="middle">JSON files</text>
+    <text x="108" y="105" text-anchor="middle">APIs</text>
+    <text x="222" y="105" text-anchor="middle">Webhooks</text>
+    <rect class="dg-node" x="1" y="170" width="328" height="56" rx="12" />
+    <text class="dg-strong" x="165" y="204" text-anchor="middle">One inventory model</text>
+    <rect class="dg-node" x="55" y="266" width="220" height="48" rx="12" />
+    <text class="dg-strong" x="165" y="296" text-anchor="middle">Google Vehicle Ads</text>
+    <circle class="dg-dot" cx="165" cy="170" r="3" />
+    <circle class="dg-dot" cx="165" cy="266" r="3" />
+  </svg>
+</CaseVisual>

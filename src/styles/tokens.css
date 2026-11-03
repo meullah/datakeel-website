@@ -37,6 +37,8 @@
   --color-text: #14161B;
   --color-text-muted: #5B616C;
   --color-accent-text: #CC3800;
+  /* Warm end of diagram graphics: brand-warm is under 3:1 on light surfaces */
+  --color-graphic-warm: var(--color-accent-text);
   --color-error: #B42318;
   --color-success: #1E7A4C;
 
@@ -137,6 +139,7 @@
   --color-text: #EEF0F3;
   --color-text-muted: #9AA3AF;
   --color-accent-text: #FF8A4C;
+  --color-graphic-warm: var(--color-brand-warm);
   --color-focus: var(--color-brand-warm);
   --focus-ring: 2px solid var(--color-focus);
   --gradient-text: var(--gradient-brand);

@@ -1,0 +1,36 @@
+---
+// Case 4 Visual: one claim side by side with the patient's record, the mismatch highlighted, and a risk score.
+// Illustrative: demo values only, no client data.
+import CaseVisual from '../CaseVisual.astro';
+// Always a dashboard: demo data keeps its "Illustrative" frame whatever the entry's `visual.kind` says.
+---
+<CaseVisual kind="dashboard" caption="Each claim sits next to the patient's record, so a claim that doesn't fit stands out before payout.">
+  <svg viewBox="0 0 330 250" role="img" aria-labelledby="vis-crc-title" aria-describedby="vis-crc-desc">
+    <title id="vis-crc-title">One claim side by side with the patient's record, with the mismatch highlighted and a risk score.</title>
+    <desc id="vis-crc-desc">Illustrative, with demo data. The claim lists a specialist scan. The patient's record shows a blood test prescription and nothing related in the history. The claimed test and the prescription are highlighted as a mismatch, and the claim's risk score reads high.</desc>
+    <defs>
+      <linearGradient id="vis-crc-flow" gradientUnits="userSpaceOnUse" x1="16" y1="0" x2="314" y2="0">
+        <stop offset="0" class="dg-stop-warm" /><stop offset="1" class="dg-stop-hot" />
+      </linearGradient>
+    </defs>
+    <rect class="dg-node" x="1" y="1" width="158" height="142" rx="12" />
+    <rect class="dg-node" x="171" y="1" width="158" height="142" rx="12" />
+    <text class="dg-strong" x="16" y="27">Claim</text>
+    <text class="dg-strong" x="186" y="27">Patient record</text>
+    <rect class="dg-mark" x="9" y="40" width="142" height="48" rx="8" />
+    <rect class="dg-mark" x="179" y="40" width="142" height="48" rx="8" />
+    <path class="dg-mark" d="M151 64 L179 64" />
+    <text class="dg-label" x="18" y="59">Claimed test</text>
+    <text x="18" y="79">Specialist scan</text>
+    <text class="dg-label" x="188" y="59">Prescription</text>
+    <text x="188" y="79">Blood test</text>
+    <text class="dg-label" x="188" y="110">History</text>
+    <text x="188" y="130">Nothing related</text>
+    <text class="dg-accent" x="165" y="168" text-anchor="middle">The claimed test doesn't fit the record</text>
+    <rect class="dg-node" x="1" y="184" width="328" height="64" rx="12" />
+    <text class="dg-label" x="16" y="210">Risk score</text>
+    <text class="dg-accent" x="314" y="210" text-anchor="end">High</text>
+    <rect class="dg-track" x="16" y="224" width="298" height="8" rx="4" />
+    <rect x="16" y="224" width="250" height="8" rx="4" fill="url(#vis-crc-flow)" />
+  </svg>
+</CaseVisual>

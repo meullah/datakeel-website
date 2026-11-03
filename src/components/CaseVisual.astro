@@ -1,0 +1,111 @@
+---
+// Case study visual: a <figure> around one inline-SVG diagram. Dashboards sit in a 24px-radius frame labeled "Illustrative".
+// The dg-* classes below style the SVG in every visual (tokens only, so both themes work).
+export type Props = { kind: 'diagram' | 'dashboard'; caption: string };
+const { kind, caption } = Astro.props;
+---
+<figure class="case-visual">
+  <div class:list={['case-visual-art', kind === 'dashboard' && 'case-visual-frame']}>
+    {kind === 'dashboard' && <p class="case-visual-label">Illustrative</p>}
+    <slot />
+  </div>
+  <figcaption class="small muted">{caption}</figcaption>
+</figure>
+
+<style>
+  .case-visual {
+    margin: var(--space-8) 0 0;
+  }
+  .case-visual-art {
+    padding: var(--space-4);
+    background: var(--color-surface);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+  }
+  .case-visual-frame {
+    border-color: var(--color-border);
+    border-radius: var(--radius-xl);
+  }
+  .case-visual-label {
+    margin: 0 0 var(--space-4);
+    color: var(--color-text-muted);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    line-height: var(--type-label-line);
+  }
+  figcaption {
+    margin-top: var(--space-4);
+  }
+  @media (width >= 768px) {
+    .case-visual-art {
+      padding: var(--space-5);
+    }
+  }
+  /* Vertical layouts, 330 units wide: at 360px the smallest (14-unit) labels still render above 12px. */
+  .case-visual :global(svg) {
+    display: block;
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    margin: 0 auto;
+  }
+  .case-visual :global(text) {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    fill: var(--color-text);
+  }
+  .case-visual :global(.dg-strong) {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .case-visual :global(.dg-label) {
+    font-weight: 600;
+    fill: var(--color-text-muted);
+  }
+  .case-visual :global(.dg-accent) {
+    font-weight: 600;
+    fill: var(--color-accent-text);
+  }
+  .case-visual :global(.dg-node) {
+    fill: var(--color-card);
+    stroke: var(--color-text-muted);
+    stroke-width: 1.5;
+  }
+  .case-visual :global(.dg-line) {
+    fill: none;
+    stroke: var(--color-text-muted);
+    stroke-width: 1.5;
+  }
+  .case-visual :global(.dg-flow) {
+    fill: none;
+    stroke-width: 1.5;
+  }
+  .case-visual :global(.dg-data) {
+    fill: none;
+    stroke-width: 2;
+    stroke-linejoin: round;
+  }
+  .case-visual :global(.dg-mark) {
+    fill: none;
+    stroke: var(--color-accent-text);
+    stroke-width: 1.5;
+  }
+  .case-visual :global(.dg-dot) {
+    fill: var(--color-brand-hot);
+  }
+  .case-visual :global(.dg-band) {
+    fill: var(--color-graphic-warm);
+    fill-opacity: 0.3;
+    stroke: var(--color-graphic-warm);
+    stroke-width: 1.5;
+  }
+  .case-visual :global(.dg-track) {
+    fill: var(--color-border);
+  }
+  .case-visual :global(.dg-stop-warm) {
+    stop-color: var(--color-graphic-warm);
+  }
+  .case-visual :global(.dg-stop-hot) {
+    stop-color: var(--color-brand-hot);
+  }
+</style>

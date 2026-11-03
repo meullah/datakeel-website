@@ -110,6 +110,9 @@ for (const [theme, t, sel] of [
   test(`${theme}: focus ring is at least 3:1 on every surface`, () => {
     assertPairs(theme, t, ['focus'], surfaces, 3);
   });
+  test(`${theme}: diagram graphics are at least 3:1 on surface and card`, () => {
+    assertPairs(theme, t, ['brand-hot', 'graphic-warm', 'text-muted'], ['surface', 'card'], 3);
+  });
   test(`${theme}: gradient text ends are at least 3:1 on background`, () => {
     const ends = gradientTextEnds(sel);
     assert.equal(ends.length, 2, `${theme}: --gradient-text needs two color tokens`);

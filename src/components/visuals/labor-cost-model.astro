@@ -1,0 +1,35 @@
+---
+// Case 5 Visual: payroll + timecards + finance → one model → labor cost dashboard.
+import CaseVisual from '../CaseVisual.astro';
+const { kind } = Astro.props as { kind: 'diagram' | 'dashboard' };
+---
+<CaseVisual kind={kind} caption="Payroll, timecards and finance meet in one model, and the labor cost dashboard reads from it.">
+  <svg viewBox="0 0 330 276" role="img" aria-labelledby="vis-lcm-title" aria-describedby="vis-lcm-desc">
+    <title id="vis-lcm-title">Payroll, timecards and finance flow into one model, which feeds a labor cost dashboard.</title>
+    <desc id="vis-lcm-desc">Payroll, timecards and finance each flow into one model. The model then feeds the labor cost dashboard.</desc>
+    <defs>
+      <linearGradient id="vis-lcm-flow" gradientUnits="userSpaceOnUse" x1="0" y1="72" x2="0" y2="226">
+        <stop offset="0" class="dg-stop-warm" /><stop offset="1" class="dg-stop-hot" />
+      </linearGradient>
+    </defs>
+    <text class="dg-label" x="165" y="16" text-anchor="middle">Separate sources</text>
+    <g class="dg-flow" stroke="url(#vis-lcm-flow)">
+      <path d="M52 72 C52 104 165 98 165 130" />
+      <path d="M165 72 L165 130" />
+      <path d="M278 72 C278 104 165 98 165 130" />
+      <path d="M165 186 L165 226" />
+    </g>
+    <rect class="dg-node" x="1" y="30" width="102" height="42" rx="8" />
+    <rect class="dg-node" x="114" y="30" width="102" height="42" rx="8" />
+    <rect class="dg-node" x="227" y="30" width="102" height="42" rx="8" />
+    <text x="52" y="56" text-anchor="middle">Payroll</text>
+    <text x="165" y="56" text-anchor="middle">Timecards</text>
+    <text x="278" y="56" text-anchor="middle">Finance</text>
+    <rect class="dg-node" x="1" y="130" width="328" height="56" rx="12" />
+    <text class="dg-strong" x="165" y="164" text-anchor="middle">One model</text>
+    <rect class="dg-node" x="55" y="226" width="220" height="48" rx="12" />
+    <text class="dg-strong" x="165" y="256" text-anchor="middle">Labor cost dashboard</text>
+    <circle class="dg-dot" cx="165" cy="130" r="3" />
+    <circle class="dg-dot" cx="165" cy="226" r="3" />
+  </svg>
+</CaseVisual>
