@@ -12,11 +12,15 @@ const industries = defineCollection({
     id: z.string(), // file() keeps the id in data
     order: z.number().int(),
     name: text,
-    // Page copy; Story 3.5 rewrites these.
+    // Industry page copy (Story 3.5). Problems restate the Before sections of that industry's cases only.
     h1: text,
     title: text,
-    description: text,
-    summary: text,
+    description: text.max(155),
+    /** Answer-first opening paragraph. */
+    intro: text,
+    problems: z.array(text).min(1),
+    /** false until the founder approves the copy (deferred-work.md). */
+    reviewed: z.boolean(),
   }),
 });
 

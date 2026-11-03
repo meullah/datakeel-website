@@ -2,7 +2,7 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { compareEntries } from '../src/lib/pure/content-rules.ts';
 
-type Industry = { id: string; order: number; name: string; h1: string; title: string; description: string; summary: string };
+type Industry = { id: string; order: number; name: string; h1: string; title: string; description: string; intro: string; problems: string[]; reviewed: boolean };
 
 export const industries: Industry[] = JSON.parse(readFileSync(new URL('../src/content/industries.json', import.meta.url), 'utf8'))
   .sort((a: Industry, b: Industry) => compareEntries({ id: a.id, data: a }, { id: b.id, data: b }));

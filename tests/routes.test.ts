@@ -9,13 +9,13 @@ import { caseStudyIds, industries } from './content-data.ts';
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const skip = { skip: existsSync(dist) ? false : 'dist/ not found; run npm run build first' };
 
-/** Route -> crumb name after Home (the page's h1 wording); null for Home. */
+/** Route -> crumb name after Home (the page's h1 wording; industry pages use the industry name); null for Home. */
 const trails = new Map<string, string | null>([
   [u.homeUrl(), null],
   [u.whatWeDoUrl(), 'What we do'],
   [u.howWeWorkUrl(), 'How we work'],
   [u.caseStudiesUrl(), 'Case studies'],
-  ...industries.map((i) => [u.industryUrl(i.id), i.h1] as [string, string]),
+  ...industries.map((i) => [u.industryUrl(i.id), i.name] as [string, string]),
   [u.standardUrl(), 'The DataKeel Standard'],
   [u.readinessReviewUrl(), 'Data & AI Readiness Review'],
   [u.selfAssessmentUrl(), 'Where does your week go?'],

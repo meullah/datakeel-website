@@ -1,25 +1,39 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseCard from '../../components/CaseCard.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { getIndustries } from '../../lib/content.ts';
-import { homeUrl, industryUrl } from '../../lib/urls.ts';
+import { getIndustries, getPublished } from '../../lib/content.ts';
+import { caseStudiesUrl, homeUrl, industryUrl } from '../../lib/urls.ts';
 
 export async function getStaticPaths() {
   return (await getIndustries()).map((industry) => ({ params: { id: industry.id }, props: { industry } }));
 }
 
 const { id, data: industry } = Astro.props.industry;
+const cases = (await getPublished('caseStudies')).filter((c) => c.data.industry.id === id);
 // "Industries" has no page, so the crumb trail is Home / {Industry} (assertCrumbs needs a real url per crumb).
-const breadcrumbs = [{ name: industry.h1, url: industryUrl(id) }];
+const breadcrumbs = [{ name: industry.name, url: industryUrl(id) }];
 ---
 <BaseLayout title={industry.title} description={industry.description} breadcrumbs={breadcrumbs}>
   <section class="section">
     <div class="container">
       <nav aria-label="Breadcrumb" class="small muted breadcrumb">
-        <a href={homeUrl()}>Home</a> / <span aria-current="page">{industry.h1}</span>
+        <a href={homeUrl()}>Home</a> / <span aria-current="page">{industry.name}</span>
       </nav>
       <h1 class="display">{industry.h1}</h1>
-      <p class="lead">{industry.summary}</p>
+      <p class="lead intro">{industry.intro}</p>
+      <h2 class="block-title">Typical data problems</h2>
+      <ul class="problems" data-industry-problems>
+        {industry.problems.map((p) => <li>{p}</li>)}
+      </ul>
+      <h2 class="block-title">Case studies</h2>
+      {cases.length > 0 ? (
+        <div class="case-grid">
+          {cases.map((entry) => <CaseCard entry={entry} summary />)}
+        </div>
+      ) : (
+        <p>No case studies here yet. <a href={caseStudiesUrl()}>See all case studies.</a></p>
+      )}
     </div>
   </section>
   <ClosingCta />
@@ -28,5 +42,23 @@ const breadcrumbs = [{ name: industry.h1, url: industryUrl(id) }];
 <style>
   .breadcrumb {
     margin-bottom: var(--space-4);
+  }
+  .intro,
+  .problems {
+    max-width: var(--reading-max);
+  }
+  /* Reading-size h2, matching the case study sections. */
+  .block-title {
+    margin: var(--space-8) 0 var(--space-5);
+    font-size: var(--type-heading-2-reading-size);
+    font-weight: var(--type-heading-2-reading-weight);
+    line-height: var(--type-heading-2-reading-line);
+    letter-spacing: var(--type-heading-2-reading-tracking);
+  }
+  .problems {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding-left: 1.25em;
   }
 </style>
