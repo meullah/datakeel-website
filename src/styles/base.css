@@ -88,9 +88,13 @@ p, li, dd, figcaption {
   text-wrap: pretty;
 }
 .lead {
+  max-width: var(--reading-max); /* DESIGN.md: 60–75 character lines */
   font-size: var(--type-body-lg-size);
   font-weight: var(--type-body-lg-weight);
   line-height: var(--type-body-lg-line);
+}
+:is(h1, .display, .display-hero) + .lead {
+  margin-top: var(--space-5);
 }
 .small {
   font-size: var(--type-small-size);

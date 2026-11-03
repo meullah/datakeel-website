@@ -114,7 +114,7 @@ const columns = [
   }
   .footer-links ul {
     display: grid;
-    gap: var(--space-2);
+    gap: 0;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -125,9 +125,11 @@ const columns = [
     min-width: var(--touch-min);
     min-height: var(--touch-min);
     color: var(--color-text-muted);
+    text-decoration: none; /* link lists, not body text */
   }
   .footer-links a:hover {
     color: var(--color-text);
+    text-decoration: underline;
   }
   .footer-bottom {
     margin-top: var(--space-7);
@@ -152,8 +154,8 @@ const columns = [
       gap: var(--space-7);
     }
     .footer-links {
-      grid-template-columns: 1fr;
-      gap: var(--space-5);
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-5) var(--space-4);
     }
   }
 </style>

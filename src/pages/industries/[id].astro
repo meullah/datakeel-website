@@ -15,7 +15,7 @@ const breadcrumbs = [{ name: industry.h1, url: industryUrl(industry.id) }];
 <BaseLayout title={industry.title} description={industry.description} breadcrumbs={breadcrumbs}>
   <section class="section">
     <div class="container">
-      <nav aria-label="Breadcrumb" class="small muted">
+      <nav aria-label="Breadcrumb" class="small muted breadcrumb">
         <a href={homeUrl()}>Home</a> / <span aria-current="page">{industry.h1}</span>
       </nav>
       <h1 class="display">{industry.h1}</h1>
@@ -24,3 +24,9 @@ const breadcrumbs = [{ name: industry.h1, url: industryUrl(industry.id) }];
   </section>
   <ClosingCta />
 </BaseLayout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: var(--space-4);
+  }
+</style>
