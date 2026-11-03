@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { selfAssessmentUrl } from '../../lib/urls.ts';
+
+const name = 'Where does your week go?';
+---
+<BaseLayout
+  title="Self-Assessment: Where Does Your Week Go?"
+  description="A short, friendly self-assessment about how your team works with data. Takes under two minutes, asks nothing personal and needs no email."
+  breadcrumbs={[{ name, url: selfAssessmentUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">Our Self-Assessment is a short, friendly check on how your team builds reports and works with data. It takes under two minutes, gives you a rough snapshot of where you stand with a few plain next steps, and never asks for your email.</p>
+    </div>
+  </section>
+</BaseLayout>

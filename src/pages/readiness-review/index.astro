@@ -1,0 +1,20 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { email } from '../../lib/config.ts';
+import { readinessReviewUrl } from '../../lib/urls.ts';
+
+const name = 'Data & AI Readiness Review';
+---
+<BaseLayout
+  title="Request a Data & AI Readiness Review"
+  description="A fixed-price Data & AI Readiness Review: in about 10 days you get a clear plan for your data and AI, and you decide if we’re the right fit."
+  breadcrumbs={[{ name, url: readinessReviewUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">The Readiness Review is a small, fixed-price first step. In about 10 days we look at your data with you and deliver a plan: where your data stands, the main risks, the AI use cases worth starting with and a phased roadmap. It works both ways, so you also decide if we’re the right fit.</p>
+      <p>To request a review now, email us at <a href={`mailto:${email}`}>{email}</a>.</p>
+    </div>
+  </section>
+</BaseLayout>

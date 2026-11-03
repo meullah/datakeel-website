@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { guidesUrl } from '../../lib/urls.ts';
+
+const name = 'Guides';
+---
+<BaseLayout
+  title="Guides: Data Platforms and AI Readiness"
+  description="Plain-English guides to the questions buyers ask about data platforms, lakehouses, Microsoft Fabric, Databricks and getting data ready for AI."
+  breadcrumbs={[{ name, url: guidesUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">We write plain-English answers to the questions people ask before they invest in data and AI, such as how to make your data AI-ready, what a lakehouse is, and how Microsoft Fabric and Databricks compare.</p>
+    </div>
+  </section>
+</BaseLayout>

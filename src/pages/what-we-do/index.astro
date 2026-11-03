@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { whatWeDoUrl } from '../../lib/urls.ts';
+
+const name = 'What we do';
+---
+<BaseLayout
+  title="What We Do: Data Platforms and AI"
+  description="Data platforms, pipelines, lakehouses and governance on Microsoft Fabric and Databricks, and the AI built on top of them."
+  breadcrumbs={[{ name, url: whatWeDoUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">We design, build and run modern data platforms: the pipelines, lakehouses and governance your reports and AI depend on. We work on Microsoft Fabric and Databricks, and once your data is in good shape, we build the AI on top.</p>
+    </div>
+  </section>
+</BaseLayout>

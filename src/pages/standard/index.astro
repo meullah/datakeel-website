@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { standardUrl } from '../../lib/urls.ts';
+
+const name = 'The DataKeel Standard';
+---
+<BaseLayout
+  title="The DataKeel Standard for Data Quality"
+  description="The quality checklist behind every DataKeel AI platform: tested pipelines, documented tables, data quality checks and no lock-in."
+  breadcrumbs={[{ name, url: standardUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">This is the checklist every platform we build meets: every pipeline tested and monitored, every table documented, data quality checks before data reaches AI, and releases through automated pipelines. Your data stays in your own environment, and you own everything we build.</p>
+    </div>
+  </section>
+</BaseLayout>

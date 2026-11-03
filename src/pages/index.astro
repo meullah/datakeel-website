@@ -1,10 +1,27 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { companyName, positioningLine } from '../lib/config.ts';
+import { companyName, cta, positioningLine } from '../lib/config.ts';
+import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
 ---
-<BaseLayout fullTitle={companyName} description={positioningLine}>
-  <div class="container">
-    <h1>{companyName}</h1>
-    <p>{positioningLine}</p>
-  </div>
+<BaseLayout fullTitle={`${companyName}: The Data Backbone Your AI Runs On`} description={positioningLine}>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Data engineering for AI</p>
+      <h1 class="display-hero">The data backbone your AI runs on.</h1>
+      <p class="lead">We design, build and run modern data platforms: pipelines, lakehouses and governance, so your reports agree and your AI works on data you can trust.</p>
+      <p class="hero-ctas">
+        <a class="btn btn-primary" href={readinessReviewUrl()}>{cta.primary}</a>
+        <a class="btn btn-ghost" href={contactUrl()}>{cta.secondary}</a>
+      </p>
+    </div>
+  </section>
 </BaseLayout>
+
+<style>
+  .hero-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+</style>

@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { aboutUrl } from '../../lib/urls.ts';
+
+const name = 'About DataKeel AI';
+---
+<BaseLayout
+  title="About DataKeel AI"
+  description="Why DataKeel AI exists: data is the backbone of AI. Our mission, our values of quality, clarity and ownership, and how we approach the work."
+  breadcrumbs={[{ name, url: aboutUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">We believe data is the backbone of AI, so we build the data platform first and the AI on top. Our work is guided by three values: quality, clarity and ownership. We build every platform so that you understand it and own it.</p>
+    </div>
+  </section>
+</BaseLayout>

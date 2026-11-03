@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { howWeWorkUrl } from '../../lib/urls.ts';
+
+const name = 'How we work';
+---
+<BaseLayout
+  title="How We Work: Review, Design, Build, Run"
+  description="How a DataKeel AI engagement runs, from Review to Design, Build and Run, and why you own all the code and documentation."
+  breadcrumbs={[{ name, url: howWeWorkUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">Every engagement follows four steps: Review, Design, Build and Run, and you know what you get at each one. You own all the code and documentation, and we can hand the platform over to your team. Work with us on a project to build a platform, or for ongoing Run support after launch.</p>
+    </div>
+  </section>
+</BaseLayout>

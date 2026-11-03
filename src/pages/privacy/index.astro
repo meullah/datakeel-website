@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { privacyUrl } from '../../lib/urls.ts';
+
+const name = 'Privacy policy';
+---
+<BaseLayout
+  title="Privacy Policy"
+  description="How DataKeel AI handles personal information sent through this website, what we collect, why, and the choices you have."
+  breadcrumbs={[{ name, url: privacyUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">This policy explains what personal information we collect when you use this website or contact us, why we collect it, how we look after it and the choices you have.</p>
+    </div>
+  </section>
+</BaseLayout>

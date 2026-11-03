@@ -1,0 +1,19 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { email } from '../../lib/config.ts';
+import { contactUrl } from '../../lib/urls.ts';
+
+const name = 'Talk to us';
+---
+<BaseLayout
+  title="Contact Us About Your Data and AI"
+  description={`Talk to DataKeel AI about your data platform or AI plans. Send us a message or email ${email} and we’ll get back to you.`}
+  breadcrumbs={[{ name, url: contactUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">Have a question about your data, a platform or an AI idea? We’re happy to talk it through. Email us at <a href={`mailto:${email}`}>{email}</a> and we’ll get back to you.</p>
+    </div>
+  </section>
+</BaseLayout>

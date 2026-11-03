@@ -1,0 +1,18 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { caseStudiesUrl } from '../../lib/urls.ts';
+
+const name = 'Case studies';
+---
+<BaseLayout
+  title="Case Studies: Data Platforms and AI Results"
+  description="Real data platform and AI projects in healthcare, insurance, automotive and finance: what was wrong, what we built and what changed."
+  breadcrumbs={[{ name, url: caseStudiesUrl() }]}
+>
+  <section class="section">
+    <div class="container">
+      <h1 class="display">{name}</h1>
+      <p class="lead">We’ve helped teams in healthcare, insurance, automotive and finance bring scattered data into one trusted platform and put AI to work on it.</p>
+    </div>
+  </section>
+</BaseLayout>
