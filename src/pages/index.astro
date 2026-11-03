@@ -1,19 +1,10 @@
 ---
-import { Font } from 'astro:assets';
+import BaseLayout from '../layouts/BaseLayout.astro';
 import { companyName, positioningLine } from '../lib/config.ts';
-import '../styles/tokens.css';
-import '../styles/base.css';
 ---
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{companyName}</title>
-    <Font cssVariable="--font-geist" preload={[{ weight: 400 }, { weight: 600 }]} />
-  </head>
-  <body>
+<BaseLayout fullTitle={companyName} description={positioningLine}>
+  <div class="container">
     <h1>{companyName}</h1>
     <p>{positioningLine}</p>
-  </body>
-</html>
+  </div>
+</BaseLayout>

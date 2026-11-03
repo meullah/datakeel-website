@@ -1,0 +1,98 @@
+---
+// The only place that renders <head>, landmarks and JSON-LD (AD-4). Never renders an <h1>.
+import { Font } from 'astro:assets';
+import { companyName, defaultOgImage, email, themeColor, themeColorDark } from '../lib/config.ts';
+import { absoluteUrl, homeUrl, isNoindexPath } from '../lib/urls.ts';
+import {
+  assertDescription,
+  assertTitle,
+  buildGraph,
+  fullTitle as withSuffix,
+  serializeGraph,
+  type Crumb,
+  type GraphNode,
+} from '../lib/seo.ts';
+import '../styles/tokens.css';
+import '../styles/base.css';
+
+export type Props = ({ title: string; fullTitle?: never } | { fullTitle: string; title?: never }) & {
+  description: string;
+  /** Crumbs after Home; required on every page except Home. */
+  breadcrumbs?: Crumb[];
+  ogDescription?: string;
+  /** Site path or absolute URL; the default is the 400px square avatar. */
+  ogImage?: string;
+  ogImageAlt?: string;
+  noindex?: boolean;
+  /** Extra JSON-LD nodes (e.g. FAQPage) appended to the page's @graph. */
+  graph?: GraphNode[];
+};
+
+const { title, fullTitle, description, breadcrumbs, ogDescription, ogImage, ogImageAlt, noindex: noindexProp = false, graph = [] } = Astro.props;
+const path = Astro.url.pathname.endsWith('/') ? Astro.url.pathname : Astro.url.pathname + '/';
+
+const noindex = noindexProp || isNoindexPath(path);
+const pageTitle = fullTitle !== undefined ? assertTitle(fullTitle, path) : withSuffix(title!, path);
+assertDescription(description, path);
+const socialDescription = ogDescription ? assertDescription(ogDescription, path) : description;
+const canonical = absoluteUrl(path);
+const image = ogImage && /^https?:/.test(ogImage) ? ogImage : absoluteUrl(ogImage ?? defaultOgImage);
+const imageAlt = ogImage ? (ogImageAlt ?? pageTitle) : companyName;
+const jsonLd = serializeGraph(buildGraph({ path, title: pageTitle, description, breadcrumbs, noindex, extraNodes: graph }));
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content={companyName} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={socialDescription} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={image} />
+    <meta property="og:image:alt" content={imageAlt} />
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={socialDescription} />
+    <meta name="twitter:image" content={image} />
+    <meta name="twitter:image:alt" content={imageAlt} />
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/svg/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/png/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content={themeColor} media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content={themeColorDark} media="(prefers-color-scheme: dark)" />
+    <Font cssVariable="--font-geist" preload={[{ weight: 400 }, { weight: 600 }]} />
+    <script type="application/ld+json" set:html={jsonLd} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <slot name="header">
+      <header class="container site-header">
+        <a href={homeUrl()}>{companyName}</a>
+      </header>
+    </slot>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <slot name="footer">
+      <footer class="container site-footer small">
+        <p>{companyName} · <a href={`mailto:${email}`}>{email}</a></p>
+      </footer>
+    </slot>
+  </body>
+</html>
+
+<style>
+  /* ponytail: placeholder chrome until the Header (1.6) and Footer (1.8) components land. */
+  .site-header,
+  .site-footer {
+    padding-block: var(--space-5);
+  }
+</style>

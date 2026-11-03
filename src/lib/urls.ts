@@ -29,3 +29,13 @@ export const termsUrl = () => path('terms');
 
 /** Absolute URL for canonicals, sitemaps and JSON-LD. */
 export const absoluteUrl = (p: string) => siteUrl + (p.startsWith('/') ? p : '/' + p);
+export const styleguideUrl = () => path('styleguide');
+
+/** Pages that carry `noindex` and stay out of the sitemap, plus any path ending in /sent/. */
+export const noindexPaths: readonly string[] = ['/404/', styleguideUrl()];
+
+/** Tolerates "/404", "/404/" and "/404.html". */
+export const isNoindexPath = (p: string) => {
+  const n = p.replace(/(\/index)?\.html$/, '').replace(/\/?$/, '/');
+  return noindexPaths.includes(n) || n.endsWith('/sent/');
+};

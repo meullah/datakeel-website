@@ -1,0 +1,10 @@
+---
+// BaseLayout plus the 720px reading column.
+// ponytail: header/footer slots are not forwarded; BaseLayout's defaults apply. Forward them if a reading page ever needs custom chrome.
+import BaseLayout, { type Props as BaseProps } from './BaseLayout.astro';
+
+export type Props = BaseProps;
+---
+<BaseLayout {...Astro.props}>
+  <div class="reading"><slot /></div>
+</BaseLayout>
