@@ -1,0 +1,39 @@
+---
+// Industry filter chips around a case grid (slot). No JS: chips link to the industry pages. With JS: the case-filter island.
+import { getIndustries } from '../lib/content.ts';
+import { caseStudiesUrl, industryUrl } from '../lib/urls.ts';
+
+const chips = [{ id: '', name: 'All', href: caseStudiesUrl() }, ...(await getIndustries()).map((i) => ({ id: i.id, name: i.data.name, href: industryUrl(i.id) }))];
+---
+<div data-case-filter>
+  <nav aria-label="Filter by industry">
+    <ul class="case-filter-chips">
+      {chips.map((c) => (
+        <li>
+          <a class:list={['chip', { 'is-selected': !c.id }]} href={c.href} data-chip={c.id} aria-current={c.id ? undefined : 'true'}>{c.name}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+  <p class="visually-hidden" aria-live="polite" data-case-filter-status></p>
+  <slot />
+  <p class="case-filter-empty" data-case-filter-empty hidden>No case studies here yet. <a href={caseStudiesUrl()}>See all case studies.</a></p>
+</div>
+
+<script>
+  import '../islands/case-filter.ts';
+</script>
+
+<style>
+  .case-filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin: 0 0 var(--space-6);
+    padding: 0;
+    list-style: none;
+  }
+  .case-filter-empty {
+    margin: 0;
+  }
+</style>

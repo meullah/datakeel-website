@@ -1,0 +1,35 @@
+---
+// Minimal detail page; Story 3.3 adds the full story, side panel and related cases.
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ClosingCta from '../../components/ClosingCta.astro';
+import { getPublished } from '../../lib/content.ts';
+import { caseStudiesUrl, caseStudyUrl, homeUrl } from '../../lib/urls.ts';
+
+export async function getStaticPaths() {
+  return (await getPublished('caseStudies')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { id, data } = Astro.props.entry;
+const breadcrumbs = [
+  { name: 'Case studies', url: caseStudiesUrl() },
+  { name: data.headline, url: caseStudyUrl(id) },
+];
+---
+<BaseLayout fullTitle={data.seoTitle} description={data.metaDescription} breadcrumbs={breadcrumbs}>
+  <section class="section">
+    <div class="container">
+      <nav aria-label="Breadcrumb" class="small muted breadcrumb">
+        <a href={homeUrl()}>Home</a> / <a href={caseStudiesUrl()}>Case studies</a> / <span aria-current="page">{data.headline}</span>
+      </nav>
+      <h1 class="display">{data.headline}</h1>
+      <p class="lead">{data.subtitle}</p>
+    </div>
+  </section>
+  <ClosingCta />
+</BaseLayout>
+
+<style>
+  .breadcrumb {
+    margin-bottom: var(--space-4);
+  }
+</style>
