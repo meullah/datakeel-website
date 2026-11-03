@@ -4,7 +4,7 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { join, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as u from '../src/lib/urls.ts';
-import { industries } from '../src/lib/industries.ts';
+import { industries } from './content-data.ts';
 import { dockProgress, isCurrent, SOLID_AFTER } from '../src/lib/pure/nav.ts';
 import { HERO_STORY_DOCK, OVERLAY_OPEN } from '../src/lib/pure/events.ts';
 

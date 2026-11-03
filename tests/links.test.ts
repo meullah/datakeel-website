@@ -4,7 +4,7 @@ import { existsSync, readFileSync, readdirSync, statSync } from 'node:fs';
 import { basename, isAbsolute, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { cta, email, officialProfiles, officialProfilesFor, positioningLine, sameAs } from '../src/lib/config.ts';
-import { industries } from '../src/lib/industries.ts';
+import { industries } from './content-data.ts';
 import * as u from '../src/lib/urls.ts';
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));

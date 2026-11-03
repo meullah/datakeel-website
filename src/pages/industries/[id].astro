@@ -1,16 +1,16 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { industries } from '../../lib/industries.ts';
+import { getIndustries } from '../../lib/content.ts';
 import { homeUrl, industryUrl } from '../../lib/urls.ts';
 
-export function getStaticPaths() {
-  return industries.map((industry) => ({ params: { id: industry.id }, props: { industry } }));
+export async function getStaticPaths() {
+  return (await getIndustries()).map((industry) => ({ params: { id: industry.id }, props: { industry } }));
 }
 
-const { industry } = Astro.props;
+const { id, data: industry } = Astro.props.industry;
 // "Industries" has no page, so the crumb trail is Home / {Industry} (assertCrumbs needs a real url per crumb).
-const breadcrumbs = [{ name: industry.h1, url: industryUrl(industry.id) }];
+const breadcrumbs = [{ name: industry.h1, url: industryUrl(id) }];
 ---
 <BaseLayout title={industry.title} description={industry.description} breadcrumbs={breadcrumbs}>
   <section class="section">

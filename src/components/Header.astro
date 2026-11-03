@@ -5,7 +5,7 @@ import Logo from './Logo.astro';
 import MobileMenu from './MobileMenu.astro';
 import ThemeToggle from './ThemeToggle.astro';
 import { cta } from '../lib/config.ts';
-import { industries } from '../lib/industries.ts';
+import { getIndustries } from '../lib/content.ts';
 import { isCurrent } from '../lib/pure/nav.ts';
 import {
   aboutUrl,
@@ -27,10 +27,11 @@ export type Props = {
 };
 
 const { current, transparent = false } = Astro.props;
+const industries = await getIndustries();
 const link = (label: string, href: string) => ({ label, href, current: isCurrent(current, href) });
 const before = [link('What We Do', whatWeDoUrl()), link('How We Work', howWeWorkUrl()), link('Case Studies', caseStudiesUrl())];
 const after = [link('Guides', guidesUrl()), link('Standard', standardUrl()), link('About', aboutUrl())];
-const industryLinks = industries.map((i) => link(i.name, industryUrl(i.id)));
+const industryLinks = industries.map((i) => link(i.data.name, industryUrl(i.id)));
 // No /industries/ page exists, so the trigger is the section parent of the four pages.
 const industriesCurrent = industryLinks.some((l) => l.current) ? 'true' : undefined;
 ---

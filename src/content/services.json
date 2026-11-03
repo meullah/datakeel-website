@@ -1,0 +1,7 @@
+[
+  { "id": "data-platforms", "order": 1, "name": "Data platforms on Microsoft Fabric and Databricks" },
+  { "id": "data-integration", "order": 2, "name": "Data integration" },
+  { "id": "data-quality-governance", "order": 3, "name": "Data quality and governance" },
+  { "id": "ai-ready-data", "order": 4, "name": "AI-ready data and AI use cases" },
+  { "id": "managed-data-operations", "order": 5, "name": "Managed data operations" }
+]
