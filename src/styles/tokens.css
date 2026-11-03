@@ -12,6 +12,7 @@
   --color-brand-orange: #FF4800; /* print and flat logo only, not web UI */
   --color-wordmark-charcoal: #313131;
   --color-on-gradient: #1A0A02;
+  --logo-wordmark: var(--color-wordmark-charcoal);
   --gradient-brand: linear-gradient(35deg, var(--color-brand-warm) 0%, var(--color-brand-hot) 100%);
   /* Gradient display words: brand-warm is too light on the light background */
   --gradient-text: linear-gradient(35deg, var(--color-brand-hot) 0%, var(--color-accent-text) 100%);
@@ -117,6 +118,7 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
+  --logo-wordmark: #FFFFFF; /* from logo-horizontal-color-on-dark.svg */
   --color-background: #0F1115;
   --color-surface: #14171C;
   --color-card: #1A1E25;

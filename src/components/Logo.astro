@@ -1,0 +1,63 @@
+---
+// Brand logo as inline SVG (geometry from Logos-web/svg/logo-horizontal-color.svg).
+// The wordmark follows --logo-wordmark, so one SVG serves both themes.
+import { homeUrl } from '../lib/urls.ts';
+
+export type Props = {
+  /** Unique per page: prefixes the gradient ids (header, mobile menu and footer each render one). */
+  id: string;
+  href?: string;
+  label?: string;
+  /** Wraps the mark in [data-dock-target] for the Hero Story (Epic 2). One per page. */
+  dockTarget?: boolean;
+};
+
+const { id, href = homeUrl(), label = 'DataKeel AI home', dockTarget = false } = Astro.props;
+const g0 = `${id}-g0`;
+const g1 = `${id}-g1`;
+---
+<a class="logo" href={href} aria-label={label}>
+  <svg width="527.61" height="101.66" viewBox="40.44 89.67 527.61 101.66" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <g data-dock-target={dockTarget ? '' : undefined}>
+      <path d="M70.936 185.332H46.4441V95.6676H70.936V185.332Z" fill={`url(#${g0})`} />
+      <path d="M136.109 185.332H74.5158L109.664 95.6676H136.109V185.332Z" fill={`url(#${g1})`} />
+    </g>
+    <path class="wordmark" d="M176.242 166H158.556V116.841H175.772C190.297 116.841 200.317 126.861 200.317 141.522C200.317 155.98 190.499 166 176.242 166ZM174.965 124.777H167.164V158.065H175.435C185.254 158.065 191.239 151.743 191.239 141.522C191.239 131.098 185.119 124.777 174.965 124.777ZM210.143 166H201.198L218.952 116.841H227.762L245.515 166H236.437L232.469 154.635H214.11L210.143 166ZM222.247 131.501L216.666 147.372H229.981L224.332 131.501C223.928 130.224 223.458 128.744 223.323 127.736C223.122 128.677 222.718 130.156 222.247 131.501ZM242.976 124.777V116.841H280.366V124.777H265.975V166H257.367V124.777H242.976ZM286.782 166H277.838L295.592 116.841H304.401L322.155 166H313.077L309.109 154.635H290.75L286.782 166ZM298.887 131.501L293.305 147.372H306.621L300.972 131.501C300.568 130.224 300.098 128.744 299.963 127.736C299.761 128.677 299.358 130.156 298.887 131.501ZM336.927 116.841V142.665L356.833 116.841H366.987L350.713 137.823L367.189 166H357.236L345.064 145.086L336.927 155.509V166H328.319V116.841H336.927ZM404.164 166H373.633V116.841H404.164V124.777H382.241V137.419H401.878V145.018H382.241V158.065H404.164V166ZM444.027 166H413.497V116.841H444.027V124.777H422.104V137.419H441.741V145.018H422.104V158.065H444.027V166ZM461.968 116.841V158.065H482.546V166H453.36V116.841H461.968Z" />
+    <path class="logo-ai" d="M511.907 166H502.963L520.717 116.841H529.527L547.28 166H538.202L534.234 154.635H515.875L511.907 166ZM524.012 131.501L518.431 147.372H531.746L526.097 131.501C525.693 130.224 525.223 128.744 525.088 127.736C524.886 128.677 524.483 130.156 524.012 131.501ZM562.052 116.841V166H553.445V116.841H562.052Z" />
+    <defs>
+      <linearGradient id={g0} x1="96.2309" y1="90.3313" x2="73.7183" y2="185.385" gradientUnits="userSpaceOnUse">
+        <stop class="stop-hot" />
+        <stop class="stop-warm" offset="0.980769" />
+      </linearGradient>
+      <linearGradient id={g1} x1="96.2309" y1="90.3313" x2="73.7183" y2="185.385" gradientUnits="userSpaceOnUse">
+        <stop class="stop-hot" />
+        <stop class="stop-warm" offset="0.980769" />
+      </linearGradient>
+    </defs>
+  </svg>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--touch-min);
+  }
+  .logo svg {
+    width: var(--logo-width, 132px);
+    min-width: 100px;
+    height: auto;
+  }
+  .wordmark {
+    fill: var(--logo-wordmark);
+  }
+  .logo-ai {
+    fill: var(--color-brand-orange);
+  }
+  .stop-hot {
+    stop-color: var(--color-brand-hot);
+  }
+  .stop-warm {
+    stop-color: var(--color-brand-warm);
+  }
+</style>

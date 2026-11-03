@@ -68,6 +68,30 @@ function assertPairs(theme: string, t: Record<string, string>, fgs: string[], bg
 
 const surfaces = ['background', 'surface', 'card'];
 
+// --logo-wordmark from a theme block, following a var(--color-…) reference.
+function logoWordmark(selector: RegExp, t: Record<string, string>): string {
+  for (const [, sel, body] of css.matchAll(/([^{}]+)\{([^}]*)\}/g)) {
+    if (!selector.test(sel)) continue;
+    const v = body.match(/--logo-wordmark:\s*([^;]+);/)?.[1].trim();
+    assert.ok(v, `no --logo-wordmark for ${selector}`);
+    const ref = v.match(/^var\(--color-([\w-]+)\)$/);
+    return ref ? t[ref[1]] : v;
+  }
+  throw new Error(`no block for ${selector}`);
+}
+
+for (const [theme, t, sel] of [
+  ['light', light, /:root/],
+  ['dark', dark, /^\s*\[data-theme="dark"\]\s*$/],
+] as const) {
+  test(`${theme}: logo wordmark is at least 3:1 on the background`, () => {
+    const wm = logoWordmark(sel, t);
+    assert.match(wm, /^#[0-9a-f]{6}$/i);
+    const ratio = contrast(wm, t.background);
+    assert.ok(ratio >= 3, `${theme}: wordmark ${wm} on background is ${ratio.toFixed(2)}:1`);
+  });
+}
+
 test('contrast function matches known WCAG values', () => {
   assert.equal(contrast('#000000', '#FFFFFF').toFixed(1), '21.0');
   assert.equal(contrast('#777777', '#FFFFFF').toFixed(2), '4.48');

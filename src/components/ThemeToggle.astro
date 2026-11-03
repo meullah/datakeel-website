@@ -1,0 +1,57 @@
+---
+// Theme toggle button. Rendered hidden; the theme island reveals it and keeps aria-pressed in sync,
+// so without JS (or if the island fails) no dead toggle shows.
+---
+<button class="theme-toggle" type="button" data-theme-toggle aria-pressed="false" aria-label="Dark theme" hidden>
+  <svg class="icon-moon" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+    <path d="M13.5 9.5A5.5 5.5 0 1 1 6.5 2.5a4.5 4.5 0 0 0 7 7Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+  </svg>
+  <svg class="icon-sun" width="16" height="16" viewBox="0 0 16 16" aria-hidden="true">
+    <circle cx="8" cy="8" r="3" fill="none" stroke="currentColor" stroke-width="1.5" />
+    <path d="M8 1v1.5M8 13.5V15M1 8h1.5M13.5 8H15M3.05 3.05l1.06 1.06M11.89 11.89l1.06 1.06M3.05 12.95l1.06-1.06M11.89 4.11l1.06-1.06" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+  </svg>
+</button>
+
+<script>
+  import '../islands/theme.ts';
+</script>
+
+<style>
+  .theme-toggle {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    min-width: var(--control-height-sm);
+    min-height: var(--control-height-sm);
+    padding: 0 var(--space-3);
+    background: transparent;
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-full);
+    cursor: pointer;
+    transition:
+      color var(--duration) ease,
+      border-color var(--duration) ease;
+  }
+  /* 44px touch target around the 40px pill */
+  .theme-toggle::after {
+    content: '';
+    position: absolute;
+    inset: calc((var(--control-height-sm) - var(--touch-min)) / 2);
+  }
+  .theme-toggle:hover {
+    color: var(--color-text);
+    border-color: var(--color-brand-warm);
+  }
+  /* The icon shows the theme you switch to. */
+  .icon-sun,
+  :global(:root[data-theme="dark"]) .icon-moon {
+    display: none;
+  }
+  :global(:root[data-theme="dark"]) .icon-sun {
+    display: block;
+  }
+  .theme-toggle[hidden] {
+    display: none;
+  }
+</style>

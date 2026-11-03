@@ -1,5 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Logo from '../components/Logo.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
 import { companyName } from '../lib/config.ts';
 import { styleguideUrl } from '../lib/urls.ts';
 
@@ -20,11 +22,18 @@ const colors = [
   breadcrumbs={[{ name: 'Style guide', url: styleguideUrl() }]}
   noindex
 >
+  <h1 class="visually-hidden">Style guide</h1>
+  <div class="container sg-bar">
+    <p class="small muted">Page theme</p>
+    <ThemeToggle />
+  </div>
   <div class="sg">
-    <h1 class="visually-hidden">Style guide</h1>
     {themes.map((t) => (
       <section class="sg-panel" data-theme={t.id} aria-labelledby={`sg-${t.id}`}>
         <p class="eyebrow" id={`sg-${t.id}`}>{t.label}</p>
+
+        <h2 class="sg-h">Logo</h2>
+        <Logo id={`sg-logo-${t.id}`} />
 
         <h2 class="sg-h">Type scale</h2>
         <p class="display-hero">Display hero</p>
@@ -80,6 +89,13 @@ const colors = [
 </BaseLayout>
 
 <style>
+  .sg-bar {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+  }
   .sg {
     display: grid;
     grid-template-columns: 1fr;

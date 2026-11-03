@@ -44,6 +44,8 @@ const jsonLd = serializeGraph(buildGraph({ path, title: pageTitle, description, 
 <html lang="en">
   <head>
     <meta charset="utf-8" />
+    {/* ponytail: inline copy of resolveTheme() in src/lib/pure/theme.ts; runs before any CSS so there is no flash. */}
+    <script is:inline>(function(){var t;try{t=localStorage.getItem('dk-theme')}catch(e){}if(t!=='light'&&t!=='dark')t=window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';document.documentElement.dataset.theme=t})();</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
