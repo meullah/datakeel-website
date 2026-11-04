@@ -5,6 +5,9 @@ export const positioningLine =
   'We build the data platform your business runs on, then the AI that makes it useful.';
 export const siteUrl = 'https://datakeelai.com';
 export const email = 'hello@datakeelai.com';
+// Web3Forms public access key (safe in client code). Temporary: delivers to the founder's personal inbox until
+// hello@datakeelai.com is live; swap for a key tied to hello@ before launch (deferred-work.md).
+export const web3formsKey = 'df4be7b4-9a4c-4661-943f-16b0bc963d67';
 // Placeholders: the founder will supply both URLs (deferred-work.md). An empty URL hides its footer link and sameAs entry.
 export const profileUrls = { LinkedIn: '', Upwork: '' };
 export const officialProfilesFor = (urls: Record<string, string>) =>
