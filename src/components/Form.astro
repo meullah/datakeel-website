@@ -1,0 +1,205 @@
+---
+// Readiness Review request or Contact form. A real Web3Forms POST without JS; the form island adds validation,
+// a JSON submit and the in-place success state.
+import { cta, email, formEndpoint, formSubjects, web3formsKey } from '../lib/config.ts';
+import { companySizes, countries, requiredFields, successCopy, type FormVariant } from '../lib/pure/constants.ts';
+import { absoluteUrl, contactSentUrl, privacyUrl, readinessReviewSentUrl } from '../lib/urls.ts';
+
+export interface Props {
+  variant: FormVariant;
+  /** Prefix for element ids; set it when a page shows the same variant twice. */
+  id?: string;
+}
+
+const { variant, id = variant } = Astro.props;
+const isRequest = variant === 'readiness-review';
+const sentUrl = isRequest ? readinessReviewSentUrl() : contactSentUrl();
+const success = successCopy[variant];
+const required = new Set(requiredFields[variant]);
+
+type Field = { name: string; label: string; type?: 'text' | 'email'; autocomplete?: string; options?: readonly string[]; textarea?: boolean };
+const fields: Field[] = [
+  { name: 'name', label: 'Name', autocomplete: 'name' },
+  { name: 'email', label: 'Work email', type: 'email', autocomplete: 'email' },
+  { name: 'company', label: 'Company', autocomplete: 'organization' },
+  ...(isRequest
+    ? [
+        { name: 'role', label: 'Role', autocomplete: 'organization-title' },
+        { name: 'companySize', label: 'Company size', options: companySizes, autocomplete: 'off' },
+      ]
+    : []),
+  { name: 'country', label: 'Country', options: countries(), autocomplete: 'country-name' },
+  { name: 'message', label: isRequest ? 'What’s your main data challenge?' : 'Message', textarea: true },
+];
+const fid = (name: string) => `${id}-${name}`;
+---
+<div class="form-wrap">
+  <form class="form" method="POST" action={formEndpoint} data-form={variant}>
+    <input type="hidden" name="access_key" value={web3formsKey} />
+    <input type="hidden" name="form_type" value={variant} />
+    <input type="hidden" name="subject" value={formSubjects[variant]} />
+    <input type="hidden" name="redirect" value={absoluteUrl(sentUrl)} />
+    <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" />
+
+    <p class="visually-hidden" aria-live="polite" data-form-summary></p>
+
+    <div class="form-fields">
+      {fields.map((f) => {
+        const attrs = { id: fid(f.name), name: f.name, class: 'form-input', autocomplete: f.autocomplete, required: required.has(f.name) };
+        return (
+          <div class:list={['form-field', { 'form-field-wide': f.textarea }]}>
+            <label for={fid(f.name)}>
+              {f.label}
+              {!required.has(f.name) && <span class="form-optional"> (optional)</span>}
+            </label>
+            {f.textarea ? (
+              <textarea {...attrs} rows="5" />
+            ) : f.options ? (
+              <select {...attrs}>
+                <option value="">Select…</option>
+                {f.options.map((o) => <option>{o}</option>)}
+              </select>
+            ) : (
+              <input {...attrs} type={f.type ?? 'text'} />
+            )}
+            {required.has(f.name) && (
+              <p class="form-error" id={`${fid(f.name)}-error`} hidden>
+                <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="7" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M8 4.5v4.5" stroke="currentColor" stroke-width="1.5" /><circle cx="8" cy="11.5" r="1" fill="currentColor" /></svg>
+                <span data-form-error-text></span>
+              </p>
+            )}
+          </div>
+        );
+      })}
+    </div>
+
+    <div class="form-banner" role="alert" data-form-failure hidden>
+      <p>Something went wrong on our side. Your message is still here; please try again, or email <a href={`mailto:${email}`}>{email}</a>.</p>
+    </div>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit">{isRequest ? cta.primary : 'Send message'}</button>
+      <p class="small muted">We only use your details to reply. See our <a href={privacyUrl()}>privacy notice</a>.</p>
+    </div>
+  </form>
+
+  <template data-form-success>
+    <div class="form-success" role="status" tabindex="-1">
+      <svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5" /><path d="M6 10.2l2.7 2.7L14 7.5" fill="none" stroke="currentColor" stroke-width="1.5" /></svg>
+      <div>
+        <p class="form-success-label">{success.label}</p>
+        <h3 data-form-success-heading></h3>
+        {success.note && <p class="muted">{success.note} <a href={`mailto:${email}`}>{email}</a>.</p>}
+      </div>
+    </div>
+  </template>
+</div>
+
+<script>
+  import '../islands/form.ts';
+</script>
+
+<style>
+  .form-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--space-5) var(--space-4);
+  }
+  @media (width >= 768px) {
+    .form-fields {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .form-field-wide {
+      grid-column: 1 / -1;
+    }
+  }
+  .form-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: var(--type-small-size);
+    font-weight: 500;
+    line-height: var(--type-small-line);
+  }
+  .form-optional {
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+  .form-input {
+    display: block;
+    width: 100%;
+    min-height: var(--control-height);
+    padding: 0 14px;
+    background: var(--color-surface);
+    color: var(--color-text);
+    /* text-muted, not border: input edges need 3:1 against the surface (WCAG 1.4.11) */
+    border: 1px solid var(--color-text-muted);
+    border-radius: var(--radius-md);
+    font-size: var(--type-body-size);
+  }
+  select.form-input {
+    appearance: none;
+    padding-right: 36px;
+    background-image: linear-gradient(45deg, transparent 50%, var(--color-text-muted) 50%), linear-gradient(135deg, var(--color-text-muted) 50%, transparent 50%);
+    background-position: calc(100% - 20px) 50%, calc(100% - 15px) 50%;
+    background-size: 5px 5px;
+    background-repeat: no-repeat;
+  }
+  textarea.form-input {
+    min-height: 120px;
+    padding: 12px 14px;
+    line-height: 1.5;
+    resize: vertical;
+  }
+  .form-input[aria-invalid='true'] {
+    border-color: var(--color-error);
+  }
+  .form-error:not([hidden]) {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+    margin-top: 6px;
+    color: var(--color-error);
+    font-size: var(--type-small-size);
+    line-height: var(--type-small-line);
+  }
+  .form-error svg,
+  .form-success svg {
+    flex: none;
+    margin-top: 3px;
+  }
+  .form-banner {
+    margin-top: var(--space-5);
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-error);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+  .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-3) var(--space-5);
+    margin-top: var(--space-5);
+  }
+  .form-success {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-start;
+    padding: var(--space-6);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+  }
+  .form-success svg {
+    color: var(--color-success);
+  }
+  .form-success-label {
+    margin-bottom: var(--space-1);
+    color: var(--color-success);
+    font-size: var(--type-small-size);
+    font-weight: 500;
+  }
+  .form-success h3 {
+    margin-bottom: var(--space-2);
+  }
+</style>

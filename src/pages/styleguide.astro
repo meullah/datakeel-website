@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClosingCta from '../components/ClosingCta.astro';
+import Form from '../components/Form.astro';
 import Logo from '../components/Logo.astro';
 import ThemeToggle from '../components/ThemeToggle.astro';
 import { companyName } from '../lib/config.ts';
@@ -19,7 +20,7 @@ const colors = [
 ---
 <BaseLayout
   title="Style guide"
-  description={`Internal style guide for the ${companyName} website: type scale, colors, buttons, chips and cards in light and dark themes.`}
+  description={`Internal style guide for the ${companyName} website: type scale, colors, buttons, chips, cards and forms in light and dark themes.`}
   breadcrumbs={[{ name: 'Style guide', url: styleguideUrl() }]}
   noindex
 >
@@ -84,6 +85,12 @@ const colors = [
             <p class="small muted">Hover darkens the border and underlines the title.</p>
           </a>
         </div>
+
+        <h2 class="sg-h">Forms</h2>
+        <p class="small muted">Readiness Review request</p>
+        <Form variant="readiness-review" id={`sg-${t.id}-rr`} />
+        <p class="small muted">Contact</p>
+        <Form variant="contact" id={`sg-${t.id}-contact`} />
       </section>
     ))}
   </div>
