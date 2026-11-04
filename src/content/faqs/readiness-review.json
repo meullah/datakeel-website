@@ -1,0 +1,18 @@
+[
+  {
+    "question": "How much does a Readiness Review cost?",
+    "answer": "It’s a fixed price, agreed before we start, so there are no surprises. Send a request and we’ll reply within one business day with details and pricing."
+  },
+  {
+    "question": "Do we have to commit to a bigger project afterward?",
+    "answer": "No. The plan is yours to keep and use, with us or with your own team. The review is also your chance to decide if we’re the right fit."
+  },
+  {
+    "question": "What do you need from our team?",
+    "answer": "Someone who knows your data for the kickoff on day 1 and the walkthrough on day 3, plus access to the systems we agree to review."
+  },
+  {
+    "question": "Does our data leave our environment?",
+    "answer": "No. We work inside your own cloud and systems. [The DataKeel Standard](/standard/) explains how we handle access and data location."
+  }
+]

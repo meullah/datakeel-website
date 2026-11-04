@@ -1,6 +1,7 @@
 // The single SEO path (AD-4, AD-12): titles, descriptions and the JSON-LD @graph.
 // Pure functions; any guard failure throws so the build fails.
 import { companyName, email, positioningLine, sameAs, siteUrl } from './config.ts';
+import { plainMd } from './pure/inline-md.ts';
 import { absoluteUrl, homeUrl } from './urls.ts';
 
 export const TITLE_SUFFIX = ` | ${companyName}`;
@@ -66,6 +67,30 @@ export const breadcrumbNode = (crumbs: Crumb[], path: string): GraphNode => ({
     name: c.name,
     item: absoluteUrl(c.url),
   })),
+});
+
+export type FaqItem = { question: string; answer: string };
+
+/** The page's one FAQPage node; answers are plain text (inline markdown stripped). */
+export const faqPageNode = (items: FaqItem[], path: string): GraphNode => ({
+  '@type': 'FAQPage',
+  '@id': `${absoluteUrl(path)}#faq`,
+  isPartOf: { '@id': webPageId(path) },
+  mainEntity: items.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: plainMd(item.answer) },
+  })),
+});
+
+/** A service the Organization provides. No price or offers: amounts are shared by email only. */
+export const serviceNode = ({ name, description, path }: { name: string; description: string; path: string }): GraphNode => ({
+  '@type': 'Service',
+  '@id': `${absoluteUrl(path)}#service`,
+  name,
+  description,
+  url: absoluteUrl(path),
+  provider: { '@id': ORGANIZATION_ID },
 });
 
 export function assertCrumbs(crumbs: Crumb[], path: string): Crumb[] {

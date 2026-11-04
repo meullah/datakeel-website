@@ -29,6 +29,17 @@ const services = defineCollection({
   schema: z.strictObject({ id: z.string(), order: z.number().int(), name: text }),
 });
 
+// FAQs per page (Story 4.2): src/content/faqs/{page-key}.json holds an array of { question, answer }.
+// The key is the route slug; the answer may use inline markdown (links to internal paths).
+// ponytail: one file() per collection, so only one page key today; switch to a multi-file loader when a second FAQ file lands.
+const faqKey = 'readiness-review';
+const faqs = defineCollection({
+  loader: file(`src/content/faqs/${faqKey}.json`, { parser: (raw) => ({ [faqKey]: { items: JSON.parse(raw) } }) }),
+  schema: z.strictObject({
+    items: z.array(z.strictObject({ question: text, answer: text })).min(4).max(8),
+  }),
+});
+
 const stat = z.strictObject({
   value: z.number().nullable(),
   prefix: z.string().default(''),
@@ -69,4 +80,4 @@ const caseStudies = defineCollection({
   }),
 });
 
-export const collections = { caseStudies, industries, services };
+export const collections = { caseStudies, faqs, industries, services };

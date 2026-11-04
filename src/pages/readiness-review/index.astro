@@ -1,22 +1,291 @@
 ---
+// Copy is founder-approved (2026-11-04) and lives here, not in a pages collection: one page, so YAGNI.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { email } from '../../lib/config.ts';
+import Faq from '../../components/Faq.astro';
+import Form from '../../components/Form.astro';
+import { cta, email } from '../../lib/config.ts';
+import { getFaqs } from '../../lib/content.ts';
+import { faqPageNode, serviceNode } from '../../lib/seo.ts';
 import { readinessReviewUrl } from '../../lib/urls.ts';
 
 const name = 'Data & AI Readiness Review';
+const path = readinessReviewUrl();
+const description =
+  'A fixed-price Data & AI Readiness Review: in about 10 days you get a clear plan for your data and AI, and you decide if we’re the right fit.';
+const lead =
+  'A short, fixed-price look at your data before you build on it. In about 10 days we review your main systems and data, then hand you a written plan: what’s ready, what’s at risk, and which AI use cases make sense first.';
+const faqs = await getFaqs('readiness-review');
+
+const steps = [
+  { day: 'Day 1', title: 'Kickoff', text: 'We meet your team, agree the scope and list the systems that matter most.' },
+  { day: 'Day 3', title: 'Data walkthrough', text: 'We walk through your data together and check how it flows between systems.' },
+  { day: 'Day 10', title: 'Plan delivered', text: 'You get the written report, and we go through it with you.' },
+];
+const reportParts = ['Data readiness score', 'Top 3 data risks', 'AI use cases for the next 90 days', 'Phased roadmap with costs'];
 ---
 <BaseLayout
   title="Request a Data & AI Readiness Review"
-  description="A fixed-price Data & AI Readiness Review: in about 10 days you get a clear plan for your data and AI, and you decide if we’re the right fit."
-  breadcrumbs={[{ name, url: readinessReviewUrl() }]}
+  description={description}
+  breadcrumbs={[{ name, url: path }]}
+  graph={[serviceNode({ name, description: lead, path }), faqPageNode(faqs, path)]}
 >
-  <section class="section">
+  <section class="section rr-hero" data-section="hero">
     <div class="container">
+      <p class="eyebrow">The first step</p>
       <h1 class="display">{name}</h1>
-      <p class="lead">The Readiness Review is a small, fixed-price first step. In about 10 days we look at your data with you and deliver a plan: where your data stands, the main risks, the AI use cases worth starting with and a phased roadmap. It works both ways, so you also decide if we’re the right fit.</p>
-      <p>To request a review now, email us at <a href={`mailto:${email}`}>{email}</a>.</p>
+      <p class="lead">{lead}</p>
+      <p class="lead">It works both ways. We get to know your data, and you see what it’s like to work with us, so you also decide if we’re the right fit. Nothing to commit to beyond the review.</p>
+      <ul class="chip-list rr-facts">
+        <li class="chip">Fixed price</li>
+        <li class="chip">About 10 days</li>
+        <li class="chip">Written plan at the end</li>
+      </ul>
+      <div class="rr-actions">
+        <a class="btn btn-primary" href="#request" data-hero-cta>{cta.primary}</a>
+        <p class="small muted">Prefer email? <a href={`mailto:${email}`}>{email}</a></p>
+      </div>
     </div>
   </section>
+
+  <section class="section section-surface" aria-labelledby="timeline-heading" data-section="timeline">
+    <div class="container">
+      <h2 id="timeline-heading">How long does a Readiness Review take?</h2>
+      <p class="lead muted rr-answer">About 10 working days, from the first call to the finished plan.</p>
+      <ol class="timeline">
+        {steps.map((step, i) => (
+          <li>
+            <span class:list={['timeline-node', { 'timeline-node-final': i === steps.length - 1 }]} aria-hidden="true">{i + 1}</span>
+            <p class="timeline-day">{step.day}</p>
+            <h3>{step.title}</h3>
+            <p class="muted">{step.text}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="report-heading" data-section="report">
+    <div class="container">
+      <h2 id="report-heading">What’s in the report?</h2>
+      <p class="lead muted rr-answer">A short written plan with four parts, so you know where you stand and what to do next.</p>
+      <div class="report">
+        {/* Decorative blurred sample: CSS shapes only, hidden from assistive tech and not clickable. */}
+        <div class="report-preview" aria-hidden="true">
+          <div class="report-blur">
+            <div class="bar bar-title"></div>
+            <div class="score"></div>
+            <div class="bar" style="width: 90%"></div>
+            <div class="bar" style="width: 76%"></div>
+            <div class="bar" style="width: 84%"></div>
+            <div class="bar bar-title" style="width: 40%"></div>
+            <div class="bar" style="width: 70%"></div>
+            <div class="bar" style="width: 88%"></div>
+          </div>
+        </div>
+        <div>
+          <ol class="report-parts">
+            {reportParts.map((part) => <li><h3>{part}</h3></li>)}
+          </ol>
+          <p class="small muted report-caption">Sample report, blurred. Your report is written for your company and your data.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <Faq items={faqs} intro="Short answers to what people usually ask before they request one." />
+
+  <section class="section" id="request" aria-labelledby="request-heading" data-section="request">
+    <div class="container">
+      <h2 id="request-heading">{cta.primary}</h2>
+      <p class="lead muted rr-answer">Tell us a little about your company and your data. We’ll reply within one business day with details and pricing.</p>
+      <div class="rr-form">
+        <Form variant="readiness-review" />
+      </div>
+    </div>
+  </section>
+
   <ClosingCta variant="review" />
 </BaseLayout>
+
+<style>
+  .rr-hero .display {
+    max-width: 14ch;
+  }
+  .rr-hero .lead + .lead {
+    margin-top: var(--space-4);
+  }
+  .rr-facts {
+    margin-top: var(--space-6);
+  }
+  .rr-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4) var(--space-5);
+    margin-top: var(--space-6);
+  }
+  .rr-answer {
+    margin-top: var(--space-4);
+  }
+  .rr-form {
+    max-width: var(--reading-max);
+    margin-top: var(--space-7);
+  }
+
+  /* Timeline: three numbered nodes on a 2px line; vertical below 768px. */
+  .timeline {
+    --node: 48px;
+    position: relative;
+    display: grid;
+    gap: var(--space-6);
+    margin: var(--space-7) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .timeline li {
+    position: relative;
+    padding-left: calc(var(--node) + var(--space-5));
+  }
+  /* Below 768px: one connector per step, from this node's centre to the next one's (painted under the nodes). */
+  .timeline li:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: calc(var(--node) / 2);
+    left: calc(var(--node) / 2 - 1px);
+    width: 2px;
+    height: calc(100% + var(--space-6));
+    background: var(--color-border);
+  }
+  .timeline-node {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: grid;
+    place-items: center;
+    width: var(--node);
+    height: var(--node);
+    border: 2px solid var(--color-text-muted);
+    border-radius: var(--radius-full);
+    background: var(--color-surface);
+    color: var(--color-text);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .timeline-node-final {
+    border-color: transparent;
+    background: var(--gradient-brand);
+    color: var(--color-on-gradient);
+  }
+  .timeline-day {
+    margin: 0 0 var(--space-2);
+    color: var(--color-accent-text);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    line-height: var(--type-label-line);
+  }
+  .timeline h3 {
+    margin-bottom: var(--space-2);
+  }
+  .timeline p.muted {
+    margin: 0;
+    max-width: 32ch;
+  }
+  @media (width >= 768px) {
+    .timeline {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: calc(var(--node) / 2 - 1px);
+      left: calc(var(--node) / 2);
+      /* Ends at the centre of the third node. */
+      right: calc((100% - 2 * var(--space-6)) / 3 - var(--node) / 2);
+      height: 2px;
+      background: var(--color-border);
+    }
+    .timeline li {
+      padding-left: 0;
+      padding-top: calc(var(--node) + var(--space-5));
+    }
+    .timeline li:not(:last-child)::before {
+      content: none;
+    }
+  }
+
+  /* Report preview */
+  .report {
+    display: grid;
+    gap: var(--space-7);
+    align-items: center;
+    margin-top: var(--space-7);
+  }
+  @media (width >= 1024px) {
+    .report {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .report-preview {
+    height: 380px;
+    padding: var(--space-6);
+    overflow: hidden;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    pointer-events: none;
+    user-select: none;
+  }
+  .report-blur {
+    filter: blur(6px);
+  }
+  .bar {
+    height: 12px;
+    margin-bottom: var(--space-3);
+    border-radius: 6px;
+    background: var(--color-border);
+  }
+  .bar-title {
+    width: 55%;
+    height: 22px;
+    margin-block: var(--space-5);
+    background: var(--color-text-muted);
+    opacity: 0.35;
+  }
+  .score {
+    width: 120px;
+    height: 120px;
+    margin-bottom: var(--space-5);
+    border: 14px solid var(--color-border);
+    border-top-color: var(--color-brand-hot);
+    border-right-color: var(--color-brand-warm);
+    border-radius: var(--radius-full);
+  }
+  .report-parts {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: part;
+  }
+  .report-parts li {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-4);
+    padding-block: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+  .report-parts li:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+  .report-parts li::before {
+    counter-increment: part;
+    content: counter(part, decimal-leading-zero) / "";
+    color: var(--color-accent-text);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+    font-variant-numeric: tabular-nums;
+  }
+  .report-caption {
+    margin-top: var(--space-4);
+  }
+</style>

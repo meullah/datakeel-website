@@ -1,0 +1,75 @@
+---
+// FAQ block: native <details>/<summary>, every answer in the HTML, any number open at once.
+// HTML only: the page builds the FAQPage node (seo.ts faqPageNode) and passes it to BaseLayout.
+import { inlineMd } from '../lib/pure/inline-md.ts';
+import type { FaqItem } from '../lib/seo.ts';
+
+export type Props = {
+  items: FaqItem[];
+  heading?: string;
+  /** Answer-first line under the heading. */
+  intro?: string;
+};
+
+const { items, heading = 'Questions about the review', intro } = Astro.props;
+---
+<section class="section section-surface" aria-labelledby="faq-heading" data-faq>
+  <div class="container">
+    <h2 id="faq-heading">{heading}</h2>
+    {intro && <p class="lead muted faq-intro">{intro}</p>}
+    <div class="faq">
+      {items.map((item) => (
+        <details>
+          <summary>{item.question}</summary>
+          <p set:html={inlineMd(item.answer)} />
+        </details>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .faq-intro {
+    margin-top: var(--space-4);
+  }
+  .faq {
+    max-width: var(--reading-max);
+    margin-top: var(--space-7);
+  }
+  details {
+    border-top: 1px solid var(--color-border);
+  }
+  details:last-child {
+    border-bottom: 1px solid var(--color-border);
+  }
+  summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: var(--space-5);
+    min-height: var(--touch-min);
+    padding-block: var(--space-5);
+    list-style: none;
+    cursor: pointer;
+    font-size: var(--type-heading-3-size);
+    font-weight: var(--type-heading-3-weight);
+    line-height: var(--type-heading-3-line);
+    letter-spacing: var(--type-heading-3-tracking);
+  }
+  summary::-webkit-details-marker {
+    display: none;
+  }
+  summary::after {
+    content: "+" / "";
+    flex-shrink: 0;
+    color: var(--color-text-muted);
+    font-weight: 400;
+  }
+  details[open] summary::after {
+    content: "\2212" / "";
+  }
+  details p {
+    margin: 0 0 var(--space-5);
+    color: var(--color-text-muted);
+  }
+</style>
