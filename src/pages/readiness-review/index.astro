@@ -12,9 +12,9 @@ import { readinessReviewUrl } from '../../lib/urls.ts';
 const name = 'Data & AI Readiness Review';
 const path = readinessReviewUrl();
 const description =
-  'A fixed-price Data & AI Readiness Review: in about 10 days you get a clear plan for your data and AI, and you decide if we’re the right fit.';
+  'A fixed-price Data & AI Readiness Review: in about 10 working days you get a clear plan for your data and AI, and you decide if we’re the right fit.';
 const lead =
-  'A short, fixed-price look at your data before you build on it. In about 10 days we review your main systems and data, then hand you a written plan: what’s ready, what’s at risk, and which AI use cases make sense first.';
+  'A short, fixed-price look at your data before you build on it. In about 10 working days we review your main systems and data, then hand you a written plan: what’s ready, what’s at risk, and which AI use cases make sense first.';
 const faqs = await getFaqs('readiness-review');
 
 const steps = [
@@ -38,7 +38,7 @@ const reportParts = ['Data readiness score', 'Top 3 data risks', 'AI use cases f
       <p class="lead">It works both ways. We get to know your data, and you see what it’s like to work with us, so you also decide if we’re the right fit. Nothing to commit to beyond the review.</p>
       <ul class="chip-list rr-facts">
         <li class="chip">Fixed price</li>
-        <li class="chip">About 10 days</li>
+        <li class="chip">About 10 working days</li>
         <li class="chip">Written plan at the end</li>
       </ul>
       <div class="rr-actions">

@@ -44,7 +44,7 @@ test('sections in order, one h1, two primaries, form inside #request, review clo
   const hero = main.slice(order[0], order[1]);
   assert.match(hero, /class="eyebrow"[^>]*>The first step</);
   assert.equal(text(hero.match(/<h1[^>]*>([\s\S]*?)<\/h1>/)![1]), 'Data & AI Readiness Review');
-  for (const fact of ['Fixed price', 'About 10 days', 'Written plan at the end']) assert.ok(hero.includes(`>${fact}</li>`), fact);
+  for (const fact of ['Fixed price', 'About 10 working days', 'Written plan at the end']) assert.ok(hero.includes(`>${fact}</li>`), fact);
   assert.match(hero, /<a class="btn btn-primary" href="#request"[^>]*>/);
   assert.ok(hero.includes(`Prefer email? <a href="mailto:${email}"`), 'mailto link');
 
@@ -122,5 +122,5 @@ test('no price anywhere: no currency symbols or amounts in main or JSON-LD', ski
   const copy = text(mainOf(h).replace(/<script[\s\S]*?<\/script>|<select[\s\S]*?<\/select>/g, ''));
   const amount = copy.match(/\b\d{1,3}(,\d{3})+\b|\b\d+(\.\d+)?\s?k\b/i);
   assert.equal(amount, null, `amount in main: ${amount?.[0]}`);
-  for (const ok of ['10 days', 'Day 3', 'Top 3', '90 days']) assert.ok(copy.includes(ok), ok);
+  for (const ok of ['10 working days', 'Day 3', 'Top 3', '90 days']) assert.ok(copy.includes(ok), ok);
 });
