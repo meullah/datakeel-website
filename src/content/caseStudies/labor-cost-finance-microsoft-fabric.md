@@ -19,7 +19,7 @@ after:
 stack: ["Microsoft Fabric", "PySpark", "Delta Lake", "GitHub Actions", "Power BI"]
 visual: { kind: diagram, id: labor-cost-model }
 stats:
-  - { value: null, display: "3 → 1", label: "finance sources unified into one model", homepage: true }
+  - { value: null, display: "3 → 1", label: "data sources unified into one model", homepage: true }
 published: 2026-11-03
 updated: 2026-11-03
 draft: false

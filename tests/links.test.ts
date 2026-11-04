@@ -144,8 +144,8 @@ test('closing CTA variants render the required links and primary behavior', skip
 });
 
 test('footer covers every required destination and follows configured profile state', skip, () => {
-  assert.deepEqual(officialProfilesFor(''), []);
-  assert.deepEqual(officialProfilesFor('https://www.linkedin.com/company/datakeel-ai/'), [
+  assert.deepEqual(officialProfilesFor({ LinkedIn: '', Upwork: '' }), []);
+  assert.deepEqual(officialProfilesFor({ LinkedIn: 'https://www.linkedin.com/company/datakeel-ai/', Upwork: '' }), [
     { label: 'LinkedIn', href: 'https://www.linkedin.com/company/datakeel-ai/' },
   ]);
   assert.deepEqual(sameAs, officialProfiles.map((profile) => profile.href));
@@ -164,7 +164,7 @@ test('footer covers every required destination and follows configured profile st
   if (officialProfiles.length) {
     for (const profile of officialProfiles) assert.match(footer, new RegExp(`href="${escapeRe(profile.href)}"[^>]*>${profile.label}<`));
   } else {
-    assert.doesNotMatch(footer, />LinkedIn</);
+    assert.doesNotMatch(footer, />(LinkedIn|Upwork)</);
   }
 });
 

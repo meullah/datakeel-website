@@ -1,6 +1,6 @@
 // hero-story island: boots the Hero Story canvas once the page is idle, and owns its scene label, ticks and pause button.
 // Fails silently: the indicator and pause button stay hidden and the copy is unaffected.
-import { tablet } from '../../lib/pure/breakpoints.ts';
+import { desktop } from '../../lib/pure/breakpoints.ts';
 import { scrollDockProgress, targetFromRect } from '../../lib/pure/dock.ts';
 import { HERO_STORY_DOCK, THEME_CHANGE } from '../../lib/pure/events.ts';
 import { SCENE_EXTENT, SCENE_LABELS } from '../../lib/pure/story-scenes.ts';
@@ -71,7 +71,7 @@ function boot() {
     dock,
     onDock: (progress) => document.dispatchEvent(new CustomEvent(HERO_STORY_DOCK, { detail: { progress } })),
     // Same test as the CSS breakpoint (viewport width, scrollbar included), not the canvas width.
-    layout: (w, h) => (innerWidth < tablet ? mobileLayout(w, h) : desktopLayout(w, h)),
+    layout: (w, h) => (innerWidth < desktop ? mobileLayout(w, h) : desktopLayout(w, h)),
     onFail() {
       indicator.hidden = pause.hidden = true;
       canvas.removeAttribute('data-docking');

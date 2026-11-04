@@ -1,14 +1,15 @@
 // Single home for shared identity and copy (AD-13).
 export const companyName = 'DataKeel AI';
-// ponytail: wording still to be confirmed by the founder (PRD open item 13).
+// Founder-confirmed 2026-11-04.
 export const positioningLine =
-  'Microsoft Fabric and Databricks lakehouse specialists: we build the data platform first, then the AI on top.';
+  'We build the data platform your business runs on, then the AI that makes it useful.';
 export const siteUrl = 'https://datakeelai.com';
 export const email = 'hello@datakeelai.com';
-// ponytail: founder to supply the official profile URL.
-export const linkedinUrl = '';
-export const officialProfilesFor = (url: string) => url ? [{ label: 'LinkedIn', href: url }] as const : [];
-export const officialProfiles = officialProfilesFor(linkedinUrl);
+// Placeholders: the founder will supply both URLs (deferred-work.md). An empty URL hides its footer link and sameAs entry.
+export const profileUrls = { LinkedIn: '', Upwork: '' };
+export const officialProfilesFor = (urls: Record<string, string>) =>
+  Object.entries(urls).filter(([, href]) => href).map(([label, href]) => ({ label, href }));
+export const officialProfiles = officialProfilesFor(profileUrls);
 
 export const cta = {
   primary: 'Request a Data & AI Readiness Review',

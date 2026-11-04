@@ -13,7 +13,7 @@
       "Proving who can see which data, for a compliance audit, is close to impossible.",
       "Seasonal disease outbreaks are handled after the fact: beds and staff are added only once wards are already full."
     ],
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "insurance",
@@ -21,14 +21,14 @@
     "name": "Insurance",
     "h1": "Data and AI for insurance",
     "title": "Data and AI for Insurance",
-    "description": "Data integration and AI for insurers: claims linked to the records behind them, so reviewers see what doesn’t add up before payout.",
+    "description": "Data integration and AI for insurance and claims teams: claims linked to the records behind them, so reviewers see what doesn’t add up before payout.",
     "intro": "We link claims to the records behind them, so reviewers can spot the ones that need a closer look before money goes out. When claims are checked by hand, it’s hard to see which ones don’t add up.",
     "problems": [
       "Every claim is checked by hand, one at a time.",
       "Reviewers have no quick way to see whether an expensive test or procedure matches the doctor’s prescription or the patient’s history.",
       "Claims that don’t add up are often paid anyway."
     ],
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "automotive",
@@ -44,7 +44,7 @@
       "Onboarding a new dealer is slow and messy.",
       "Keeping listings on Google accurate gets harder as the dealer list grows."
     ],
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "finance",
@@ -59,6 +59,6 @@
       "Matching labor cost to finance takes hours of manual spreadsheet work.",
       "Changes go straight to production with no testing."
     ],
-    "reviewed": false
+    "reviewed": true
   }
 ]

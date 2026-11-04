@@ -31,6 +31,13 @@ import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
     /* No isolation/z-index here: the docking canvas must stack above the sticky header. */
     overflow: hidden;
   }
+  /* Short screens (landscape phones): no 620px floor, so the copy and CTAs show without scrolling (founder 2026-11-04). */
+  @media (max-height: 500px) {
+    .hero {
+      min-height: 100vh;
+      min-height: 100svh;
+    }
+  }
   .hero-glow,
   .hero-shade {
     position: absolute;
@@ -73,7 +80,7 @@ import { contactUrl, readinessReviewUrl } from '../lib/urls.ts';
     margin-top: var(--space-6);
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 1023px) { /* phones and tablets: animation on top, copy below (founder 2026-11-04) */
     .hero-glow {
       right: 50%;
       top: 26%;

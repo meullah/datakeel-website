@@ -15,8 +15,7 @@ after:
   - "Management plans for seasonal surges instead of reacting to them."
   - "The forecast shows how many extra beds and health workers each affected unit will need in the months ahead."
   - "Every department is compared on one dashboard."
-# Founder-supplied tools; the exact-tools marker is removed until confirmed (deferred-work.md).
-stack: ["Lakehouse", "Python forecasting model", "Power BI"]
+stack: ["Databricks", "Python", "Multiple linear regression", "Power BI"]
 visual: { kind: dashboard, id: seasonal-surge-forecast }
 published: 2026-11-03
 updated: 2026-11-03

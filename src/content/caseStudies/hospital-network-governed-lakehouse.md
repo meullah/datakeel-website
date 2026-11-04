@@ -15,7 +15,7 @@ found: 'The same metric was being calculated in different ways by different team
 after:
   - "Leadership compares departments and hospital sites using the same, standard metrics."
   - "Cross-functional teams work from one source of truth instead of their own copies."
-  # Removed until the founder confirms (deferred-work.md): the role-based access / auditors line.
+  - "Access is defined by role and can be shown to auditors."
 stack: ["Databricks", "Azure", "Delta Lake", "Power BI"]
 visual: { kind: diagram, id: hospital-governed-lakehouse }
 published: 2026-11-03

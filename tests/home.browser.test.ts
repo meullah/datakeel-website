@@ -20,10 +20,12 @@ after(async () => {
 
 const cases = [
   { width: 360, height: 640, js: true },
+  { width: 768, height: 1024, js: true },
   { width: 820, height: 1180, js: true },
   { width: 1024, height: 768, js: true },
   { width: 1280, height: 620, js: true },
   { width: 1920, height: 1080, js: true },
+  { width: 740, height: 360, js: true }, // landscape phone: no 620px floor
   { width: 360, height: 640, js: false },
 ];
 
@@ -417,7 +419,7 @@ test('hero story: a failure mid-dock hands the header logo back', async () => {
 });
 
 for (const width of [1280, 1440, 1920]) {
-  test(`hero story at ${width}px: particles stay inside the content edges`, async () => {
+  test(`hero story at ${width}px: particles stay inside the content edges and clear of the copy`, async () => {
     const context = await browser.newContext({ viewport: { width, height: 900 } });
     try {
       const page = await context.newPage();
@@ -428,10 +430,24 @@ for (const width of [1280, 1440, 1920]) {
         const k = c.width / c.clientWidth;
         const d = c.getContext('2d')!.getImageData(0, 0, c.width, c.height).data;
         let maxX = 0;
-        for (let i = 3; i < d.length; i += 4) if (d[i]) maxX = Math.max(maxX, ((i - 3) / 4) % c.width);
-        return { maxX: maxX / k, contentRight: document.querySelector('.header-cta')!.getBoundingClientRect().right };
+        let minX = c.width;
+        for (let i = 3; i < d.length; i += 4) {
+          if (!d[i]) continue;
+          const x = ((i - 3) / 4) % c.width;
+          maxX = Math.max(maxX, x);
+          minX = Math.min(minX, x);
+        }
+        // Right edge of the copy's actual text (not its block boxes), as the island measures it.
+        const textRight = Math.max(...['.eyebrow', 'h1', '.lead', '.hero-ctas'].map((s) => {
+          const r = document.createRange();
+          r.selectNodeContents(document.querySelector(`.hero-copy ${s}`)!);
+          return r.getBoundingClientRect().right;
+        }));
+        return { minX: minX / k, maxX: maxX / k, textRight, contentRight: document.querySelector('.header-cta')!.getBoundingClientRect().right };
       });
       assert.ok(m.maxX <= m.contentRight + 2, `particles reach x=${m.maxX}, content edge ${m.contentRight}`);
+      // ponytail: samples the first scene only; sweep every scene if a later one is ever widened past SCENE_EXTENT.
+      assert.ok(m.minX >= m.textRight, `particles start at x=${m.minX}, copy text ends at ${m.textRight}`);
     } finally {
       await context.close();
     }
