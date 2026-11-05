@@ -1,0 +1,48 @@
+# Story 9.2: every push to main is checked, tested and built; only a green build is deployed to GitHub Pages.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One deploy at a time; a newer push waits instead of cancelling a deploy halfway.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Type and template check
+        run: npx astro check
+      - name: Browser for the Playwright tests
+        run: npx playwright install --with-deps chromium
+      - name: Tests (builds first)
+        run: npm test
+      # Builds the site again and uploads dist/ as the Pages artifact. Any failure above stops here.
+      - uses: withastro/action@v6
+        with:
+          node-version: 24
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v5
