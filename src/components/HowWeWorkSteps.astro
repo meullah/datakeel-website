@@ -1,25 +1,29 @@
 ---
-// Homepage How We Work steps (01-04). Copy is founder-approved (2026-11-05, homepage-epic5.md §5.4);
-// the How We Work page (Epic 6) must say the same.
+// Review → Design → Build → Run (01-04). Step lines live in pages.json (how-we-work, section "steps"), so the
+// homepage and the How We Work page always say the same; homepage lines are founder-approved (homepage-epic5.md §5.4).
+// `detailed` (How We Work page): the section's own heading and answer, plus each step's "What you get" line.
+import { getPage, sectionOf } from '../lib/content.ts';
 import { readinessReviewUrl } from '../lib/urls.ts';
 
-const steps = [
-  { title: 'Review', text: 'We look at your data and systems and give you a written plan.', href: readinessReviewUrl() },
-  { title: 'Design', text: 'We agree on the platform, the sources and what success looks like.' },
-  { title: 'Build', text: 'We build in short steps, testing every change before it reaches production.' },
-  { title: 'Run', text: 'We keep the platform healthy and help your team get value from it.' },
-];
+export type Props = { detailed?: boolean };
+const { detailed = false } = Astro.props;
+const section = sectionOf(await getPage('how-we-work'), 'steps');
+const steps = section.items ?? [];
+if (steps.length !== 4) throw new Error(`pages/how-we-work: section "steps" needs 4 items, found ${steps.length}`);
+const heading = detailed ? section.heading : 'How do we work?';
+const answer = detailed ? section.answer : 'Four steps, starting with a short fixed-price review so you know where you stand.';
 ---
-<section class="section section-surface" aria-labelledby="process-heading" data-section="process" data-reveal>
+<section class="section section-surface" aria-labelledby="process-heading" data-section="process" data-reveal={!detailed || undefined}>
   <div class="container">
-    <h2 id="process-heading">How do we work?</h2>
-    <p class="lead muted section-answer">Four steps, starting with a short fixed-price review so you know where you stand.</p>
+    <h2 id="process-heading">{heading}</h2>
+    <p class="lead muted section-answer">{answer}</p>
     <ol class="steps" role="list">
       {steps.map((step, i) => (
         <li>
           <p class="steps-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
-          <h3>{step.href ? <a href={step.href}>{step.title}</a> : step.title}</h3>
+          <h3>{i === 0 ? <a href={readinessReviewUrl()}>{step.title}</a> : step.title}</h3>
           <p class="muted">{step.text}</p>
+          {detailed && step.detail && <p class="steps-detail">{step.detail}</p>}
         </li>
       ))}
     </ol>
@@ -52,5 +56,8 @@ const steps = [
   }
   .steps p:last-child {
     margin: 0;
+  }
+  .steps-detail {
+    margin-top: var(--space-4);
   }
 </style>

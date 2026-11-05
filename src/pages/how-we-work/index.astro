@@ -1,20 +1,72 @@
 ---
+// Copy lives in src/content/pages.json (how-we-work) and faqs/how-we-work.json (Story 6.2).
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
+import Faq from '../../components/Faq.astro';
+import HowWeWorkSteps from '../../components/HowWeWorkSteps.astro';
+import { getFaqs, getPage, sectionOf } from '../../lib/content.ts';
+import { faqPageNode } from '../../lib/seo.ts';
 import { howWeWorkUrl } from '../../lib/urls.ts';
 
-const name = 'How we work';
+const path = howWeWorkUrl();
+const page = await getPage('how-we-work');
+const ownership = sectionOf(page, 'ownership');
+const engagement = sectionOf(page, 'engagement');
+const faq = sectionOf(page, 'faq');
+const faqs = await getFaqs('how-we-work');
 ---
-<BaseLayout
-  title="How We Work: Review, Design, Build, Run"
-  description="How a DataKeel AI engagement runs, from Review to Design, Build and Run, and why you own all the code and documentation."
-  breadcrumbs={[{ name, url: howWeWorkUrl() }]}
->
-  <section class="section">
+<BaseLayout title={page.title} description={page.description} breadcrumbs={[{ name: page.h1, url: path }]} graph={[faqPageNode(faqs, path)]}>
+  <section class="section" data-section="hero">
     <div class="container">
-      <h1 class="display">{name}</h1>
-      <p class="lead">Every engagement follows four steps: Review, Design, Build and Run, and you know what you get at each one. You own all the code and documentation, and we can hand the platform over to your team. Work with us on a project to build a platform, or for ongoing Run support after launch.</p>
+      <h1 class="display">{page.h1}</h1>
+      <p class="lead">{page.lead}</p>
     </div>
   </section>
+
+  <HowWeWorkSteps detailed />
+
+  <section class="section" aria-labelledby="ownership-heading" data-section="ownership">
+    <div class="container">
+      <h2 id="ownership-heading">{ownership.heading}</h2>
+      <p class="lead muted section-answer">{ownership.answer}</p>
+      <ul class="card-grid hww-grid" role="list">
+        {ownership.items?.map((item) => (
+          <li class="card"><h3>{item.title}</h3><p class="muted">{item.text}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-surface" aria-labelledby="engagement-heading" data-section="engagement">
+    <div class="container">
+      <h2 id="engagement-heading">{engagement.heading}</h2>
+      <p class="lead muted section-answer">{engagement.answer}</p>
+      <ul class="card-grid hww-grid" role="list">
+        {engagement.items?.map((item) => (
+          <li class="card"><h3>{item.title}</h3><p class="muted">{item.text}</p></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <Faq items={faqs} heading={faq.heading} intro={faq.answer} />
+
   <ClosingCta />
 </BaseLayout>
+
+<style>
+  .section-answer {
+    margin-top: var(--space-4);
+  }
+  .hww-grid {
+    margin-top: var(--space-7);
+    padding: 0;
+    list-style: none;
+  }
+  .hww-grid h3 {
+    margin-bottom: var(--space-2);
+  }
+  .hww-grid p {
+    margin: 0;
+  }
+</style>

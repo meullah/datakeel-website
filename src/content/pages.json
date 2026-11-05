@@ -7,8 +7,93 @@
     "lead": "We design, build and run modern data platforms: the pipelines, lakehouses and governance your reports and AI depend on. We work on Microsoft Fabric and Databricks, and once your data is in good shape, we build the AI on top.",
     "summary": "Five services: data platforms on Microsoft Fabric and Databricks, data integration, data quality and governance, AI-ready data and AI use cases, and managed data operations.",
     "sections": [
-      { "id": "stack", "heading": "What does a modern data platform look like?", "answer": "Five layers, from the systems you already use to data that’s ready for reporting and AI. Every service on this page builds or looks after one or more of them." },
-      { "id": "faq", "heading": "Questions about what we do", "answer": "Short answers to what people usually ask about our services." }
+      {
+        "id": "stack",
+        "heading": "What does a modern data platform look like?",
+        "answer": "Five layers, from the systems you already use to data that’s ready for reporting and AI. Every service on this page builds or looks after one or more of them."
+      },
+      {
+        "id": "faq",
+        "heading": "Questions about what we do",
+        "answer": "Short answers to what people usually ask about our services."
+      }
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "how-we-work",
+    "title": "How We Work: Review, Design, Build, Run",
+    "description": "How a DataKeel AI engagement runs, from Review to Design, Build and Run, and why you own all the code and documentation.",
+    "h1": "How we work",
+    "lead": "Every engagement follows four steps: Review, Design, Build and Run, and you know what you get at each one. You own all the code and documentation, and we can hand the platform over to your team whenever you want.",
+    "summary": "Four steps (Review, Design, Build, Run), client ownership of all code and documentation, and two ways to work together: a project or ongoing Run support.",
+    "sections": [
+      {
+        "id": "steps",
+        "heading": "What happens at each step?",
+        "answer": "Four steps, starting with a short fixed-price review so you know where you stand. Each step ends with something you can see and keep.",
+        "items": [
+          {
+            "title": "Review",
+            "text": "We look at your data and systems and give you a written plan.",
+            "detail": "What you get: a written plan with a data readiness score, your top 3 data risks, AI use cases for the next 90 days and a phased roadmap with costs."
+          },
+          {
+            "title": "Design",
+            "text": "We agree on the platform, the sources and what success looks like.",
+            "detail": "What you get: a platform design you sign off on, covering the architecture, the sources in scope and how we’ll measure success."
+          },
+          {
+            "title": "Build",
+            "text": "We build in short steps, testing every change before it reaches production.",
+            "detail": "What you get: a working platform, delivered in steps you can see and try, with every pipeline tested and every table documented."
+          },
+          {
+            "title": "Run",
+            "text": "We keep the platform healthy and help your team get value from it.",
+            "detail": "What you get: a monitored platform that keeps improving, and help for your team to use it. Or a full handover, if you’d rather run it yourself."
+          }
+        ]
+      },
+      {
+        "id": "ownership",
+        "heading": "Who owns the platform?",
+        "answer": "You do. You own all the code and documentation from the first day, and we can hand the platform over to your team whenever you want.",
+        "items": [
+          {
+            "title": "Your code and documentation",
+            "text": "Everything we build belongs to you, so you’re never locked in."
+          },
+          {
+            "title": "Your environment",
+            "text": "The platform runs in your own cloud or on your own servers, so your data stays where you want it."
+          },
+          {
+            "title": "Handover when you want it",
+            "text": "If your team wants to run the platform, we hand it over with the documentation they need."
+          }
+        ]
+      },
+      {
+        "id": "engagement",
+        "heading": "How can we work together?",
+        "answer": "In two ways: a project to design and build your platform, or ongoing Run support after launch. You can choose either one, or start with a project and add Run support later.",
+        "items": [
+          {
+            "title": "A project",
+            "text": "We design and build your platform, or one part of it, with an agreed scope. It starts with a Readiness Review."
+          },
+          {
+            "title": "Ongoing Run support",
+            "text": "After launch, we operate, monitor and improve the platform for you, and help your team get value from it."
+          }
+        ]
+      },
+      {
+        "id": "faq",
+        "heading": "Questions about how we work",
+        "answer": "Short answers to what people usually ask before they start."
+      }
     ],
     "reviewed": false
   }

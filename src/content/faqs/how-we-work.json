@@ -1,0 +1,26 @@
+[
+  {
+    "question": "Where do we start?",
+    "answer": "With a [Data & AI Readiness Review](/readiness-review/). In about 10 working days you get a written plan, and you decide if we’re the right fit."
+  },
+  {
+    "question": "How long does a project take?",
+    "answer": "It depends on how many systems and teams are involved. The Readiness Review ends with a phased roadmap, with costs for each phase, so you know before you commit."
+  },
+  {
+    "question": "Do we own the code?",
+    "answer": "Yes. You own all the code and documentation from the first day, and the platform runs in your own environment. See [the DataKeel Standard](/standard/)."
+  },
+  {
+    "question": "Can our own team take over the platform?",
+    "answer": "Yes. We can hand it over at any point, with the documentation your team needs to run it."
+  },
+  {
+    "question": "Do we have to sign up for Run support?",
+    "answer": "No. Run support is optional. You can add it after a project, or run the platform yourselves."
+  },
+  {
+    "question": "How will we know how the build is going?",
+    "answer": "We build in short steps, so you see working results after each one, and every change is tested before it reaches production."
+  }
+]

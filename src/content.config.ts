@@ -57,7 +57,7 @@ const pages = defineCollection({
           id: z.string(),
           heading: text,
           answer: text,
-          items: z.array(z.strictObject({ title: text, text: text })).optional(),
+          items: z.array(z.strictObject({ title: text, text: text, detail: text.optional() })).optional(),
         }),
       )
       .default([]),
