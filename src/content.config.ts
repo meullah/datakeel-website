@@ -61,6 +61,8 @@ const pages = defineCollection({
         }),
       )
       .default([]),
+    /** Shown as "Last updated" (legal pages). */
+    updated: z.coerce.date().optional(),
     /** false until the founder approves the copy (planning-artifacts/content/epic6-8-copy-review.md). */
     reviewed: z.boolean(),
   }),

@@ -3,7 +3,7 @@
 import { Font } from 'astro:assets';
 import Footer from '../components/Footer.astro';
 import Header from '../components/Header.astro';
-import { companyName, defaultOgImage, themeColor, themeColorDark } from '../lib/config.ts';
+import { analyticsHost, cloudflareAnalyticsToken, companyName, defaultOgImage, themeColor, themeColorDark } from '../lib/config.ts';
 import { absoluteUrl, isNoindexPath } from '../lib/urls.ts';
 import {
   assertDescription,
@@ -88,5 +88,17 @@ const jsonLd = serializeGraph(buildGraph({ path, title: pageTitle, description, 
     <slot name="footer">
       <Footer />
     </slot>
+    {import.meta.env.PROD && cloudflareAnalyticsToken && (
+      // Cookieless Cloudflare Web Analytics, only on the live host (never on previews or localhost).
+      <script is:inline define:vars={{ token: cloudflareAnalyticsToken, host: analyticsHost }}>
+        if (location.hostname === host) {
+          var s = document.createElement('script');
+          s.defer = true;
+          s.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+          s.setAttribute('data-cf-beacon', JSON.stringify({ token: token, spa: false }));
+          document.body.appendChild(s);
+        }
+      </script>
+    )}
   </body>
 </html>

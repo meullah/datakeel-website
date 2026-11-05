@@ -1,20 +1,5 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import ClosingCta from '../../components/ClosingCta.astro';
+import LegalPage from '../../components/LegalPage.astro';
 import { termsUrl } from '../../lib/urls.ts';
-
-const name = 'Terms of use';
 ---
-<BaseLayout
-  title="Terms of Use"
-  description="The terms that apply when you use the DataKeel AI website and its content, including the Self-Assessment."
-  breadcrumbs={[{ name, url: termsUrl() }]}
->
-  <section class="section">
-    <div class="container">
-      <h1 class="display">{name}</h1>
-      <p class="lead">These terms explain the rules that apply when you use this website and its content, including the Self-Assessment and the guides.</p>
-    </div>
-  </section>
-  <ClosingCta />
-</BaseLayout>
+<LegalPage id="terms" path={termsUrl()} />

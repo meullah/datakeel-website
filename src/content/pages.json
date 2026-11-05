@@ -110,11 +110,26 @@
         "heading": "What does every platform we build include?",
         "answer": "Five practices, on every project, whatever its size. Each one is there for a business reason, not for its own sake.",
         "items": [
-          { "title": "Every pipeline tested and monitored", "text": "Why it matters to you: problems are caught before they reach your reports, not in a meeting." },
-          { "title": "Every table documented", "text": "Why it matters to you: anyone on your team can find the right data and know what it means." },
-          { "title": "Data quality checks before data reaches AI", "text": "Why it matters to you: reports and AI tools work from data you can trust, so their answers are ones you can act on." },
-          { "title": "Changes released through automated pipelines across separate environments", "text": "Why it matters to you: every change is tested in development and test before it reaches production, so your live reports don’t break." },
-          { "title": "You own all the code and documentation", "text": "Why it matters to you: no lock-in. You can run the platform yourself or change partners at any time." }
+          {
+            "title": "Every pipeline tested and monitored",
+            "text": "Why it matters to you: problems are caught before they reach your reports, not in a meeting."
+          },
+          {
+            "title": "Every table documented",
+            "text": "Why it matters to you: anyone on your team can find the right data and know what it means."
+          },
+          {
+            "title": "Data quality checks before data reaches AI",
+            "text": "Why it matters to you: reports and AI tools work from data you can trust, so their answers are ones you can act on."
+          },
+          {
+            "title": "Changes released through automated pipelines across separate environments",
+            "text": "Why it matters to you: every change is tested in development and test before it reaches production, so your live reports don’t break."
+          },
+          {
+            "title": "You own all the code and documentation",
+            "text": "Why it matters to you: no lock-in. You can run the platform yourself or change partners at any time."
+          }
         ]
       },
       {
@@ -127,10 +142,22 @@
         "heading": "How do you keep our data safe?",
         "answer": "With the same four practices on every project. They protect your data and make every change to the platform traceable.",
         "items": [
-          { "title": "Access by role", "text": "People see only the data their role needs." },
-          { "title": "An audit trail of changes", "text": "Every change to the platform is recorded, so you can see who changed what, and when." },
-          { "title": "Secrets kept in a vault", "text": "Passwords and keys live in a vault such as Azure Key Vault, never in code." },
-          { "title": "Version-controlled, tested releases", "text": "Every change is stored in version control and tested before it’s released." }
+          {
+            "title": "Access by role",
+            "text": "People see only the data their role needs."
+          },
+          {
+            "title": "An audit trail of changes",
+            "text": "Every change to the platform is recorded, so you can see who changed what, and when."
+          },
+          {
+            "title": "Secrets kept in a vault",
+            "text": "Passwords and keys live in a vault such as Azure Key Vault, never in code."
+          },
+          {
+            "title": "Version-controlled, tested releases",
+            "text": "Every change is stored in version control and tested before it’s released."
+          }
         ]
       },
       {
@@ -159,9 +186,18 @@
         "heading": "What do we value?",
         "answer": "Three things: quality, clarity and ownership. They shape how we build, how we talk and what you keep at the end.",
         "items": [
-          { "title": "Quality", "text": "We test, monitor and document everything we build, because your decisions depend on it." },
-          { "title": "Clarity", "text": "Plain language, clear plans and no surprises. You always know what we’re doing and why." },
-          { "title": "Ownership", "text": "You own all the code and documentation, and we build so that your own team could run the platform." }
+          {
+            "title": "Quality",
+            "text": "We test, monitor and document everything we build, because your decisions depend on it."
+          },
+          {
+            "title": "Clarity",
+            "text": "Plain language, clear plans and no surprises. You always know what we’re doing and why."
+          },
+          {
+            "title": "Ownership",
+            "text": "You own all the code and documentation, and we build so that your own team could run the platform."
+          }
         ]
       },
       {
@@ -169,9 +205,18 @@
         "heading": "How do we approach the work?",
         "answer": "Data first, then AI. We start with a short review of your data, build the platform in small tested steps, and keep it healthy after launch.",
         "items": [
-          { "title": "We ask before we sell", "text": "Every engagement starts with a Readiness Review, so we both know if we’re the right fit." },
-          { "title": "Data before AI", "text": "We get your data clean and documented before we build AI on top of it." },
-          { "title": "Built to hand over", "text": "Every platform is tested and documented, so you’re never tied to us." }
+          {
+            "title": "We ask before we sell",
+            "text": "Every engagement starts with a Readiness Review, so we both know if we’re the right fit."
+          },
+          {
+            "title": "Data before AI",
+            "text": "We get your data clean and documented before we build AI on top of it."
+          },
+          {
+            "title": "Built to hand over",
+            "text": "Every platform is tested and documented, so you’re never tied to us."
+          }
         ]
       },
       {
@@ -181,5 +226,181 @@
       }
     ],
     "reviewed": false
+  },
+  {
+    "id": "privacy",
+    "title": "Privacy Policy",
+    "description": "How DataKeel AI handles personal information sent through this website, what we collect, why, and the choices you have.",
+    "h1": "Privacy policy",
+    "lead": "This policy explains what personal information we collect when you use this website or contact us, why we collect it, how we look after it and the choices you have.",
+    "summary": "What personal information the site collects (form details only), the processors involved (Web3Forms, Cloudflare Web Analytics, GitHub Pages), no cookies, and your rights under UK/EU, US, Singapore, Australian and Gulf privacy laws.",
+    "sections": [
+      {
+        "id": "who",
+        "heading": "Who we are",
+        "answer": "DataKeel AI runs this website at datakeelai.com. For anything about your personal information, email hello@datakeelai.com."
+      },
+      {
+        "id": "collect",
+        "heading": "What do we collect?",
+        "answer": "Only what you choose to send us, plus anonymous visit statistics. We don’t use cookies, and we don’t ask for personal information anywhere else on the site.",
+        "items": [
+          {
+            "title": "Forms",
+            "text": "When you request a Readiness Review or send a message, we receive your name, work email, company, country and message, and for a Readiness Review your role and company size."
+          },
+          {
+            "title": "Visit statistics",
+            "text": "Cloudflare Web Analytics counts page views, the page you came from, your browser and device type, and your approximate country. It uses no cookies and doesn’t identify you."
+          },
+          {
+            "title": "Hosting logs",
+            "text": "GitHub Pages, which hosts the site, may log technical details such as your IP address to keep the service secure."
+          },
+          {
+            "title": "Theme preference",
+            "text": "If you switch between light and dark mode, the choice is saved on your device as “dk-theme”. It never leaves your browser."
+          },
+          {
+            "title": "Self-Assessment answers",
+            "text": "Your answers are worked out in your browser and are never sent to us or stored."
+          }
+        ]
+      },
+      {
+        "id": "why",
+        "heading": "Why do we use it?",
+        "answer": "To reply to you and, if you ask, to prepare and run a Readiness Review or a project with you. We rely on our legitimate interest in answering business enquiries, or on taking steps at your request before entering a contract. We don’t sell your information or use it for advertising."
+      },
+      {
+        "id": "processors",
+        "heading": "Who else handles it?",
+        "answer": "A few service providers process information on our behalf. Each one only gets what it needs to do its job.",
+        "items": [
+          {
+            "title": "Web3Forms",
+            "text": "Delivers form submissions to our inbox by email."
+          },
+          {
+            "title": "Cloudflare Web Analytics",
+            "text": "Provides cookieless visit statistics."
+          },
+          {
+            "title": "GitHub Pages",
+            "text": "Hosts this website."
+          },
+          {
+            "title": "Our email provider",
+            "text": "Stores the messages we receive and send."
+          }
+        ]
+      },
+      {
+        "id": "transfers",
+        "heading": "Is my information sent abroad?",
+        "answer": "Our service providers may process information outside your country, including in the United States. Where the law requires it, we rely on safeguards such as standard contractual clauses."
+      },
+      {
+        "id": "retention",
+        "heading": "How long do we keep it?",
+        "answer": "Only as long as we need it to reply to you, to work with you if you become a client, and to keep the business records the law requires. Then we delete it."
+      },
+      {
+        "id": "rights",
+        "heading": "What are my rights?",
+        "answer": "You can ask us to show, correct or delete the personal information we hold about you, at any time, by emailing hello@datakeelai.com. Depending on where you live, you also have these rights:",
+        "items": [
+          {
+            "title": "UK and EU (UK GDPR and EU GDPR)",
+            "text": "Access, correction, deletion, restriction, objection and portability, and the right to complain to your data protection authority, such as the ICO in the UK."
+          },
+          {
+            "title": "United States (including CCPA/CPRA in California)",
+            "text": "The right to know what we collect, to delete it and to correct it. We don’t sell or share personal information for cross-context behavioral advertising."
+          },
+          {
+            "title": "Singapore (PDPA)",
+            "text": "Access, correction and withdrawal of consent."
+          },
+          {
+            "title": "Australia (Privacy Act 1988)",
+            "text": "Access and correction under the Australian Privacy Principles, and the right to complain to the OAIC."
+          },
+          {
+            "title": "UAE, Saudi Arabia and Qatar",
+            "text": "The rights given by the UAE Personal Data Protection Law, Saudi Arabia’s Personal Data Protection Law and Qatar’s Law No. 13 of 2016, including access, correction and deletion where they apply."
+          }
+        ]
+      },
+      {
+        "id": "children",
+        "heading": "Children",
+        "answer": "This website is for businesses and isn’t aimed at children. We don’t knowingly collect information from anyone under 16."
+      },
+      {
+        "id": "changes",
+        "heading": "Changes to this policy",
+        "answer": "If we change this policy, we’ll update this page. Material changes will be clear on this page before they take effect."
+      }
+    ],
+    "reviewed": false,
+    "updated": "2026-11-05"
+  },
+  {
+    "id": "terms",
+    "title": "Terms of Use",
+    "description": "The terms for using the DataKeel AI website: what the content is for, who owns it, and the limits of our responsibility.",
+    "h1": "Terms of use",
+    "lead": "These terms cover your use of datakeelai.com. By using the site, you agree to them. Our services are provided under a separate written agreement.",
+    "summary": "The terms for using the DataKeel AI website: information only, ownership of content, links, no warranties, limits of liability, and how to contact us.",
+    "sections": [
+      {
+        "id": "use",
+        "heading": "Using this website",
+        "answer": "You can browse, read and share links to this site for any lawful purpose. Please don’t try to disrupt it, access it in ways it isn’t designed for, or copy it in bulk."
+      },
+      {
+        "id": "information",
+        "heading": "Information, not advice",
+        "answer": "The content on this site, including Guides, case studies and the Self-Assessment, is general information. It isn’t professional advice for your situation, and it isn’t an offer. Any work we do together is set out in a separate written agreement."
+      },
+      {
+        "id": "ownership",
+        "heading": "Who owns the content?",
+        "answer": "The text, design, logo and graphics on this site belong to DataKeel AI. You may quote short parts with a link back to the page. Anything else needs our written permission."
+      },
+      {
+        "id": "submissions",
+        "heading": "What you send us",
+        "answer": "When you send us a form or an email, please only include information you’re allowed to share. We handle it as described in our Privacy Policy."
+      },
+      {
+        "id": "links",
+        "heading": "Links to other sites",
+        "answer": "We may link to other websites. We don’t control them and aren’t responsible for their content or their privacy practices."
+      },
+      {
+        "id": "warranty",
+        "heading": "No warranties",
+        "answer": "We work to keep this site accurate and available, but we provide it “as is”, without warranties of any kind, as far as the law allows."
+      },
+      {
+        "id": "liability",
+        "heading": "Limits of our responsibility",
+        "answer": "As far as the law allows, we aren’t liable for any loss that comes from using this site or relying on its content. Nothing in these terms limits liability that can’t be limited by law."
+      },
+      {
+        "id": "changes",
+        "heading": "Changes to these terms",
+        "answer": "We may update these terms. The version on this page is the one that applies."
+      },
+      {
+        "id": "contact",
+        "heading": "Contact",
+        "answer": "Questions about these terms? Email hello@datakeelai.com."
+      }
+    ],
+    "reviewed": false,
+    "updated": "2026-11-05"
   }
 ]

@@ -4,7 +4,7 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import * as u from '../src/lib/urls.ts';
-import { caseStudyIds, industries } from './content-data.ts';
+import { caseStudyIds, guideIds, industries } from './content-data.ts';
 
 const dist = fileURLToPath(new URL('../dist/', import.meta.url));
 const skip = { skip: existsSync(dist) ? false : 'dist/ not found; run npm run build first' };
@@ -81,8 +81,8 @@ test('case study BreadcrumbList is exactly Home / Case studies / {headline}', sk
   }
 });
 
-test('sitemap lists exactly the 16 routes plus each published case study', skip, () => {
+test('sitemap lists exactly the 16 routes plus each published case study and guide', skip, () => {
   const xml = readFileSync(join(dist, 'sitemap-0.xml'), 'utf8');
   const locs = [...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]).sort();
-  assert.deepEqual(locs, [...routes, ...caseStudyIds.map(u.caseStudyUrl)].map(u.absoluteUrl).sort());
+  assert.deepEqual(locs, [...routes, ...caseStudyIds.map(u.caseStudyUrl), ...guideIds.map(u.guideUrl)].map(u.absoluteUrl).sort());
 });

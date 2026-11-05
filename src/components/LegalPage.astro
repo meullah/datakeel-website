@@ -1,0 +1,51 @@
+---
+// Privacy and Terms (Story 8.4): copy from pages.json, one reading column. Until `reviewed` is true the page says it
+// is a draft awaiting legal review; launch sign-off (Story 9.1) needs lawyer-reviewed text.
+import ReadingLayout from '../layouts/ReadingLayout.astro';
+import ClosingCta from './ClosingCta.astro';
+import { getPage } from '../lib/content.ts';
+
+export type Props = { id: 'privacy' | 'terms'; path: string };
+const { id, path } = Astro.props;
+const page = await getPage(id);
+const dateFmt = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' });
+---
+<ReadingLayout title={page.title} description={page.description} breadcrumbs={[{ name: page.h1, url: path }]}>
+  <article class="legal">
+    <h1>{page.h1}</h1>
+    {page.updated && <p class="small muted">Last updated <time datetime={page.updated.toISOString().slice(0, 10)}>{dateFmt.format(page.updated)}</time></p>}
+    {!page.reviewed && <p class="legal-draft small" data-legal-draft>Draft: this page is waiting for legal review.</p>}
+    <p class="lead">{page.lead}</p>
+    {page.sections.map((s) => (
+      <section aria-labelledby={`${s.id}-heading`} data-section={s.id}>
+        <h2 id={`${s.id}-heading`}>{s.heading}</h2>
+        <p>{s.answer}</p>
+        {s.items && (
+          <ul>
+            {s.items.map((item) => <li><strong>{item.title}.</strong> {item.text}</li>)}
+          </ul>
+        )}
+      </section>
+    ))}
+  </article>
+  <ClosingCta slot="after" />
+</ReadingLayout>
+
+<style>
+  .legal {
+    padding-block: var(--space-8) var(--space-7);
+  }
+  .legal h2 {
+    margin-top: var(--space-7);
+  }
+  .legal li + li {
+    margin-top: var(--space-2);
+  }
+  .legal-draft {
+    display: inline-block;
+    padding: var(--space-2) var(--space-3);
+    color: var(--color-accent-text);
+    border: 1px solid currentColor;
+    border-radius: var(--radius-md);
+  }
+</style>

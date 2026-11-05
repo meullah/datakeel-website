@@ -29,12 +29,12 @@ const iso = (d: Date) => d.toISOString().slice(0, 10);
   graph={[articleNode({ ...data, path, author: author.data }), ...(person ? [person] : [])]}
 >
   <article class="guide">
-    <header class="guide-head">
+    <div class="guide-head">
       <h1>{data.title}</h1>
       <p class="small muted guide-meta" data-guide-meta>
         By {author.data.name}{author.data.kind === 'person' && <>, {author.data.jobTitle}</>} · Updated <time datetime={iso(data.updated)}>{dateFmt.format(data.updated)}</time>
       </p>
-    </header>
+    </div>
 
     <nav class="guide-toc" aria-labelledby="toc-heading" data-guide-toc>
       <p id="toc-heading" class="guide-toc-title">In this guide</p>

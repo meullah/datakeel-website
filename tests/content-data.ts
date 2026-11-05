@@ -13,3 +13,10 @@ export const caseStudyIds: string[] = readdirSync(caseDir)
   .filter((f) => f.endsWith('.md') && !/^draft:\s*true\s*$/m.test(readFileSync(new URL(f, caseDir), 'utf8')))
   .map((f) => f.slice(0, -3))
   .sort();
+
+const guideDir = new URL('../src/content/guides/', import.meta.url);
+/** Ids of published guides (draft: false). */
+export const guideIds: string[] = readdirSync(guideDir)
+  .filter((f) => f.endsWith('.md') && !/^draft:\s*true\s*$/m.test(readFileSync(new URL(f, guideDir), 'utf8')))
+  .map((f) => f.slice(0, -3))
+  .sort();
