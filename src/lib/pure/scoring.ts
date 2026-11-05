@@ -1,7 +1,24 @@
 // Self-assessment scoring (Story 7.1): one source of rules (src/content/self-assessment.json), used by the page,
 // the island and the tests. Every number in the result comes from the visitor's own answers.
-import data from '../../content/self-assessment.json' with { type: 'json' };
+import json from '../../content/self-assessment.json' with { type: 'json' };
 
+type Option = { value: string; label: string; points: number };
+export type Question =
+  | { id: string; type: 'choice'; legend: string; hint?: string; options: Option[] }
+  | { id: string; type: 'range'; legend: string; hint?: string; min: number; max: number; bands: { max: number; points: number }[] }
+  | { id: string; type: 'text'; legend: string; hint?: string };
+type Rule = { when: { question: string; in: string[] } | { question: string; min: number } | { level: string }; text: string };
+export type Assessment = {
+  intro: string;
+  questions: Question[];
+  levels: { id: string; name: string; max: number; text: string }[];
+  recommendations: Rule[];
+  fallback: string;
+  weeksPerYear: number;
+  label: string;
+};
+
+const data = json as Assessment;
 export const assessment = data;
 export type Answers = { reports?: string; hours?: number; agree?: string; systems?: string; goal?: string };
 export type Level = (typeof data.levels)[number];
@@ -17,9 +34,9 @@ export type Result = {
   recommendations: string[];
 };
 
-type Choice = Extract<(typeof data.questions)[number], { type: 'choice' }>;
+type Choice = Extract<Question, { type: 'choice' }>;
 const question = (id: string) => data.questions.find((q) => q.id === id)!;
-const hoursQ = question('hours') as Extract<(typeof data.questions)[number], { type: 'range' }>;
+const hoursQ = question('hours') as Extract<Question, { type: 'range' }>;
 
 /** Clamp to the slider range and round to whole hours; anything not a number counts as 0. */
 export const cleanHours = (h: unknown) => {
