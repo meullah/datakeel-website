@@ -7,7 +7,7 @@ author: datakeel-ai
 published: 2026-11-05
 updated: 2026-11-05
 draft: false
-reviewed: false
+reviewed: true
 related:
   - { label: "Where does your week go? Self-Assessment", href: "/self-assessment/" }
   - { label: "How do I make my company’s data AI-ready?", href: "/guides/how-to-make-your-data-ai-ready/" }

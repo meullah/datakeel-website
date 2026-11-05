@@ -18,7 +18,7 @@
         "answer": "Short answers to what people usually ask about our services."
       }
     ],
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "how-we-work",
@@ -95,7 +95,7 @@
         "answer": "Short answers to what people usually ask before they start."
       }
     ],
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "standard",
@@ -166,7 +166,7 @@
         "answer": "In our case studies. The labor cost platform on Microsoft Fabric releases every change through automated pipelines across development, test and production, and the hospital network lakehouse was built with access controls from day one."
       }
     ],
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "about",
@@ -225,7 +225,7 @@
         "answer": "We focus on the US and UK, and we also work with companies in the Gulf, Singapore and Australia, remotely with your team."
       }
     ],
-    "reviewed": false
+    "reviewed": true
   },
   {
     "id": "privacy",
@@ -343,7 +343,7 @@
         "answer": "If we change this policy, we’ll update this page. Material changes will be clear on this page before they take effect."
       }
     ],
-    "reviewed": false,
+    "reviewed": true,
     "updated": "2026-11-05"
   },
   {
@@ -400,7 +400,7 @@
         "answer": "Questions about these terms? Email hello@datakeelai.com."
       }
     ],
-    "reviewed": false,
+    "reviewed": true,
     "updated": "2026-11-05"
   }
 ]
