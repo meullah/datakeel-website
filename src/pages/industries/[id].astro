@@ -5,7 +5,7 @@ import ClosingCta from '../../components/ClosingCta.astro';
 import Faq from '../../components/Faq.astro';
 import { getFaqs, getIndustries, getPublished } from '../../lib/content.ts';
 import { faqPageNode } from '../../lib/seo.ts';
-import { caseStudiesUrl, homeUrl, industryUrl } from '../../lib/urls.ts';
+import { caseStudiesUrl, homeUrl, howWeWorkUrl, industryUrl, whatWeDoUrl } from '../../lib/urls.ts';
 
 export async function getStaticPaths() {
   return (await getIndustries()).map((industry) => ({ params: { id: industry.id }, props: { industry } }));
@@ -28,12 +28,13 @@ const lower = industry.name.toLowerCase();
       <h1 class="display">{industry.h1}</h1>
       <p class="lead intro">{industry.intro}</p>
       <h2 class="block-title">Typical data problems</h2>
-      <p class="block-answer">These are the data problems that come up most often for {lower} teams.</p>
+      <p class="block-answer">In {lower}, the same few data problems tend to hold teams back.</p>
       <ul class="problems" data-industry-problems>
         {industry.problems.map((p) => <li>{p}</li>)}
       </ul>
+      <p class="block-more">See <a href={whatWeDoUrl()}>what we do</a> about problems like these, and <a href={howWeWorkUrl()}>how we work</a>.</p>
       <h2 class="block-title">Case studies</h2>
-      {cases.length > 0 && <p class="block-answer">Projects that show how these problems were solved.</p>}
+      {cases.length > 0 && <p class="block-answer">These projects show what was wrong, what was built and what changed.</p>}
       {cases.length > 0 ? (
         <div class="case-grid">
           {cases.map((entry) => <CaseCard entry={entry} summary />)}
@@ -70,6 +71,10 @@ const lower = industry.name.toLowerCase();
     max-width: var(--reading-max);
     margin: 0 0 var(--space-5);
     color: var(--color-text-muted);
+  }
+  .block-more {
+    max-width: var(--reading-max);
+    margin: var(--space-5) 0 0;
   }
   .problems {
     display: grid;

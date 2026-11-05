@@ -6,7 +6,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
 import { cta } from '../../lib/config.ts';
 import { assessment, hoursText } from '../../lib/pure/scoring.ts';
-import { readinessReviewUrl, selfAssessmentUrl } from '../../lib/urls.ts';
+import { guideUrl, howWeWorkUrl, readinessReviewUrl, selfAssessmentUrl } from '../../lib/urls.ts';
 
 const name = 'Where does your week go?';
 const total = assessment.questions.length;
@@ -20,6 +20,7 @@ const total = assessment.questions.length;
     <div class="container">
       <h1 class="display">{name}</h1>
       <p class="lead">{assessment.intro}</p>
+      <p class="sa-more">Prefer to read? See <a href={guideUrl('signs-your-data-isnt-ready-for-ai')}>Signs your data isn’t ready for AI</a> or <a href={howWeWorkUrl()}>how we work</a>.</p>
     </div>
   </section>
 
@@ -102,6 +103,9 @@ const total = assessment.questions.length;
 </script>
 
 <style>
+  .sa-more {
+    margin: var(--space-4) 0 0;
+  }
   .sa-form,
   .sa-snapshot {
     max-width: var(--reading-max);

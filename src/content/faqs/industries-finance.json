@@ -9,7 +9,7 @@
   },
   {
     "question": "Which platforms do you use for finance data?",
-    "answer": "Mostly Microsoft Fabric and Databricks, with Power BI for reporting. Your data stays in your own environment."
+    "answer": "In our finance work, Microsoft Fabric, with Power BI for reporting. We also work with Databricks, and your data stays in your own environment."
   },
   {
     "question": "Where should a finance team start?",

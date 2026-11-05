@@ -7,7 +7,7 @@ import Form from '../../components/Form.astro';
 import { cta, email } from '../../lib/config.ts';
 import { getFaqs } from '../../lib/content.ts';
 import { faqPageNode, serviceNode } from '../../lib/seo.ts';
-import { readinessReviewUrl } from '../../lib/urls.ts';
+import { caseStudiesUrl, howWeWorkUrl, readinessReviewUrl } from '../../lib/urls.ts';
 
 const name = 'Data & AI Readiness Review';
 const path = readinessReviewUrl();
@@ -62,6 +62,7 @@ const reportParts = ['Data readiness score', 'Top 3 data risks', 'AI use cases f
           </li>
         ))}
       </ol>
+      <p class="rr-more">What comes after the review: <a href={howWeWorkUrl()}>how we work</a> and <a href={caseStudiesUrl()}>our case studies</a>.</p>
     </div>
   </section>
 
@@ -287,5 +288,8 @@ const reportParts = ['Data readiness score', 'Top 3 data risks', 'AI use cases f
   }
   .report-caption {
     margin-top: var(--space-4);
+  }
+  .rr-more {
+    margin: var(--space-7) 0 0;
   }
 </style>

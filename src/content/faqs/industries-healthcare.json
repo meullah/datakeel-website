@@ -5,7 +5,7 @@
   },
   {
     "question": "How do you protect patient data?",
-    "answer": "We design access controls around healthcare regulations from day one, and records can be de-identified before analysis. The platform runs in your own environment, and you own everything we build."
+    "answer": "In the hospital network project from our team’s experience, access controls were designed around healthcare regulations from day one. In another hospital, records were de-identified before analysis. The platform runs in your own environment, and you own everything we build."
   },
   {
     "question": "Can data help us plan for seasonal surges?",

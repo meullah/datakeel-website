@@ -43,4 +43,5 @@ test('llms.txt: name, positioning line, and a summary line for every indexable p
   const links = [...txt.matchAll(/^- \[[^\]]+\]\(([^)]+)\)/gm)].map((m) => m[1]);
   assert.equal(new Set(links).size, links.length, 'each link listed once');
   assert.match(txt, /\(Proof of concept\)\]/, 'framing labels kept');
+  assert.match(txt, /\(Our team's experience\)\]/);
 });

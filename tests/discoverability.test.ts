@@ -97,7 +97,7 @@ test('answer-first: on FAQ pages every h2 is followed by a short direct answer p
       const answer = text(body);
       const sentences = answer.split(/(?<=[.!?])\s+/).filter(Boolean).length;
       const words = answer.split(' ').length;
-      if (sentences > 3 || words > 70) errors.push(`${p}: "${text(heading)}" answer is ${sentences} sentences / ${words} words`);
+      if (sentences > 3 || words > 70 || words < 6) errors.push(`${p}: "${text(heading)}" answer is ${sentences} sentences / ${words} words`);
     }
   }
   assert.deepEqual(errors, []);
@@ -110,8 +110,13 @@ test('links: every page links to 3+ other pages from main, and every page is lin
   for (const p of all) {
     const h = html(p);
     const out = (s: string) => new Set([...s.matchAll(/<a\b[^>]*href="(\/[^"#?]*)/g)].map((m) => m[1]).filter((u) => u !== p));
-    if (out(mainOf(h)).size < 3) errors.push(`${p}: ${out(mainOf(h)).size} related links in main`);
-    for (const u of out(h)) if (inbound.has(u)) inbound.set(u, inbound.get(u)! + 1);
+    // Related links are the page's own: the closing band and the breadcrumb appear everywhere, so they don't count.
+    const body = mainOf(h)
+      .replace(/<section\b[^>]*data-closing-cta[\s\S]*?<\/section>/, '')
+      .replace(/<nav\b[^>]*aria-label="Breadcrumb"[\s\S]*?<\/nav>/, '');
+    if (out(body).size < 3) errors.push(`${p}: ${out(body).size} related links in main`);
+    // Inbound links from page content only: header and footer nav would make every page pass.
+    for (const u of out(mainOf(h))) if (inbound.has(u)) inbound.set(u, inbound.get(u)! + 1);
   }
   for (const [p, n] of inbound) if (p !== '/' && n === 0) errors.push(`${p}: orphan (no page links to it)`);
   assert.deepEqual(errors, []);

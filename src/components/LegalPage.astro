@@ -4,7 +4,7 @@
 import ReadingLayout from '../layouts/ReadingLayout.astro';
 import ClosingCta from './ClosingCta.astro';
 import { getPage } from '../lib/content.ts';
-import { contactUrl, privacyUrl, termsUrl } from '../lib/urls.ts';
+import { contactUrl, homeUrl, privacyUrl, termsUrl } from '../lib/urls.ts';
 
 export type Props = { id: 'privacy' | 'terms'; path: string };
 const { id, path } = Astro.props;
@@ -28,7 +28,7 @@ const dateFmt = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 
         )}
       </section>
     ))}
-    <p class="small muted legal-more">See also: <a href={id === 'privacy' ? termsUrl() : privacyUrl()}>{id === 'privacy' ? 'Terms of use' : 'Privacy policy'}</a> · <a href={contactUrl()}>Contact us</a></p>
+    <p class="small muted legal-more">See also: <a href={id === 'privacy' ? termsUrl() : privacyUrl()}>{id === 'privacy' ? 'Terms of use' : 'Privacy policy'}</a> · <a href={contactUrl()}>Contact us</a> · <a href={homeUrl()}>Home</a></p>
   </article>
   <ClosingCta slot="after" />
 </ReadingLayout>
