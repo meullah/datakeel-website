@@ -1,0 +1,15 @@
+[
+  {
+    "id": "what-we-do",
+    "title": "What We Do: Data Platforms and AI",
+    "description": "Data platforms, integration, quality and governance on Microsoft Fabric and Databricks, and the AI built on top of them.",
+    "h1": "What we do",
+    "lead": "We design, build and run modern data platforms: the pipelines, lakehouses and governance your reports and AI depend on. We work on Microsoft Fabric and Databricks, and once your data is in good shape, we build the AI on top.",
+    "summary": "Five services: data platforms on Microsoft Fabric and Databricks, data integration, data quality and governance, AI-ready data and AI use cases, and managed data operations.",
+    "sections": [
+      { "id": "stack", "heading": "What does a modern data platform look like?", "answer": "Five layers, from the systems you already use to data that’s ready for reporting and AI. Every service on this page builds or looks after one or more of them." },
+      { "id": "faq", "heading": "Questions about what we do", "answer": "Short answers to what people usually ask about our services." }
+    ],
+    "reviewed": false
+  }
+]

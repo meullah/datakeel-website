@@ -1,20 +1,114 @@
 ---
+// Copy lives in src/content/pages.json (what-we-do), services.json and faqs/what-we-do.json (Story 6.1).
+import { getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { whatWeDoUrl } from '../../lib/urls.ts';
+import Faq from '../../components/Faq.astro';
+import StackDiagram from '../../components/StackDiagram.astro';
+import { getFaqs, getPage, getPublished, sectionOf } from '../../lib/content.ts';
+import { faqPageNode, serviceNode } from '../../lib/seo.ts';
+import { caseStudyUrl, whatWeDoUrl } from '../../lib/urls.ts';
 
-const name = 'What we do';
+const path = whatWeDoUrl();
+const page = await getPage('what-we-do');
+const stack = sectionOf(page, 'stack');
+const faq = sectionOf(page, 'faq');
+const faqs = await getFaqs('what-we-do');
+const services = await Promise.all(
+  (await getPublished('services')).map(async (s) => {
+    const study = await getEntry(s.data.caseStudy);
+    if (!study) throw new Error(`services/${s.id}: unknown caseStudy "${s.data.caseStudy.id}"`);
+    return { ...s, study };
+  }),
+);
 ---
 <BaseLayout
-  title="What We Do: Data Platforms and AI"
-  description="Data platforms, pipelines, lakehouses and governance on Microsoft Fabric and Databricks, and the AI built on top of them."
-  breadcrumbs={[{ name, url: whatWeDoUrl() }]}
+  title={page.title}
+  description={page.description}
+  breadcrumbs={[{ name: page.h1, url: path }]}
+  graph={[
+    ...services.map((s) => serviceNode({ name: s.data.name, description: s.data.description, path, anchor: s.id })),
+    faqPageNode(faqs, path),
+  ]}
 >
-  <section class="section">
+  <section class="section" data-section="hero">
     <div class="container">
-      <h1 class="display">{name}</h1>
-      <p class="lead">We design, build and run modern data platforms: the pipelines, lakehouses and governance your reports and AI depend on. We work on Microsoft Fabric and Databricks, and once your data is in good shape, we build the AI on top.</p>
+      <h1 class="display">{page.h1}</h1>
+      <p class="lead">{page.lead}</p>
     </div>
   </section>
+
+  {services.map((s, i) => (
+    <section
+      class:list={['section', { 'section-surface': i % 2 === 0 }]}
+      id={s.id}
+      aria-labelledby={`${s.id}-heading`}
+      data-section="service"
+    >
+      <div class="container">
+        <h2 id={`${s.id}-heading`}>{s.data.name}</h2>
+        <p class="lead muted section-answer">{s.data.description}</p>
+        <div class="service-detail">
+          <div>
+            <h3>Typical problems</h3>
+            <ul class="service-problems">
+              {s.data.problems.map((p) => <li>{p}</li>)}
+            </ul>
+          </div>
+          <div>
+            <h3>Technologies</h3>
+            <ul class="chip-list" data-technologies>
+              {s.data.technologies.map((t) => <li class="chip">{t}</li>)}
+            </ul>
+            <p class="service-case">
+              See it in practice: <a href={caseStudyUrl(s.study.id)}>{s.study.data.headline}</a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+  ))}
+
+  <section class:list={['section', { 'section-surface': services.length % 2 === 0 }]} aria-labelledby="stack-heading" data-section="stack">
+    <div class="container">
+      <h2 id="stack-heading">{stack.heading}</h2>
+      <p class="lead muted section-answer">{stack.answer}</p>
+      <StackDiagram />
+    </div>
+  </section>
+
+  <Faq items={faqs} heading={faq.heading} intro={faq.answer} />
+
   <ClosingCta />
 </BaseLayout>
+
+<style>
+  .section-answer {
+    margin-top: var(--space-4);
+  }
+  .service-detail {
+    display: grid;
+    gap: var(--space-6);
+    margin-top: var(--space-6);
+  }
+  @media (width >= 1024px) {
+    .service-detail {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--space-7);
+    }
+  }
+  .service-detail h3 {
+    margin-bottom: var(--space-4);
+  }
+  .service-problems {
+    margin: 0;
+    padding-left: var(--space-5);
+    max-width: 60ch;
+  }
+  .service-problems li + li {
+    margin-top: var(--space-2);
+  }
+  .service-case {
+    margin: var(--space-5) 0 0;
+  }
+</style>

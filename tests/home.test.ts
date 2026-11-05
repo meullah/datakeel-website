@@ -114,7 +114,7 @@ test('home problem section: approved h2, answer line, four pain cards with the a
   for (const c of cards) assert.doesNotMatch(c, /<a\b/, 'pain cards are not links');
 });
 
-test('home services: one card per services.json entry, name + summary, one link to /what-we-do/', skip, () => {
+test('home services: one card per services.json entry, name + summary, one link to its /what-we-do/ section', skip, () => {
   const s = sectionOf('services');
   assert.ok(s, 'services section missing');
   assert.equal(text(s.match(/<h2\b[\s\S]*?<\/h2>/)?.[0] ?? ''), 'What we do');
@@ -124,7 +124,7 @@ test('home services: one card per services.json entry, name + summary, one link 
   const sorted = [...services].sort((a, b) => a.order - b.order);
   cards.forEach((c, i) => {
     const links = [...c.matchAll(/<a\b[^>]*href="([^"]+)"/g)].map((m) => m[1]);
-    assert.deepEqual(links, ['/what-we-do/']);
+    assert.deepEqual(links, [`/what-we-do/#${sorted[i].id}`]);
     assert.equal(text(c.match(/<h3\b[\s\S]*?<\/h3>/)?.[0] ?? ''), sorted[i].name);
     assert.ok(text(c).includes(sorted[i].summary), sorted[i].id);
   });

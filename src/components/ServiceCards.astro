@@ -1,5 +1,5 @@
 ---
-// "What we do": one card per services entry, each one link to /what-we-do/. Reused on What We Do (Epic 6).
+// "What we do": one card per services entry, each one link to its section on /what-we-do/. Reused on What We Do (Epic 6).
 // Copy is founder-approved (2026-11-05, homepage-epic5.md §5.2); one-liners live in services.json.
 import { getPublished } from '../lib/content.ts';
 import { whatWeDoUrl } from '../lib/urls.ts';
@@ -13,7 +13,7 @@ const services = await getPublished('services');
     <ul class="card-grid services-grid" role="list">
       {services.map((s) => (
         <li class="card card-interactive card-stretch service-card" data-service={s.id}>
-          <h3><a href={whatWeDoUrl()}>{s.data.name}</a></h3>
+          <h3><a href={`${whatWeDoUrl()}#${s.id}`}>{s.data.name}</a></h3>
           <p class="muted">{s.data.summary}</p>
         </li>
       ))}

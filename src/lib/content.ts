@@ -7,19 +7,23 @@ const isPublished = (e: { data: object }) => !('draft' in e.data && e.data.draft
 // Runs once per build. Every page renders the header, which calls getIndustries(), so any page build fails on a broken rule.
 let checked: Promise<void> | undefined;
 async function runChecks() {
-  const [cases, industries, services, faqs, departments] = await Promise.all([
+  const [cases, industries, services, faqs, departments, pages] = await Promise.all([
     getCollection('caseStudies', isPublished),
     getCollection('industries'),
     getCollection('services'),
     getCollection('faqs'),
     getCollection('departments'),
+    getCollection('pages'),
   ]);
   assertNoMarkers(cases, 'caseStudies');
   assertNoMarkers(industries, 'industries');
   assertNoMarkers(services, 'services');
   assertNoMarkers(faqs, 'faqs');
   assertNoMarkers(departments, 'departments');
+  assertNoMarkers(pages, 'pages');
   const caseIds = new Set(cases.map((c) => c.id));
+  for (const s of services)
+    if (!caseIds.has(s.data.caseStudy.id)) throw new Error(`services/${s.id}: caseStudy "${s.data.caseStudy.id}" is not a published case study.`);
   for (const d of departments.filter((d) => d.data.show))
     if (!caseIds.has(d.data.caseStudy.id)) throw new Error(`departments/${d.id}: caseStudy "${d.data.caseStudy.id}" is not a published case study.`);
   assertHomepageStats(cases);
@@ -45,4 +49,19 @@ export async function getFaqs(pageKey: string) {
   const entry = await getEntry('faqs', pageKey);
   if (!entry) throw new Error(`faqs: no src/content/faqs/${pageKey}.json`);
   return entry.data.items;
+}
+
+/** Page copy for a route slug (e.g. 'what-we-do'); a missing entry fails the build. */
+export async function getPage(id: string) {
+  await checkContent();
+  const entry = await getEntry('pages', id);
+  if (!entry) throw new Error(`pages: no entry "${id}" in src/content/pages.json`);
+  return entry.data;
+}
+
+/** A page's section by id; a missing one fails the build. */
+export function sectionOf(page: CollectionEntry<'pages'>['data'], id: string) {
+  const s = page.sections.find((x) => x.id === id);
+  if (!s) throw new Error(`pages/${page.id}: section "${id}" missing`);
+  return s;
 }

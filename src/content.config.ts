@@ -26,7 +26,44 @@ const industries = defineCollection({
 
 const services = defineCollection({
   loader: file('src/content/services.json'),
-  schema: z.strictObject({ id: z.string(), order: z.number().int(), name: text, summary: text }),
+  schema: z.strictObject({
+    id: z.string(),
+    order: z.number().int(),
+    name: text,
+    /** Homepage card one-liner. */
+    summary: text,
+    // What We Do section (Story 6.1): answer-first description, problems, tools (text only) and the case that shows it.
+    description: text,
+    problems: z.array(text).min(1),
+    technologies: z.array(text).min(1),
+    caseStudy: reference('caseStudies'),
+  }),
+});
+
+// Page copy (Story 6.1): one entry per content page, keyed by route slug. `summary` feeds llms.txt (Epic 8).
+// `sections` are answer-first h2 blocks the page looks up by id; `items` cover lists like steps or checklist lines.
+const pages = defineCollection({
+  loader: file('src/content/pages.json'),
+  schema: z.strictObject({
+    id: z.string(),
+    title: text,
+    description: text.max(155),
+    h1: text,
+    lead: text,
+    summary: text,
+    sections: z
+      .array(
+        z.strictObject({
+          id: z.string(),
+          heading: text,
+          answer: text,
+          items: z.array(z.strictObject({ title: text, text: text })).optional(),
+        }),
+      )
+      .default([]),
+    /** false until the founder approves the copy (planning-artifacts/content/epic6-8-copy-review.md). */
+    reviewed: z.boolean(),
+  }),
 });
 
 // Homepage "Where it helps" (Story 5.3): one line per department and the case study that shows it.
@@ -95,4 +132,4 @@ const caseStudies = defineCollection({
   }),
 });
 
-export const collections = { caseStudies, departments, faqs, industries, services };
+export const collections = { caseStudies, departments, faqs, industries, pages, services };

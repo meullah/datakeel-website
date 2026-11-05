@@ -84,12 +84,13 @@ export const faqPageNode = (items: FaqItem[], path: string): GraphNode => ({
 });
 
 /** A service the Organization provides. No price or offers: amounts are shared by email only. */
-export const serviceNode = ({ name, description, path }: { name: string; description: string; path: string }): GraphNode => ({
+/** `anchor` (an element id on the page) gives each of several services on one page its own @id and url. */
+export const serviceNode = ({ name, description, path, anchor }: { name: string; description: string; path: string; anchor?: string }): GraphNode => ({
   '@type': 'Service',
-  '@id': `${absoluteUrl(path)}#service`,
+  '@id': `${absoluteUrl(path)}#${anchor ?? 'service'}`,
   name,
   description,
-  url: absoluteUrl(path),
+  url: absoluteUrl(path) + (anchor ? `#${anchor}` : ''),
   provider: { '@id': ORGANIZATION_ID },
 });
 

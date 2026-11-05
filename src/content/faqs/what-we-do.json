@@ -1,0 +1,8 @@
+[
+  { "question": "Do you only work with Microsoft Fabric and Databricks?", "answer": "Those are the platforms we use most, with Azure, Delta Lake, dbt and Power BI around them. If you already run something else, like Cloudera on your own servers, we work with what you have." },
+  { "question": "Can our data stay in our own cloud or on our own servers?", "answer": "Yes. We build the platform inside your environment, and you own all the code and documentation. See [the DataKeel Standard](/standard/)." },
+  { "question": "Do we need all five services?", "answer": "No. Many clients start with one, like integration or quality, and add more later. The [Readiness Review](/readiness-review/) tells you where to start." },
+  { "question": "Do you build AI before the data is ready?", "answer": "No. AI built on messy data gives confident, wrong answers, so we get the data right first. Then we build the AI use cases that make sense for you." },
+  { "question": "Who looks after the platform once it’s built?", "answer": "Your choice. We can keep running it for you, or hand it over to your team with full documentation. [How we work](/how-we-work/) explains both options." },
+  { "question": "How do we get started?", "answer": "With a [Data & AI Readiness Review](/readiness-review/). In about 10 working days you get a written plan, and you decide if we’re the right fit." }
+]

@@ -1,7 +1,72 @@
 [
-  { "id": "data-platforms", "order": 1, "name": "Data platforms on Microsoft Fabric and Databricks", "summary": "One governed home for your data, built to grow with you." },
-  { "id": "data-integration", "order": 2, "name": "Data integration", "summary": "Every source system feeding the platform automatically, on a schedule you can trust." },
-  { "id": "data-quality-governance", "order": 3, "name": "Data quality and governance", "summary": "Tested data, clear owners and access rules, so every report tells the same story." },
-  { "id": "ai-ready-data", "order": 4, "name": "AI-ready data and AI use cases", "summary": "Clean, documented data first, then AI use cases that actually work on it." },
-  { "id": "managed-data-operations", "order": 5, "name": "Managed data operations", "summary": "We keep the platform running, monitored and up to date after launch." }
+  {
+    "id": "data-platforms",
+    "order": 1,
+    "name": "Data platforms on Microsoft Fabric and Databricks",
+    "summary": "One governed home for your data, built to grow with you.",
+    "description": "We build one platform where all your business data lives, on Microsoft Fabric or Databricks, in your own cloud or on your own servers. Data moves through clear layers, from raw to cleaned to ready for reporting, so every team works from the same numbers.",
+    "problems": [
+      "Key numbers live in spreadsheets that people copy by hand.",
+      "Each team reports from its own copy of the data, so the numbers rarely match.",
+      "Month-end reporting takes days of manual matching across systems."
+    ],
+    "technologies": ["Microsoft Fabric", "Databricks", "Delta Lake", "Azure", "PySpark", "Power BI"],
+    "caseStudy": "labor-cost-finance-microsoft-fabric"
+  },
+  {
+    "id": "data-integration",
+    "order": 2,
+    "name": "Data integration",
+    "summary": "Every source system feeding the platform automatically, on a schedule you can trust.",
+    "description": "We connect the systems you already use, like your ERP, CRM, finance tools and files from partners, and bring their data into the platform automatically. Each source lands in one shared model, so a new source is a small job, not a new project.",
+    "problems": [
+      "Files arrive in different formats, with different column names and missing details.",
+      "Someone has to download, clean and upload data by hand every week.",
+      "Adding a new source or partner is slow and error-prone."
+    ],
+    "technologies": ["Azure Data Factory", "Microsoft Fabric pipelines", "Azure Functions", "APIs and SFTP"],
+    "caseStudy": "dealer-inventory-google-vehicle-ads"
+  },
+  {
+    "id": "data-quality-governance",
+    "order": 3,
+    "name": "Data quality and governance",
+    "summary": "Tested data, clear owners and access rules, so every report tells the same story.",
+    "description": "We test your data before anyone relies on it, agree one definition for each important number, and set clear rules for who can see what. You can show auditors exactly who has access to which data.",
+    "problems": [
+      "The same metric is calculated in different ways by different teams.",
+      "Nobody can say for sure who can see which data.",
+      "Errors are found in a meeting, not before the report goes out."
+    ],
+    "technologies": ["dbt tests", "Access controls", "Data lineage", "Delta Lake"],
+    "caseStudy": "hospital-network-governed-lakehouse"
+  },
+  {
+    "id": "ai-ready-data",
+    "order": 4,
+    "name": "AI-ready data and AI use cases",
+    "summary": "Clean, documented data first, then AI use cases that actually work on it.",
+    "description": "AI is only as good as the data under it. We get your data clean, joined and documented first, then build AI use cases on top of it, like forecasting, flagging risky records or AI assistants that answer from your own data.",
+    "problems": [
+      "An AI pilot gives confident, wrong answers because the data under it is messy.",
+      "The data an AI model needs is spread across systems that were never joined.",
+      "Nobody is sure which AI use case is worth trying first."
+    ],
+    "technologies": ["Databricks", "Python", "SQL", "AI models and assistants", "Power BI"],
+    "caseStudy": "health-claims-review-proof-of-concept"
+  },
+  {
+    "id": "managed-data-operations",
+    "order": 5,
+    "name": "Managed data operations",
+    "summary": "We keep the platform running, monitored and up to date after launch.",
+    "description": "After launch, we keep the platform healthy: we watch every pipeline, fix problems before your reports are affected, and keep improving the platform as your business changes. You can also take it over yourself whenever you want.",
+    "problems": [
+      "A pipeline fails overnight and nobody notices until the report is wrong.",
+      "The platform was built once and never improved.",
+      "Your team doesn't have the time to look after the platform themselves."
+    ],
+    "technologies": ["Monitoring and alerts", "GitHub Actions", "Microsoft Fabric", "Databricks"],
+    "caseStudy": "hospital-seasonal-surge-forecasting"
+  }
 ]
