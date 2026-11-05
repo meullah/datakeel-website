@@ -1,20 +1,256 @@
 ---
+// "Where does your week go?" (Epic 7). Questions, scoring and Snapshot text come from src/content/self-assessment.json
+// via src/lib/pure/scoring.ts. Every question is in the HTML; the island shows one per screen and builds the Snapshot.
+// Nothing is stored or sent: no email, no network call.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { selfAssessmentUrl } from '../../lib/urls.ts';
+import { cta } from '../../lib/config.ts';
+import { assessment, hoursText } from '../../lib/pure/scoring.ts';
+import { readinessReviewUrl, selfAssessmentUrl } from '../../lib/urls.ts';
 
 const name = 'Where does your week go?';
+const total = assessment.questions.length;
 ---
 <BaseLayout
   title="Self-Assessment: Where Does Your Week Go?"
   description="A short, friendly self-assessment about how your team works with data. Takes under two minutes, asks nothing personal and needs no email."
   breadcrumbs={[{ name, url: selfAssessmentUrl() }]}
 >
-  <section class="section">
+  <section class="section" data-section="hero">
     <div class="container">
       <h1 class="display">{name}</h1>
-      <p class="lead">Our Self-Assessment is a short, friendly check on how your team builds reports and works with data. It takes under two minutes, gives you a rough snapshot of where you stand with a few plain next steps, and never asks for your email.</p>
+      <p class="lead">{assessment.intro}</p>
     </div>
   </section>
+
+  <section class="section section-surface" aria-label="Self-assessment" data-section="assessment">
+    <div class="container sa">
+      <form class="sa-form" data-sa autocomplete="off" novalidate>
+        <div class="sa-progress" data-sa-progress hidden>
+          <p class="sa-progress-label" aria-live="polite" data-sa-status>Question 1 of {total}</p>
+          <div class="sa-bar" aria-hidden="true"><span data-sa-bar></span></div>
+        </div>
+
+        {assessment.questions.map((q, i) => (
+          <fieldset class="sa-q" data-sa-step={i} data-sa-type={q.type} tabindex="-1" aria-describedby={q.hint ? `sa-${q.id}-hint` : undefined}>
+            <legend><span class="sa-q-num">Question {i + 1} of {total}</span> {q.legend}</legend>
+            {q.hint && <p class="small muted sa-hint" id={`sa-${q.id}-hint`}>{q.hint}</p>}
+            {q.type === 'choice' && (
+              <div class="sa-options">
+                {q.options.map((o) => (
+                  <label class="sa-option">
+                    <input type="radio" name={q.id} value={o.value} />
+                    <span>{o.label}</span>
+                  </label>
+                ))}
+              </div>
+            )}
+            {q.type === 'range' && (
+              <div class="sa-range">
+                <input
+                  type="range"
+                  id={`sa-${q.id}`}
+                  name={q.id}
+                  min={q.min}
+                  max={q.max}
+                  step="1"
+                  value={q.min}
+                  aria-label="Hours a week"
+                  aria-valuetext={hoursText(q.min)}
+                  data-sa-range
+                />
+                <output for={`sa-${q.id}`} class="sa-range-value" data-sa-range-value>{hoursText(q.min)}</output>
+              </div>
+            )}
+            {q.type === 'text' && (
+              <input type="text" class="sa-text" name={q.id} maxlength="200" aria-label="Your answer (optional)" />
+            )}
+          </fieldset>
+        ))}
+
+        <p class="sa-error" aria-live="assertive" data-sa-error></p>
+        <div class="sa-nav" data-sa-nav hidden>
+          <button type="button" class="btn btn-ghost" data-sa-back>Back</button>
+          <button type="button" class="btn btn-ghost" data-sa-skip hidden>Skip</button>
+          <button type="submit" class="btn btn-primary" data-sa-next>Next</button>
+        </div>
+        <p class="small muted" data-sa-nojs>Your snapshot is worked out in your browser, so it needs JavaScript turned on.</p>
+      </form>
+
+      <div class="sa-snapshot" data-sa-snapshot hidden>
+        <h2 id="snapshot-heading" tabindex="-1">Your snapshot</h2>
+        <p class="small muted">{assessment.label}</p>
+        <p data-sa-time hidden>You told us your team spends about <strong data-sa-hours></strong> on manual data work. That’s roughly <strong data-sa-yearly></strong> (based on {assessment.weeksPerYear} working weeks).</p>
+        <p data-sa-goal hidden>You’d like to make this decision faster: <em data-sa-goal-text></em>.</p>
+        <h3>Your level: <span data-sa-level></span></h3>
+        <p data-sa-level-text></p>
+        <h3>Where to start</h3>
+        <ul class="sa-recs" data-sa-recs></ul>
+        <div class="sa-actions">
+          <a class="btn btn-primary" href={readinessReviewUrl()}>{cta.primary}</a>
+          <button type="button" class="btn btn-ghost" data-sa-print>Download / print my snapshot</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <ClosingCta variant="snapshot" />
 </BaseLayout>
+
+<script>
+  import '../../islands/self-assessment.ts';
+</script>
+
+<style>
+  .sa-form,
+  .sa-snapshot {
+    max-width: var(--reading-max);
+  }
+  /* Flex/grid rules below would otherwise beat the hidden attribute. */
+  .sa [hidden] {
+    display: none;
+  }
+  .sa-progress {
+    margin-bottom: var(--space-6);
+  }
+  .sa-progress-label {
+    margin: 0 0 var(--space-2);
+    font-weight: 600;
+  }
+  .sa-bar {
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--color-border);
+    overflow: hidden;
+  }
+  .sa-bar span {
+    display: block;
+    width: 20%;
+    height: 100%;
+    background: var(--gradient-brand);
+    transition: width var(--duration) ease;
+  }
+  .sa-q {
+    margin: 0 0 var(--space-7);
+    padding: 0;
+    border: 0;
+    min-width: 0;
+  }
+  .sa-q:focus {
+    outline: none;
+  }
+  .sa-q legend {
+    padding: 0;
+    margin-bottom: var(--space-4);
+    font-size: var(--type-heading-3-size);
+    font-weight: var(--type-heading-3-weight);
+    line-height: var(--type-heading-3-line);
+  }
+  .sa-q-num {
+    display: block;
+    margin-bottom: var(--space-2);
+    color: var(--color-accent-text);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+  }
+  /* With the island, the progress bar already says "Question N of 5". */
+  .sa-form.is-stepped .sa-q-num {
+    display: none;
+  }
+  .sa-hint {
+    margin: 0 0 var(--space-4);
+  }
+  .sa-options {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .sa-option {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-height: var(--touch-min);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-card);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+  }
+  .sa-option:has(input:checked) {
+    border-color: var(--color-text);
+  }
+  .sa-option input {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    flex-shrink: 0;
+    accent-color: var(--color-brand-hot);
+  }
+  .sa-range {
+    display: grid;
+    gap: var(--space-3);
+  }
+  .sa-range input {
+    width: 100%;
+    min-height: var(--touch-min);
+    accent-color: var(--color-brand-hot);
+  }
+  .sa-range-value {
+    font-size: var(--type-heading-3-size);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .sa-text {
+    width: 100%;
+    min-height: var(--touch-min);
+    padding: var(--space-3) var(--space-4);
+    color: var(--color-text);
+    background: var(--color-card);
+    border: 1px solid var(--color-text-muted);
+    border-radius: var(--radius-md);
+  }
+  .sa-error {
+    margin: 0;
+    color: var(--color-error);
+  }
+  .sa-error:empty {
+    display: none;
+  }
+  .sa-nav,
+  .sa-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-5);
+  }
+  .sa-nav [data-sa-next] {
+    margin-left: auto;
+  }
+  .sa-snapshot h2:focus {
+    outline: none;
+  }
+  .sa-snapshot h3 {
+    margin: var(--space-6) 0 var(--space-2);
+  }
+  .sa-recs {
+    margin: 0;
+    padding-left: var(--space-5);
+  }
+  .sa-recs li + li {
+    margin-top: var(--space-2);
+  }
+</style>
+
+<style is:global>
+  /* "Download / print my snapshot": only the Snapshot prints; other pages and this page otherwise print normally. */
+  @media print {
+    body[data-printing="snapshot"] > :not(main),
+    body[data-printing="snapshot"] main > :not([data-section="assessment"]),
+    body[data-printing="snapshot"] [data-section="assessment"] :is(form, .sa-actions) {
+      display: none !important;
+    }
+    body[data-printing="snapshot"] [data-section="assessment"] {
+      padding: 0;
+      background: none;
+    }
+  }
+</style>
