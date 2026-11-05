@@ -1,8 +1,11 @@
-# Story 9.2: every push to main is checked, tested and built; only a green build is deployed to GitHub Pages.
+# Story 9.2: every pull request and every push to main is checked, tested and built; only a green build on main is
+# deployed to GitHub Pages. The `build` job is the required status check on the protected main branch.
 name: Deploy
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
   workflow_dispatch:
 
@@ -39,6 +42,7 @@ jobs:
 
   deploy:
     needs: build
+    if: github.event_name != 'pull_request'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
