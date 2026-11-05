@@ -1,0 +1,69 @@
+{
+  "intro": "Five quick questions about how your team works with data. Takes under two minutes. You’ll get a short snapshot at the end, and you don’t need to give your email.",
+  "questions": [
+    {
+      "id": "reports",
+      "type": "choice",
+      "legend": "How does your team build its main reports today?",
+      "options": [
+        { "value": "dashboard", "label": "One trusted dashboard", "points": 2 },
+        { "value": "stitched", "label": "A few tools stitched together", "points": 1 },
+        { "value": "spreadsheets", "label": "Mostly spreadsheets, by hand", "points": 0 }
+      ]
+    },
+    {
+      "id": "hours",
+      "type": "range",
+      "legend": "Roughly how many hours a week does your team spend collecting, copying and fixing data?",
+      "min": 0,
+      "max": 40,
+      "bands": [
+        { "max": 4, "points": 2 },
+        { "max": 15, "points": 1 },
+        { "max": 40, "points": 0 }
+      ]
+    },
+    {
+      "id": "agree",
+      "type": "choice",
+      "legend": "Do your reports agree with each other?",
+      "options": [
+        { "value": "always", "label": "Always", "points": 2 },
+        { "value": "sometimes", "label": "Sometimes", "points": 1 },
+        { "value": "rarely", "label": "Rarely", "points": 0 }
+      ]
+    },
+    {
+      "id": "systems",
+      "type": "choice",
+      "legend": "How many systems hold your important data?",
+      "hint": "ERP, CRM, finance, spreadsheets…",
+      "options": [
+        { "value": "1-3", "label": "1–3", "points": 2 },
+        { "value": "4-7", "label": "4–7", "points": 1 },
+        { "value": "8+", "label": "8 or more", "points": 0 }
+      ]
+    },
+    {
+      "id": "goal",
+      "type": "text",
+      "legend": "What decision would you make faster if your data was ready?",
+      "hint": "Optional. It’s quoted back in your snapshot and never leaves your browser."
+    }
+  ],
+  "levels": [
+    { "id": "early", "name": "Early", "max": 3, "text": "Your data is working against you. The good news: the first fixes are usually the biggest wins." },
+    { "id": "developing", "name": "Developing", "max": 6, "text": "You have the pieces. Connecting them is what unlocks reliable reporting and AI." },
+    { "id": "ready", "name": "Ready", "max": 8, "text": "Your foundations look solid. You may be ready to pilot an AI use case on top." }
+  ],
+  "recommendations": [
+    { "when": { "question": "reports", "in": ["spreadsheets"] }, "text": "Bring your main sources into one place before adding new tools." },
+    { "when": { "question": "agree", "in": ["sometimes", "rarely"] }, "text": "Agree one definition for your key numbers, so every report tells the same story." },
+    { "when": { "question": "hours", "min": 16 }, "text": "Automate the weekly refresh. That time comes straight back to your team." },
+    { "when": { "question": "systems", "in": ["8+"] }, "text": "Map your systems first. A short review shows which ones matter most." },
+    { "when": { "level": "ready" }, "text": "Pick one AI use case and test it on the data you already trust." }
+  ],
+  "fallback": "A Data & AI Readiness Review turns this snapshot into a costed plan.",
+  "weeksPerYear": 48,
+  "label": "A rough self-assessment based on your answers, not a diagnosis."
+}
