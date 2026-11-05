@@ -87,7 +87,7 @@ export const faqPageNode = (items: FaqItem[], path: string): GraphNode => ({
 /** `anchor` (an element id on the page) gives each of several services on one page its own @id and url. */
 export const serviceNode = ({ name, description, path, anchor }: { name: string; description: string; path: string; anchor?: string }): GraphNode => ({
   '@type': 'Service',
-  '@id': `${absoluteUrl(path)}#${anchor ?? 'service'}`,
+  '@id': `${absoluteUrl(path)}#${anchor ? `service-${anchor}` : 'service'}`,
   name,
   description,
   url: absoluteUrl(path) + (anchor ? `#${anchor}` : ''),

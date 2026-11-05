@@ -33,6 +33,14 @@ export function assertHomepageStats(entries: StatsEntry[]): void {
   if (sources.length < 2) throw new Error(`Homepage stats: all come from ${sources.map((e) => e.id).join(', ') || 'no case study'}; they must come from at least 2 case studies.`);
 }
 
+type CaseRefEntry = { id: string; data: { caseStudy: { id: string } } };
+
+/** Each entry's caseStudy must be a published case study (e.g. services, departments). */
+export function assertCaseRefs(entries: CaseRefEntry[], caseIds: Set<string>, collection: string): void {
+  for (const e of entries)
+    if (!caseIds.has(e.data.caseStudy.id)) throw new Error(`${collection}/${e.id}: caseStudy "${e.data.caseStudy.id}" is not a published case study.`);
+}
+
 type RelatedEntry = { id: string; data: { related?: ({ id: string } | string)[] } };
 
 /** Related case studies must be other published entries (drafts have no page, so a link would 404). */

@@ -1,6 +1,6 @@
 // The only way to read content collections: drafts filtered, one sort, content rules enforced.
 import { getCollection, getEntry, type CollectionEntry, type CollectionKey } from 'astro:content';
-import { assertHomepageStats, assertNoMarkers, assertRelated, compareEntries } from './pure/content-rules.ts';
+import { assertCaseRefs, assertHomepageStats, assertNoMarkers, assertRelated, compareEntries } from './pure/content-rules.ts';
 
 const isPublished = (e: { data: object }) => !('draft' in e.data && e.data.draft === true);
 
@@ -22,10 +22,8 @@ async function runChecks() {
   assertNoMarkers(departments, 'departments');
   assertNoMarkers(pages, 'pages');
   const caseIds = new Set(cases.map((c) => c.id));
-  for (const s of services)
-    if (!caseIds.has(s.data.caseStudy.id)) throw new Error(`services/${s.id}: caseStudy "${s.data.caseStudy.id}" is not a published case study.`);
-  for (const d of departments.filter((d) => d.data.show))
-    if (!caseIds.has(d.data.caseStudy.id)) throw new Error(`departments/${d.id}: caseStudy "${d.data.caseStudy.id}" is not a published case study.`);
+  assertCaseRefs(services, caseIds, 'services');
+  assertCaseRefs(departments.filter((d) => d.data.show), caseIds, 'departments');
   assertHomepageStats(cases);
   assertRelated(cases);
 }

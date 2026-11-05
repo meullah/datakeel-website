@@ -4,7 +4,8 @@ import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { plainMd } from '../src/lib/pure/inline-md.ts';
-import { caseStudyUrl } from '../src/lib/urls.ts';
+import { absoluteUrl, caseStudyUrl, whatWeDoUrl } from '../src/lib/urls.ts';
+import { assertCaseRefs } from '../src/lib/pure/content-rules.ts';
 import { caseStudyIds } from './content-data.ts';
 
 const read = (p: string) => readFileSync(fileURLToPath(new URL(p, import.meta.url)), 'utf8');
@@ -22,6 +23,12 @@ const faqs: { question: string; answer: string }[] = JSON.parse(read('../src/con
 test('content: every service links a published case study; page has a summary', () => {
   for (const s of services) assert.ok(caseStudyIds.includes(s.caseStudy), `${s.id} → ${s.caseStudy}`);
   assert.ok(page?.summary?.length > 0);
+});
+
+test('assertCaseRefs: an unpublished or missing case study fails, naming the entry', () => {
+  const ids = new Set(['a']);
+  assert.doesNotThrow(() => assertCaseRefs([{ id: 'x', data: { caseStudy: { id: 'a' } } }], ids, 'services'));
+  assert.throws(() => assertCaseRefs([{ id: 'x', data: { caseStudy: { id: 'draft-case' } } }], ids, 'services'), /services\/x: caseStudy "draft-case"/);
 });
 
 test('one h1 and title/description from pages.json', skip, () => {
@@ -60,5 +67,9 @@ test('stack diagram, FAQ matches JSON, one FAQPage and one Service node per serv
   assert.deepEqual(faqNodes[0].mainEntity.map((q: any) => q.acceptedAnswer.text), faqs.map((f) => plainMd(f.answer)));
   const svc = g.filter((n) => n['@type'] === 'Service');
   assert.deepEqual(svc.map((n) => n.name), services.map((s) => s.name));
-  assert.equal(new Set(svc.map((n) => n['@id'])).size, services.length, 'unique @ids');
+  svc.forEach((n, i) => {
+    assert.equal(n.url, `${absoluteUrl(whatWeDoUrl())}#${services[i].id}`, 'url points at the section');
+    assert.equal(n['@id'], `${absoluteUrl(whatWeDoUrl())}#service-${services[i].id}`);
+    assert.ok(h.includes(`id="${services[i].id}"`), 'anchor exists');
+  });
 });
