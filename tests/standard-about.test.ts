@@ -45,9 +45,8 @@ test('about: mission, three values, approach, related links; no team size or pho
   assert.equal((main.match(/<h1[\s>]/g) ?? []).length, 1);
   assert.match(text(sectionOf(main, 'mission')), /backbone/);
   assert.deepEqual([...sectionOf(main, 'values').matchAll(/<h3\b[^>]*>([\s\S]*?)<\/h3>/g)].map((m) => text(m[1])), ['Quality', 'Clarity', 'Ownership']);
-  assert.ok(sectionOf(main, 'approach'));
-  const links = new Set([...main.matchAll(/<a\b[^>]*href="(\/[^"#]*)"/g)].map((m) => m[1]));
-  assert.ok(links.size >= 3, `related links: ${[...links]}`);
+  const approach = sectionOf(main, 'approach');
+  for (const href of [howWeWorkUrl(), standardUrl(), caseStudiesUrl()]) assert.ok(approach.includes(`href="${href}"`), `related link ${href}`);
   assert.doesNotMatch(text(main), TEAM);
   assert.doesNotMatch(main, /<img\b/);
   assert.deepEqual(surfaces(main), [false, true, false, true, false, false]);
