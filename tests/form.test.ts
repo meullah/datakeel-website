@@ -30,7 +30,7 @@ test('firstName and success headings', () => {
   assert.equal(firstName(''), '');
   assert.equal(successCopy['readiness-review'].heading('  Sara  Collins '), 'Thanks, Sara. We’ll reply within one business day with details and pricing.');
   assert.equal(successCopy.contact.heading('   '), 'Thanks. We’ll get back to you within one business day.');
-  assert.equal(successCopy.contact.label, 'Request sent');
+  assert.equal(successCopy.contact.label, 'Message sent');
 });
 
 test('error summary, sizes, countries', () => {

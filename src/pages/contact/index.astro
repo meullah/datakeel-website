@@ -1,6 +1,8 @@
 ---
+// Copy is founder-approved (2026-11-05).
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
+import Form from '../../components/Form.astro';
 import { email } from '../../lib/config.ts';
 import { contactUrl } from '../../lib/urls.ts';
 
@@ -11,11 +13,28 @@ const name = 'Talk to us';
   description={`Talk to DataKeel AI about your data platform or AI plans. Send us a message or email ${email} and we’ll get back to you.`}
   breadcrumbs={[{ name, url: contactUrl() }]}
 >
-  <section class="section">
+  <section class="section" data-section="hero">
     <div class="container">
       <h1 class="display">{name}</h1>
-      <p class="lead">Have a question about your data, a platform or an AI idea? We’re happy to talk it through. Email us at <a href={`mailto:${email}`}>{email}</a> and we’ll get back to you.</p>
+      <p class="lead">Have a question about your data, a platform or an AI idea? We’re happy to talk it through. Send us a message below or email <a href={`mailto:${email}`}>{email}</a>, and we’ll get back to you within one business day.</p>
     </div>
   </section>
-  <ClosingCta />
+
+  <section class="section" id="message" aria-labelledby="message-heading" data-section="message">
+    <div class="container">
+      <h2 id="message-heading">Send us a message</h2>
+      <div class="contact-form">
+        <Form variant="contact" />
+      </div>
+    </div>
+  </section>
+
+  <ClosingCta variant="contact" />
 </BaseLayout>
+
+<style>
+  .contact-form {
+    max-width: var(--reading-max);
+    margin-top: var(--space-7);
+  }
+</style>

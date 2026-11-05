@@ -1,0 +1,47 @@
+---
+// The /sent/ page for a form: same copy as the in-place success state (successCopy), without a name (no JS).
+// noindex and out of the sitemap via isNoindexPath; no breadcrumbs.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { email } from '../lib/config.ts';
+import { successCopy, type FormVariant } from '../lib/pure/constants.ts';
+import { caseStudiesUrl, homeUrl } from '../lib/urls.ts';
+
+export interface Props {
+  variant: FormVariant;
+  title: string;
+  description: string;
+}
+
+const { variant, title, description } = Astro.props;
+const copy = successCopy[variant];
+---
+<BaseLayout title={title} description={description}>
+  <section class="section sent" data-sent={variant}>
+    <div class="container">
+      <p class="sent-label">{copy.label}</p>
+      <h1>{copy.heading('')}</h1>
+      {copy.note && <p class="lead">{copy.note} <a href={`mailto:${email}`}>{email}</a>.</p>}
+      <nav class="sent-links" aria-label="Where to next">
+        <a class="btn btn-ghost" href={homeUrl()}>Back to home</a>
+        <a class="btn btn-ghost" href={caseStudiesUrl()}>Read the case studies</a>
+      </nav>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .sent .container {
+    max-width: calc(var(--reading-max) + 2 * var(--gutter));
+  }
+  .sent-label {
+    margin-bottom: var(--space-2);
+    color: var(--color-success);
+    font-weight: 500;
+  }
+  .sent-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-6);
+  }
+</style>

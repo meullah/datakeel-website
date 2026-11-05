@@ -59,7 +59,7 @@ export const successCopy: Record<FormVariant, { label: string; heading: (name: s
     note: 'If it’s urgent, email',
   },
   contact: {
-    label: 'Request sent',
+    label: 'Message sent',
     heading: (name) => `${thanks(name)} We’ll get back to you within one business day.`,
   },
 };

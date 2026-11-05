@@ -84,8 +84,12 @@ test('form with JS: contact variant pushes /contact/sent/', () =>
     await submit(page, c);
     await page.waitForSelector('.form-success');
     assert.equal(requests[0].postDataJSON().subject, 'New contact message');
+    assert.match((await page.textContent('.form-success-label')) ?? '', /^Message sent$/);
     assert.equal(await page.textContent('.form-success h3'), 'Thanks, Omar. We’ll get back to you within one business day.');
     assert.equal(new URL(page.url()).pathname, '/contact/sent/');
+    const reload = await page.reload();
+    assert.equal(reload?.status(), 200, 'pushed URL is a real page');
+    assert.equal(await page.textContent('h1'), 'Thanks. We’ll get back to you within one business day.');
   }));
 
 test('form with JS: invalid email errors on blur and on submit; no POST; first error focused', () =>

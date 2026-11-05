@@ -3,7 +3,7 @@ import { cta } from '../lib/config.ts';
 import { contactUrl, guidesUrl, readinessReviewUrl, selfAssessmentUrl } from '../lib/urls.ts';
 
 export type Props = {
-  variant?: 'default' | 'review' | 'snapshot';
+  variant?: 'default' | 'review' | 'snapshot' | 'contact';
 };
 
 const { variant = 'default' } = Astro.props;
@@ -21,6 +21,10 @@ const content = {
       { label: cta.secondary, href: contactUrl(), primary: false },
       { label: 'Take the Self-Assessment', href: selfAssessmentUrl(), primary: false },
     ],
+  },
+  contact: {
+    heading: 'Ready to see where your data stands?',
+    links: [{ label: cta.primary, href: readinessReviewUrl(), primary: true }],
   },
   snapshot: {
     heading: 'Want to take the next step?',

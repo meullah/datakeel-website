@@ -104,7 +104,9 @@ test('every built page except 404 ends main with exactly one closing CTA', skip,
     const source = relative(dist, file);
     const main = mainOf(html, source);
     const ctas = closingCtas(main);
-    if (basename(file) === '404.html') {
+    const route = '/' + source.split(sep).join('/');
+    // 404 and the /sent/ confirmation pages end with their own ghost links instead; the styleguide demos everything.
+    if (u.isNoindexPath(route) && !route.startsWith(u.styleguideUrl())) {
       assert.equal(ctas.length, 0, source);
       continue;
     }
