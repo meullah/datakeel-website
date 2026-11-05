@@ -453,3 +453,45 @@ for (const width of [1280, 1440, 1920]) {
     }
   });
 }
+
+test('stats strip: countable stats count up once in an aria-hidden overlay and end on the final value', async () => {
+  const context = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  try {
+    const page = await context.newPage();
+    await page.goto(home(), { waitUntil: 'load' });
+    const finals = await page.locator('[data-stat-final]').allTextContents();
+    await page.locator('[data-section="stats"]').scrollIntoViewIfNeeded();
+    const counting = page.locator('[data-stat-value] .stat-count');
+    await counting.first().waitFor({ state: 'attached' });
+    assert.equal(await counting.first().getAttribute('aria-hidden'), 'true');
+    // Non-countable stats (value null) never get an overlay.
+    const countable = await page.locator('[data-stat-value]').count();
+    assert.equal(await counting.count(), countable);
+    await counting.first().waitFor({ state: 'detached', timeout: 5000 });
+    await page.waitForFunction(() => !document.querySelector('.stat-count'));
+    assert.deepEqual(await page.locator('[data-stat-final]').allTextContents(), finals);
+    const opacities = await page.$$eval('[data-stat-final]', (els) => els.map((e) => getComputedStyle(e).opacity));
+    assert.ok(opacities.every((o) => o === '1'));
+    await page.evaluate(() => scrollTo(0, 0));
+    await page.waitForFunction(() => scrollY === 0);
+    await page.locator('[data-section="stats"]').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(700);
+    assert.equal(await page.locator('.stat-count').count(), 0, 'no replay on scroll back');
+  } finally {
+    await context.close();
+  }
+});
+
+test('stats strip: reduced motion shows final values, no count; no horizontal scroll at 360', async () => {
+  const context = await browser.newContext({ viewport: { width: 360, height: 640 }, reducedMotion: 'reduce' });
+  try {
+    const page = await context.newPage();
+    await page.goto(home(), { waitUntil: 'load' });
+    await page.locator('[data-section="stats"]').scrollIntoViewIfNeeded();
+    await page.waitForTimeout(300);
+    assert.equal(await page.locator('.stat-count').count(), 0);
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  } finally {
+    await context.close();
+  }
+});

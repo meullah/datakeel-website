@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const file = fileURLToPath(new URL('../dist/index.html', import.meta.url));
@@ -41,4 +41,48 @@ test('home hero: CTAs, text-free hidden visual area, pause button outside it', s
   assert.doesNotMatch(pause, /aria-pressed/, "label alone carries the state");
   assert.match(pause, /aria-label="Pause background animation"/);
   assert.match(pause, /\shidden\b/, 'pause stays hidden until the island runs');
+});
+
+// Homepage stats straight from the case files (frontmatter stats lines with homepage: true), in getPublished order.
+import { compareEntries } from '../src/lib/pure/content-rules.ts';
+import { formatStat } from '../src/lib/pure/stat-counter.ts';
+const caseDir = new URL('../src/content/caseStudies/', import.meta.url);
+const caseFiles = readdirSync(caseDir)
+  .filter((f) => f.endsWith('.md'))
+  .map((f) => {
+    const front = readFileSync(new URL(f, caseDir), 'utf8').split(/^---\s*$/m)[1] ?? '';
+    const featured = front.match(/^featured:\s*(\d+)/m)?.[1];
+    const published = front.match(/^published:\s*(\S+)/m)?.[1];
+    return { id: f.slice(0, -3), front, data: { featured: featured ? Number(featured) : undefined, published: published ? new Date(published) : undefined } };
+  })
+  .filter((c) => !/^draft:\s*true\s*$/m.test(c.front))
+  .sort(compareEntries);
+// Each stat line is a YAML flow map with plain keys, so quoting the keys makes it JSON.
+type Stat = { value: number | null; prefix?: string; suffix?: string; display: string; label: string; homepage?: boolean };
+const homepageStats: Stat[] = caseFiles
+  .flatMap((c) => [...c.front.matchAll(/^\s*- (\{.*\})\s*$/gm)].map((m) => JSON.parse(m[1].replace(/(\w+):/g, '"$1":')) as Stat))
+  .filter((st) => st.homepage);
+
+test('homepage stats: every countable value formats to exactly its display (the count ends where the HTML is)', () => {
+  assert.ok(homepageStats.length >= 3);
+  for (const st of homepageStats) if (st.value !== null) assert.equal(formatStat(st.value, st.prefix, st.suffix), st.display, st.label);
+});
+
+test('home stats strip: right after the hero, heading, answer line, every homepage stat with its final value', skip, () => {
+  const main = html.match(/<main\b[\s\S]*<\/main>/)?.[0] ?? '';
+  const sections = [...main.matchAll(/<section\b[^>]*>/g)].map((m) => m[0]);
+  assert.match(sections[0], /\bhero\b/);
+  assert.match(sections[1], /data-section="stats"/);
+  const strip = main.match(/<section\b[^>]*data-section="stats"[\s\S]*?<\/section>/)?.[0] ?? '';
+  assert.equal(text(strip.match(/<h2\b[\s\S]*?<\/h2>/)?.[0] ?? ''), 'Real platforms, running every day');
+  assert.match(text(strip), /Every number here comes from a platform we built that runs in production today\./);
+  const items = [...strip.matchAll(/<li\b[\s\S]*?<\/li>/g)].map((m) => m[0]);
+  assert.ok(items.length >= 3 && items.length <= 4, `stat count ${items.length}`);
+  const shown = items.map((li) => ({
+    display: text(li.match(/<span data-stat-final[^>]*>([\s\S]*?)<\/span>/)?.[1] ?? '').replace(/&gt;/g, '>'),
+    label: text(li.match(/<p class="small muted"[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? ''),
+  }));
+  const key = (s: { display: string; label: string }) => `${s.display} | ${s.label}`;
+  assert.deepEqual(shown.map(key), homepageStats.map(key));
+  for (const li of items) assert.match(li, /class="stat\b/);
 });

@@ -1,0 +1,52 @@
+---
+// Homepage proof stats: every homepage: true stat from published case studies (3-4, enforced by assertHomepageStats).
+// Copy is founder-approved (2026-11-05).
+import { getPublished } from '../lib/content.ts';
+
+const stats = (await getPublished('caseStudies')).flatMap((c) => (c.data.stats ?? []).filter((s) => s.homepage));
+---
+<section class="section section-surface" aria-labelledby="stats-heading" data-section="stats">
+  <div class="container">
+    <h2 id="stats-heading">Real platforms, running every day</h2>
+    <p class="lead muted stats-answer">Every number here comes from a platform we built that runs in production today.</p>
+    <ul class="stats-list" role="list">
+      {stats.map((s) => (
+        <li>
+          <p class="stat stats-value" data-stat-value={s.value ?? undefined} data-stat-prefix={s.prefix} data-stat-suffix={s.suffix}>
+            <span data-stat-final>{s.display}</span>
+          </p>
+          <p class="small muted">{s.label}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<script>
+  import '../islands/stat-counter.ts';
+</script>
+
+<style>
+  .stats-answer {
+    max-width: 720px;
+  }
+  .stats-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-6);
+    margin-top: var(--space-7);
+    padding: 0;
+    list-style: none;
+  }
+  .stats-value {
+    /* The count overlay sits on the real value, so its width never moves the layout. */
+    position: relative;
+    display: inline-block;
+    margin-bottom: var(--space-1);
+  }
+  .stats-value :global(.stat-count) {
+    position: absolute;
+    inset: 0;
+    white-space: nowrap;
+  }
+</style>
