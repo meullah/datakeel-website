@@ -4,7 +4,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
 import Form from '../../components/Form.astro';
 import { email } from '../../lib/config.ts';
-import { contactUrl } from '../../lib/urls.ts';
+import { caseStudiesUrl, contactUrl, guidesUrl, howWeWorkUrl } from '../../lib/urls.ts';
 
 const name = 'Talk to us';
 ---
@@ -17,6 +17,7 @@ const name = 'Talk to us';
     <div class="container">
       <h1 class="display">{name}</h1>
       <p class="lead">Have a question about your data, a platform or an AI idea? We’re happy to talk it through. Send us a message below or email <a href={`mailto:${email}`}>{email}</a>, and we’ll get back to you within one business day.</p>
+      <p class="small muted contact-more">Prefer to read first? See <a href={caseStudiesUrl()}>our case studies</a>, <a href={howWeWorkUrl()}>how we work</a> or <a href={guidesUrl()}>our guides</a>.</p>
     </div>
   </section>
 
@@ -33,6 +34,9 @@ const name = 'Talk to us';
 </BaseLayout>
 
 <style>
+  .contact-more {
+    margin-top: var(--space-4);
+  }
   .contact-form {
     max-width: var(--reading-max);
     margin-top: var(--space-7);

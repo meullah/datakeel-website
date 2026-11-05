@@ -12,7 +12,7 @@ related:
   - { label: "Data & AI Readiness Review", href: "/readiness-review/" }
   - { label: "What we do", href: "/what-we-do/" }
   - { label: "The DataKeel Standard", href: "/standard/" }
-  - { label: "Flagging suspicious claims before payout", href: "/case-studies/health-claims-review-proof-of-concept/" }
+  - { label: "Flagging suspicious claims before payout (proof of concept)", href: "/case-studies/health-claims-review-proof-of-concept/" }
 ---
 
 Your data is AI-ready when it lives in one governed place, every key number has one agreed definition, quality is checked before anyone uses it, access is controlled, and someone could explain any table to a newcomer. Most companies get there in steps, and the first steps usually pay off in better reporting long before any AI is involved.

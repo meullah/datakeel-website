@@ -2,7 +2,9 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CaseCard from '../../components/CaseCard.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { getIndustries, getPublished } from '../../lib/content.ts';
+import Faq from '../../components/Faq.astro';
+import { getFaqs, getIndustries, getPublished } from '../../lib/content.ts';
+import { faqPageNode } from '../../lib/seo.ts';
 import { caseStudiesUrl, homeUrl, industryUrl } from '../../lib/urls.ts';
 
 export async function getStaticPaths() {
@@ -13,8 +15,11 @@ const { id, data: industry } = Astro.props.industry;
 const cases = (await getPublished('caseStudies')).filter((c) => c.data.industry.id === id);
 // "Industries" has no page, so the crumb trail is Home / {Industry} (assertCrumbs needs a real url per crumb).
 const breadcrumbs = [{ name: industry.name, url: industryUrl(id) }];
+// FAQ file per industry: src/content/faqs/industries-{id}.json (Story 8.3).
+const faqs = await getFaqs(`industries-${id}`);
+const lower = industry.name.toLowerCase();
 ---
-<BaseLayout title={industry.title} description={industry.description} breadcrumbs={breadcrumbs}>
+<BaseLayout title={industry.title} description={industry.description} breadcrumbs={breadcrumbs} graph={[faqPageNode(faqs, industryUrl(id))]}>
   <section class="section">
     <div class="container">
       <nav aria-label="Breadcrumb" class="small muted breadcrumb">
@@ -23,10 +28,12 @@ const breadcrumbs = [{ name: industry.name, url: industryUrl(id) }];
       <h1 class="display">{industry.h1}</h1>
       <p class="lead intro">{industry.intro}</p>
       <h2 class="block-title">Typical data problems</h2>
+      <p class="block-answer">These are the data problems that come up most often for {lower} teams.</p>
       <ul class="problems" data-industry-problems>
         {industry.problems.map((p) => <li>{p}</li>)}
       </ul>
       <h2 class="block-title">Case studies</h2>
+      {cases.length > 0 && <p class="block-answer">Projects that show how these problems were solved.</p>}
       {cases.length > 0 ? (
         <div class="case-grid">
           {cases.map((entry) => <CaseCard entry={entry} summary />)}
@@ -36,6 +43,7 @@ const breadcrumbs = [{ name: industry.name, url: industryUrl(id) }];
       )}
     </div>
   </section>
+  <Faq items={faqs} heading={`Questions about ${lower} data`} intro={`Short answers to what ${lower} teams usually ask us.`} />
   <ClosingCta />
 </BaseLayout>
 
@@ -54,6 +62,14 @@ const breadcrumbs = [{ name: industry.name, url: industryUrl(id) }];
     font-weight: var(--type-heading-2-reading-weight);
     line-height: var(--type-heading-2-reading-line);
     letter-spacing: var(--type-heading-2-reading-tracking);
+  }
+  .block-title:has(+ .block-answer) {
+    margin-bottom: var(--space-3);
+  }
+  .block-answer {
+    max-width: var(--reading-max);
+    margin: 0 0 var(--space-5);
+    color: var(--color-text-muted);
   }
   .problems {
     display: grid;

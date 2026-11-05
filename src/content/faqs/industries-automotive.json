@@ -1,0 +1,18 @@
+[
+  {
+    "question": "Can you connect dealer feeds that all look different?",
+    "answer": "Yes. One ingestion platform we built accepts CSV, XML, JSON, APIs, webhooks and SFTP, and turns every dealer’s feed into one inventory model."
+  },
+  {
+    "question": "Can you publish inventory to Google Vehicle Ads?",
+    "answer": "Yes. In that project, listings for 220+ dealers and 10,500+ vehicles go live on Google through the Merchant API, refreshed twice a day. [Read the case study](/case-studies/dealer-inventory-google-vehicle-ads/)."
+  },
+  {
+    "question": "What about missing vehicle details?",
+    "answer": "The platform fills in missing details through an API and applies business rules automatically, such as minimum stock, custom labels and finance pricing."
+  },
+  {
+    "question": "Where should we start?",
+    "answer": "With a [Data & AI Readiness Review](/readiness-review/). In about 10 working days you get a written plan, and you decide if we’re the right fit."
+  }
+]

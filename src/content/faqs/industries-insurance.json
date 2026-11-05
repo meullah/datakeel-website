@@ -1,0 +1,18 @@
+[
+  {
+    "question": "Can data help catch suspicious claims before payout?",
+    "answer": "Yes. In a proof of concept, linking each claim to the patient’s medical records, history and prescriptions made the claims that didn’t fit visible before payout. [Read the case study](/case-studies/health-claims-review-proof-of-concept/)."
+  },
+  {
+    "question": "Does this replace claims reviewers?",
+    "answer": "No. It flags the claims that need a closer look, so reviewers can spend their time where it matters."
+  },
+  {
+    "question": "What data do you need?",
+    "answer": "Your claims data, plus the records behind each claim, such as medical records, history and prescriptions. A [Readiness Review](/readiness-review/) shows what you already have and what’s missing."
+  },
+  {
+    "question": "Where should an insurer start?",
+    "answer": "With a [Data & AI Readiness Review](/readiness-review/). In about 10 working days you get a written plan, and you decide if we’re the right fit."
+  }
+]

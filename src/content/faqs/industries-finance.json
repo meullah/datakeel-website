@@ -1,0 +1,18 @@
+[
+  {
+    "question": "Can you bring payroll, timecards and finance data together?",
+    "answer": "Yes. A Microsoft Fabric lakehouse we built unifies payroll, timecards and finance into one model, so management sees labor cost against finance in one dashboard. [Read the case study](/case-studies/labor-cost-finance-microsoft-fabric/)."
+  },
+  {
+    "question": "How do you stop changes from breaking our reports?",
+    "answer": "Every change is tested and released through automated pipelines across development, test and production, so nothing goes straight to production untested."
+  },
+  {
+    "question": "Which platforms do you use for finance data?",
+    "answer": "Mostly Microsoft Fabric and Databricks, with Power BI for reporting. Your data stays in your own environment."
+  },
+  {
+    "question": "Where should a finance team start?",
+    "answer": "With a [Data & AI Readiness Review](/readiness-review/). In about 10 working days you get a written plan, and you decide if we’re the right fit."
+  }
+]

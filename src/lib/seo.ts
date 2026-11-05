@@ -1,6 +1,6 @@
 // The single SEO path (AD-4, AD-12): titles, descriptions and the JSON-LD @graph.
 // Pure functions; any guard failure throws so the build fails.
-import { companyName, email, positioningLine, sameAs, siteUrl } from './config.ts';
+import { companyName, defaultOgImage, email, positioningLine, sameAs, siteUrl } from './config.ts';
 import { plainMd } from './pure/inline-md.ts';
 import { absoluteUrl, homeUrl } from './urls.ts';
 
@@ -79,6 +79,7 @@ export const articleNode = (g: { title: string; description: string; published: 
   author: { '@id': g.author.kind === 'person' ? personId(g.author.id) : ORGANIZATION_ID },
   publisher: { '@id': ORGANIZATION_ID },
   mainEntityOfPage: { '@id': webPageId(g.path) },
+  image: absoluteUrl(defaultOgImage),
   inLanguage: 'en',
 });
 

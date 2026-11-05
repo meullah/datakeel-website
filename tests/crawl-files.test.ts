@@ -40,4 +40,7 @@ test('llms.txt: name, positioning line, and a summary line for every indexable p
   const missing = indexable().filter((p) => !listed.has(p));
   assert.deepEqual(missing, [], 'pages without an llms.txt line');
   assert.doesNotMatch(txt, /undefined|\[object/);
+  const links = [...txt.matchAll(/^- \[[^\]]+\]\(([^)]+)\)/gm)].map((m) => m[1]);
+  assert.equal(new Set(links).size, links.length, 'each link listed once');
+  assert.match(txt, /\(Proof of concept\)\]/, 'framing labels kept');
 });

@@ -1,0 +1,18 @@
+[
+  {
+    "question": "Can you work with Epic EHR data?",
+    "answer": "Yes. In a hospital network project from our team’s experience, we brought Epic EHR data, operational files and demographic data into one governed lakehouse. [Read the case study](/case-studies/hospital-network-governed-lakehouse/)."
+  },
+  {
+    "question": "How do you protect patient data?",
+    "answer": "We design access controls around healthcare regulations from day one, and records can be de-identified before analysis. The platform runs in your own environment, and you own everything we build."
+  },
+  {
+    "question": "Can data help us plan for seasonal surges?",
+    "answer": "Yes. In one hospital, a forecasting model trained on several years of admissions history helps plan beds and staff before seasonal surges. [Read the case study](/case-studies/hospital-seasonal-surge-forecasting/)."
+  },
+  {
+    "question": "Where should a hospital start?",
+    "answer": "With a [Data & AI Readiness Review](/readiness-review/). In about 10 working days you get a written plan for your data, and you decide if we’re the right fit."
+  }
+]
