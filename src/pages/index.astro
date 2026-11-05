@@ -1,20 +1,41 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClosingCta from '../components/ClosingCta.astro';
+import Faq from '../components/Faq.astro';
 import Hero from '../components/Hero.astro';
+import HomeFeatured from '../components/HomeFeatured.astro';
+import HowWeWorkSteps from '../components/HowWeWorkSteps.astro';
 import ProblemSection from '../components/ProblemSection.astro';
+import SelfAssessmentTeaser from '../components/SelfAssessmentTeaser.astro';
 import ServiceCards from '../components/ServiceCards.astro';
 import StackSection from '../components/StackSection.astro';
 import StatStrip from '../components/StatStrip.astro';
+import StillExploring from '../components/StillExploring.astro';
+import TechStrip from '../components/TechStrip.astro';
 import WhereItHelps from '../components/WhereItHelps.astro';
 import { companyName, positioningLine } from '../lib/config.ts';
+import { getFaqs } from '../lib/content.ts';
+import { faqPageNode } from '../lib/seo.ts';
+import { homeUrl } from '../lib/urls.ts';
+
+const faqs = await getFaqs('home');
 ---
-<BaseLayout fullTitle={`${companyName}: The Data Backbone Your AI Runs On`} description={positioningLine} transparentHeader>
+<BaseLayout fullTitle={`${companyName}: The Data Backbone Your AI Runs On`} description={positioningLine} transparentHeader graph={[faqPageNode(faqs, homeUrl())]}>
   <Hero />
   <StatStrip />
   <ProblemSection />
   <ServiceCards />
   <WhereItHelps />
   <StackSection />
+  <HomeFeatured />
+  <HowWeWorkSteps />
+  <SelfAssessmentTeaser />
+  <TechStrip />
+  <StillExploring />
+  <Faq items={faqs} heading="Questions about DataKeel AI" reveal />
   <ClosingCta />
 </BaseLayout>
+
+<script>
+  import '../islands/reveal.ts';
+</script>

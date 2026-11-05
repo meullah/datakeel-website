@@ -1,0 +1,56 @@
+---
+// Homepage How We Work steps (01-04). Copy is founder-approved (2026-11-05, homepage-epic5.md §5.4);
+// the How We Work page (Epic 6) must say the same.
+import { readinessReviewUrl } from '../lib/urls.ts';
+
+const steps = [
+  { title: 'Review', text: 'We look at your data and systems and give you a written plan.', href: readinessReviewUrl() },
+  { title: 'Design', text: 'We agree on the platform, the sources and what success looks like.' },
+  { title: 'Build', text: 'We build in short steps, testing every change before it reaches production.' },
+  { title: 'Run', text: 'We keep the platform healthy and help your team get value from it.' },
+];
+---
+<section class="section section-surface" aria-labelledby="process-heading" data-section="process" data-reveal>
+  <div class="container">
+    <h2 id="process-heading">How do we work?</h2>
+    <p class="lead muted section-answer">Four steps, starting with a short fixed-price review so you know where you stand.</p>
+    <ol class="steps" role="list">
+      {steps.map((step, i) => (
+        <li>
+          <p class="steps-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</p>
+          <h3>{step.href ? <a href={step.href}>{step.title}</a> : step.title}</h3>
+          <p class="muted">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: var(--space-6);
+    margin: var(--space-7) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .steps li {
+    padding-top: var(--space-4);
+    border-top: 2px solid var(--color-border);
+  }
+  .steps-num {
+    margin: 0 0 var(--space-2);
+    color: var(--color-accent-text);
+    font-size: var(--type-stat-size);
+    font-weight: var(--type-stat-weight);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .steps h3 {
+    margin-bottom: var(--space-2);
+  }
+  .steps p:last-child {
+    margin: 0;
+  }
+</style>

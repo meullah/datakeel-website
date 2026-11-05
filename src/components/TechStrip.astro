@@ -1,0 +1,32 @@
+---
+// Homepage technologies strip: names as text, no logos or partner badges.
+// Copy is founder-approved (2026-11-05, homepage-epic5.md §5.4).
+const tools = ['Microsoft Fabric', 'Databricks', 'Azure', 'dbt', 'Power BI', 'Delta Lake'];
+---
+<section class="section section-surface" aria-labelledby="tech-heading" data-section="tech" data-reveal>
+  <div class="container">
+    <h2 id="tech-heading">Technologies we work with</h2>
+    <p class="lead muted section-answer">We use proven tools and pick what fits your business.</p>
+    <ul class="tech-list" role="list">
+      {tools.map((t) => <li>{t}</li>)}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .tech-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin: var(--space-6) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .tech-list li {
+    padding: var(--space-2) var(--space-4);
+    background: var(--color-card);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-full);
+    font-weight: 500;
+  }
+</style>

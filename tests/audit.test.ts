@@ -153,6 +153,7 @@ function fakePage({ injectionDefinesAxe = true } = {}) {
     setRequestInterception: async () => {},
     on: () => {},
     evaluateOnNewDocument: async () => {},
+    emulateMediaFeatures: async () => {},
     setViewport: async (viewport: { width: number }) => {
       width = viewport.width;
       viewports.push(width);

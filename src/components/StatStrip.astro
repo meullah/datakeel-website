@@ -5,7 +5,7 @@ import { getPublished } from '../lib/content.ts';
 
 const stats = (await getPublished('caseStudies')).flatMap((c) => (c.data.stats ?? []).filter((s) => s.homepage));
 ---
-<section class="section section-surface" aria-labelledby="stats-heading" data-section="stats">
+<section class="section section-surface" aria-labelledby="stats-heading" data-section="stats" data-reveal>
   <div class="container">
     <h2 id="stats-heading">Real platforms, running every day</h2>
     <p class="lead muted stats-answer">Every number here comes from a platform we built that runs in production today.</p>

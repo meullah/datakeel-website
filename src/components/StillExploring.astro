@@ -1,0 +1,37 @@
+---
+// Homepage "Still exploring?" cards. Copy is founder-approved (2026-11-05, homepage-epic5.md §5.4).
+import { caseStudiesUrl, selfAssessmentUrl, standardUrl } from '../lib/urls.ts';
+
+const cards = [
+  { title: 'The DataKeel Standard', text: 'How we build, test and hand over every platform.', href: standardUrl() },
+  { title: 'Case studies', text: 'See what we’ve built and what changed for each client.', href: caseStudiesUrl() },
+  { title: 'Self-Assessment', text: 'Two minutes to see where your data stands.', href: selfAssessmentUrl() },
+];
+---
+<section class="section" aria-labelledby="explore-heading" data-section="explore" data-reveal>
+  <div class="container">
+    <h2 id="explore-heading">Still exploring?</h2>
+    <ul class="card-grid explore-grid" role="list">
+      {cards.map((c) => (
+        <li class="card card-interactive card-stretch">
+          <h3><a href={c.href}>{c.title}</a></h3>
+          <p class="muted">{c.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .explore-grid {
+    margin-top: var(--space-6);
+    padding: 0;
+    list-style: none;
+  }
+  .explore-grid h3 {
+    margin-bottom: var(--space-2);
+  }
+  .explore-grid p {
+    margin: 0;
+  }
+</style>

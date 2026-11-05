@@ -1,0 +1,8 @@
+[
+  { "question": "What does DataKeel AI do?", "answer": "We build the data platform your business runs on, then the AI that makes it useful. That covers integration, quality, governance and running the platform after launch." },
+  { "question": "Which platforms do you work with?", "answer": "Mostly Microsoft Fabric and Databricks, with Azure, Delta Lake, dbt and Power BI. Your data can stay in your cloud or on your own servers." },
+  { "question": "Where should we start?", "answer": "With a [Data & AI Readiness Review](/readiness-review/). In about 10 working days you get a written plan, and you decide if we’re the right fit." },
+  { "question": "Do we need to be ready for AI before we talk to you?", "answer": "No. Most clients come to us because their data isn’t ready yet. That’s the part we fix first." },
+  { "question": "Which industries do you work with?", "answer": "Mostly healthcare, insurance, automotive and finance, but the same approach works anywhere data is spread across systems." },
+  { "question": "Do you work with companies outside the US?", "answer": "Yes. We focus on the US and UK, and we also work with companies in the Gulf, Singapore and Australia, remotely with your team." }
+]

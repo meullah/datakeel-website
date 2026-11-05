@@ -1,0 +1,33 @@
+---
+// Homepage featured case studies: published cases with a featured order, lowest first (getPublished sorts by it).
+// Copy is founder-approved (2026-11-05, homepage-epic5.md §5.4).
+import CaseCard from './CaseCard.astro';
+import { getPublished } from '../lib/content.ts';
+import { caseStudiesUrl } from '../lib/urls.ts';
+
+const featured = (await getPublished('caseStudies')).filter((c) => c.data.featured !== undefined);
+if (featured.length < 3 || featured.length > 4)
+  throw new Error(`Homepage featured cases: found ${featured.length}, need 3 to 4 (featured: in case study files).`);
+if (new Set(featured.map((c) => c.data.featured)).size !== featured.length)
+  throw new Error('Homepage featured cases: two case studies share a featured number.');
+---
+<section class="section" aria-labelledby="featured-heading" data-section="featured" data-reveal>
+  <div class="container">
+    <h2 id="featured-heading">Case studies</h2>
+    <p class="lead muted section-answer">Real projects in healthcare, automotive and insurance.</p>
+    <div class="case-grid featured-grid">
+      {featured.map((entry) => <CaseCard entry={entry} />)}
+    </div>
+    <p class="featured-all"><a href={caseStudiesUrl()}>See all case studies</a></p>
+  </div>
+</section>
+
+<style>
+  .featured-grid {
+    margin-top: var(--space-7);
+  }
+  .featured-all {
+    margin: var(--space-6) 0 0;
+    font-weight: 500;
+  }
+</style>

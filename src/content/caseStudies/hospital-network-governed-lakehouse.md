@@ -21,4 +21,5 @@ visual: { kind: diagram, id: hospital-governed-lakehouse }
 published: 2026-11-03
 updated: 2026-11-03
 draft: false
+featured: 1
 ---

@@ -308,6 +308,8 @@ async function preparePage(browser, theme, resources, timeoutMs = TIMEOUTS.opera
       const action = () => (isLocalAuditUrl(request.url()) ? request.continue() : request.abort('blockedbyclient'));
       Promise.resolve().then(action).catch(() => Promise.resolve().then(() => request.abort('blockedbyclient')).catch(() => {}));
     });
+    // Reduced motion: the reveal island then hides nothing, so axe checks every section's contrast.
+    await withTimeout(() => page.emulateMediaFeatures([{ name: 'prefers-reduced-motion', value: 'reduce' }]), timeoutMs, 'reduced motion');
     await withTimeout(() => page.evaluateOnNewDocument((selectedTheme) => {
       localStorage.setItem('dk-theme', selectedTheme);
     }, theme), timeoutMs, 'theme preparation');

@@ -20,4 +20,5 @@ visual: { kind: dashboard, id: seasonal-surge-forecast }
 published: 2026-11-03
 updated: 2026-11-03
 draft: false
+featured: 3
 ---

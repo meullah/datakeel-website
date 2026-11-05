@@ -6,13 +6,13 @@ import { caseStudyUrl } from '../lib/urls.ts';
 
 const departments = (await getPublished('departments')).filter((d) => d.data.show);
 ---
-<section class="section" aria-labelledby="helps-heading" data-section="helps">
+<section class="section" aria-labelledby="helps-heading" data-section="helps" data-reveal>
   <div class="container">
     <h2 id="helps-heading">Where does it help?</h2>
     <p class="lead muted helps-answer">Better data pays off in every department that runs on numbers.</p>
     <ul class="card-grid helps-grid" role="list">
       {departments.map((d) => (
-        <li class="card card-interactive dept-card" data-department={d.id}>
+        <li class="card card-interactive card-stretch dept-card" data-department={d.id}>
           <h3><a href={caseStudyUrl(d.data.caseStudy.id)}>{d.data.name}</a></h3>
           <p class="muted">{d.data.summary}</p>
         </li>
@@ -30,22 +30,8 @@ const departments = (await getPublished('departments')).filter((d) => d.data.sho
     padding: 0;
     list-style: none;
   }
-  .dept-card {
-    position: relative;
-  }
   .dept-card h3 {
     margin-bottom: var(--space-2);
-  }
-  .dept-card a {
-    color: inherit;
-    text-decoration: none;
-  }
-  /* Stretch the one link over the whole card. */
-  .dept-card a::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: var(--radius-lg);
   }
   .dept-card p {
     margin: 0;

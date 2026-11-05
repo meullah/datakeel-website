@@ -1,0 +1,26 @@
+---
+// Homepage Self-Assessment teaser. Copy is founder-approved (2026-11-05, homepage-epic5.md §5.4).
+import { selfAssessmentUrl } from '../lib/urls.ts';
+---
+<section class="section" aria-labelledby="teaser-heading" data-section="teaser" data-reveal>
+  <div class="container">
+    <div class="card teaser">
+      <h2 id="teaser-heading">Where does your week go?</h2>
+      <p class="lead muted">Five quick questions about how your team works with data. Takes under two minutes, and you don’t need to give your email.</p>
+      <p class="teaser-action"><a class="btn btn-ghost" href={selfAssessmentUrl()}>Take the Self-Assessment</a></p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .teaser {
+    padding: var(--space-7) var(--space-6);
+    border-radius: var(--radius-xl);
+  }
+  .teaser .lead {
+    max-width: 640px;
+  }
+  .teaser-action {
+    margin: var(--space-5) 0 0;
+  }
+</style>

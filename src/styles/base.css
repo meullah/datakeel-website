@@ -300,6 +300,20 @@ a:hover {
   text-decoration: underline;
   text-underline-offset: 0.15em;
 }
+/* A card whose one link (in its heading) is stretched over the whole card. */
+.card-stretch {
+  position: relative;
+}
+.card-stretch :is(h2, h3) a {
+  color: inherit;
+  text-decoration: none;
+}
+.card-stretch :is(h2, h3) a::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+}
 .card-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -366,4 +380,21 @@ a:hover {
 }
 main:focus {
   outline: none;
+}
+
+/* reveal island: only the island adds .reveal-pending, so content is visible without JS; screen only, so print shows all. */
+@media screen {
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .reveal-pending.reveal-in {
+    opacity: 1;
+    transform: none;
+    transition: opacity 400ms ease-out, transform 400ms ease-out;
+  }
+}
+/* Answer-first line under a section h2. */
+.section-answer {
+  max-width: 720px;
 }
