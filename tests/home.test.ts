@@ -93,7 +93,7 @@ const services: { id: string; order: number; name: string; summary: string }[] =
 test('home: sections in the fixed order so far, and headings go h1 → h2 → h3', skip, () => {
   const main = html.match(/<main\b[\s\S]*<\/main>/)?.[0] ?? '';
   const order = [...main.matchAll(/data-section="([^"]+)"/g)].map((m) => m[1]).filter((k) => k !== 'hero');
-  assert.deepEqual(order.slice(0, 3), ['stats', 'problem', 'services']);
+  assert.deepEqual(order.slice(0, 5), ['stats', 'problem', 'services', 'helps', 'stack']);
   const levels = [...main.matchAll(/<h([1-6])\b/g)].map((m) => Number(m[1]));
   assert.equal(levels[0], 1);
   for (let i = 1; i < levels.length; i++) assert.ok(levels[i] <= levels[i - 1] + 1, `heading jumps to h${levels[i]}`);
@@ -128,4 +128,36 @@ test('home services: one card per services.json entry, name + summary, one link 
     assert.equal(text(c.match(/<h3\b[\s\S]*?<\/h3>/)?.[0] ?? ''), sorted[i].name);
     assert.ok(text(c).includes(sorted[i].summary), sorted[i].id);
   });
+});
+
+const departments: { id: string; order: number; name: string; summary: string; caseStudy: string; show: boolean }[] = JSON.parse(
+  readFileSync(new URL('../src/content/departments.json', import.meta.url), 'utf8'),
+);
+
+test('home where it helps: shown departments in order, each one link to its built case page', skip, () => {
+  const s = sectionOf('helps');
+  assert.ok(s, 'helps section missing');
+  assert.equal(text(s.match(/<h2\b[\s\S]*?<\/h2>/)?.[0] ?? ''), 'Where does it help?');
+  const shown = departments.filter((d) => d.show).sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
+  const cards = [...s.matchAll(/<li\b[^>]*class="[^"]*\bdept-card\b[\s\S]*?<\/li>/g)].map((m) => m[0]);
+  assert.ok(cards.length > 0, 'no department cards');
+  assert.equal(cards.length, shown.length);
+  cards.forEach((c, i) => {
+    const links = [...c.matchAll(/<a\b[^>]*href="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(links, [`/case-studies/${shown[i].caseStudy}/`]);
+    assert.ok(existsSync(fileURLToPath(new URL(`../dist${links[0]}index.html`, import.meta.url))), `${links[0]} not built`);
+    assert.equal(text(c.match(/<h3\b[\s\S]*?<\/h3>/)?.[0] ?? ''), shown[i].name);
+    assert.ok(text(c).includes(shown[i].summary), shown[i].id);
+  });
+});
+
+test('home stack diagram: five layers in order, tool names as text, decorative SVG only, no hex colors', skip, () => {
+  const s = sectionOf('stack');
+  assert.ok(s, 'stack section missing');
+  assert.equal(text(s.match(/<h2\b[\s\S]*?<\/h2>/)?.[0] ?? ''), 'What does a modern data platform look like?');
+  const layers = [...s.matchAll(/<li\b[^>]*class="[^"]*\bstack-layer\b[\s\S]*?<\/ul>/g)].map((m) => text(m[0].match(/<h3\b[\s\S]*?<\/h3>/)?.[0] ?? ''));
+  assert.deepEqual(layers, ['Sources', 'Ingestion', 'Lakehouse', 'Quality & governance', 'AI-ready']);
+  for (const tool of ['Microsoft Fabric', 'Databricks', 'Delta Lake', 'dbt', 'Azure Data Factory', 'Power BI']) assert.ok(text(s).includes(tool), tool);
+  for (const svg of s.match(/<svg\b[^>]*>/g) ?? []) assert.match(svg, /aria-hidden="true"/);
+  assert.doesNotMatch(s, /#[0-9a-f]{3,8}\b/i);
 });

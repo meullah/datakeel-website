@@ -1,0 +1,6 @@
+[
+  { "id": "finance", "order": 1, "name": "Finance", "summary": "Labor cost and finance numbers in one model, without the monthly copy and paste.", "caseStudy": "labor-cost-finance-microsoft-fabric", "show": true },
+  { "id": "operations", "order": 2, "name": "Operations", "summary": "Stock and listings that update themselves, twice a day.", "caseStudy": "dealer-inventory-google-vehicle-ads", "show": true },
+  { "id": "leadership", "order": 3, "name": "Leadership", "summary": "Plans built on a forecast, not on last year’s guess.", "caseStudy": "hospital-seasonal-surge-forecasting", "show": true },
+  { "id": "compliance", "order": 4, "name": "Compliance", "summary": "Clear access rules and a record of who sees what.", "caseStudy": "hospital-network-governed-lakehouse", "show": true }
+]

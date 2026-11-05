@@ -495,3 +495,24 @@ test('stats strip: reduced motion shows final values, no count; no horizontal sc
     await context.close();
   }
 });
+
+test('stack diagram: a row of five from 768px with equal columns and no text overflow, a column at 360', async () => {
+  for (const [width, row] of [[1024, true], [768, true], [360, false]] as const) {
+    const context = await browser.newContext({ viewport: { width, height: 800 } });
+    try {
+      const page = await context.newPage();
+      await page.goto(home(), { waitUntil: 'load' });
+      const tops = await page.$$eval('.stack-node', (els) => els.map((e) => Math.round(e.getBoundingClientRect().top)));
+      assert.equal(tops.length, 5);
+      if (row) assert.equal(new Set(tops).size, 1, `row at ${width}: ${tops}`);
+      else assert.ok(tops.every((t, i) => i === 0 || t > tops[i - 1]), `column at ${width}: ${tops}`);
+      assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), `overflow at ${width}`);
+      const widths = await page.$$eval('.stack-node', (els) => els.map((e) => Math.round(e.getBoundingClientRect().width)));
+      if (row) assert.ok(Math.max(...widths) - Math.min(...widths) <= 1, `equal columns at ${width}: ${widths}`);
+      const spill = await page.$$eval('.stack-node :is(h3, li, p)', (els) => els.filter((e) => e.scrollWidth > e.clientWidth + 1).map((e) => e.textContent));
+      assert.deepEqual(spill, [], `text overflow at ${width}`);
+    } finally {
+      await context.close();
+    }
+  }
+});

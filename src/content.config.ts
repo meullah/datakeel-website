@@ -29,6 +29,20 @@ const services = defineCollection({
   schema: z.strictObject({ id: z.string(), order: z.number().int(), name: text, summary: text }),
 });
 
+// Homepage "Where it helps" (Story 5.3): one line per department and the case study that shows it.
+const departments = defineCollection({
+  loader: file('src/content/departments.json'),
+  schema: z.strictObject({
+    id: z.string(),
+    order: z.number().int(),
+    name: text,
+    summary: text,
+    caseStudy: reference('caseStudies'),
+    /** false hides the department (e.g. until its case line is confirmed). */
+    show: z.boolean(),
+  }),
+});
+
 // FAQs per page (Story 4.2): src/content/faqs/{page-key}.json holds an array of { question, answer }.
 // The key is the route slug; the answer may use inline markdown (links to internal paths).
 // ponytail: one file() per collection, so only one page key today; switch to a multi-file loader when a second FAQ file lands.
@@ -80,4 +94,4 @@ const caseStudies = defineCollection({
   }),
 });
 
-export const collections = { caseStudies, faqs, industries, services };
+export const collections = { caseStudies, departments, faqs, industries, services };

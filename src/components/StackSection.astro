@@ -1,0 +1,17 @@
+---
+// Homepage stack section around the reusable StackDiagram. Copy is founder-approved (2026-11-05, homepage-epic5.md §5.3).
+import StackDiagram from './StackDiagram.astro';
+---
+<section class="section section-surface" aria-labelledby="stack-heading" data-section="stack">
+  <div class="container">
+    <h2 id="stack-heading">What does a modern data platform look like?</h2>
+    <p class="lead muted stack-answer">Five layers, from the systems you already use to data that’s ready for reporting and AI.</p>
+    <StackDiagram />
+  </div>
+</section>
+
+<style>
+  .stack-answer {
+    max-width: 720px;
+  }
+</style>

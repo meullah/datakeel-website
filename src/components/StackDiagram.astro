@@ -1,0 +1,113 @@
+---
+// The five-layer Stack Diagram (homepage, What We Do in Epic 6). Layers and tools are real HTML text in an ordered
+// list; the gradient data flow between them is decorative inline SVG. A row from 768px, stacked below.
+// Copy is founder-approved (2026-11-05, homepage-epic5.md §5.3).
+const layers = [
+  { name: 'Sources', tools: ['ERP', 'CRM', 'Finance systems', 'Spreadsheets and files'] },
+  { name: 'Ingestion', tools: ['Azure Data Factory', 'Microsoft Fabric pipelines'] },
+  { name: 'Lakehouse', tools: ['Microsoft Fabric', 'Databricks', 'Delta Lake'] },
+  { name: 'Quality & governance', tools: ['dbt tests', 'Access controls', 'Data lineage'] },
+  { name: 'AI-ready', tools: ['Power BI', 'AI models and assistants'] },
+];
+---
+<ol class="stack" role="list" aria-label="Five layers of a modern data platform">
+  {layers.map((layer, i) => (
+    <li class="stack-layer">
+      {i > 0 && (
+        <svg class="stack-flow" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M4 12 H18 M13 7 L18 12 L13 17" />
+        </svg>
+      )}
+      <div class:list={['stack-node', { 'stack-node-final': i === layers.length - 1 }]}>
+        <p class="stack-step">{i + 1}</p>
+        <h3>{layer.name}</h3>
+        <ul class="stack-tools" role="list">
+          {layer.tools.map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .stack {
+    display: grid;
+    gap: var(--space-2);
+    margin: var(--space-7) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  .stack-layer {
+    display: grid;
+    justify-items: center;
+    gap: var(--space-2);
+  }
+  .stack-node {
+    width: 100%;
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-card);
+    border: 1px solid var(--color-card-border);
+    border-radius: var(--radius-lg);
+  }
+  .stack-node-final {
+    border: 2px solid transparent;
+    background: linear-gradient(var(--color-card), var(--color-card)) padding-box, var(--gradient-brand) border-box;
+  }
+  .stack-step {
+    margin: 0 0 var(--space-1);
+    color: var(--color-accent-text);
+    font-size: var(--type-label-size);
+    font-weight: var(--type-label-weight);
+  }
+  .stack-node h3 {
+    margin: 0 0 var(--space-2);
+    font-size: var(--type-body-size);
+  }
+  .stack-tools {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    color: var(--color-text-muted);
+    font-size: var(--type-small-size);
+    line-height: var(--type-small-line);
+  }
+  .stack-flow {
+    width: 24px;
+    height: 24px;
+    transform: rotate(90deg);
+    fill: none;
+    stroke: var(--color-accent-text);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .stack-node h3,
+  .stack-tools {
+    overflow-wrap: anywhere;
+  }
+  /* From 768px: one row, equal columns, the arrow sits in the gap before each layer. */
+  @media (width >= 768px) {
+    .stack {
+      --stack-gap: var(--space-5);
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: var(--stack-gap);
+    }
+    .stack-layer {
+      position: relative;
+      display: flex;
+    }
+    .stack-flow {
+      position: absolute;
+      top: 50%;
+      left: calc(var(--stack-gap) / -2 - 10px);
+      width: 20px;
+      height: 20px;
+      transform: translateY(-50%);
+    }
+  }
+  @media (768px <= width < 1024px) {
+    .stack-node {
+      padding: var(--space-3);
+    }
+  }
+</style>
