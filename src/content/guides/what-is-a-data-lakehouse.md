@@ -7,7 +7,7 @@ author: datakeel-ai
 published: 2026-11-05
 updated: 2026-11-05
 draft: false
-reviewed: false
+reviewed: true
 related:
   - { label: "What does a modern data platform look like?", href: "/what-we-do/" }
   - { label: "Labor cost and finance, finally in one place", href: "/case-studies/labor-cost-finance-microsoft-fabric/" }

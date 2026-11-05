@@ -7,7 +7,7 @@ author: datakeel-ai
 published: 2026-11-05
 updated: 2026-11-05
 draft: false
-reviewed: false
+reviewed: true
 related:
   - { label: "Data & AI Readiness Review", href: "/readiness-review/" }
   - { label: "What we do", href: "/what-we-do/" }
