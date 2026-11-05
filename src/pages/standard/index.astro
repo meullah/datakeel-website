@@ -1,20 +1,43 @@
 ---
+// Copy lives in src/content/pages.json (standard) (Story 6.3). No certification is claimed: none is held.
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CaseCard from '../../components/CaseCard.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
+import PageSection from '../../components/PageSection.astro';
+import { getPage, getPublished, sectionOf } from '../../lib/content.ts';
 import { standardUrl } from '../../lib/urls.ts';
 
-const name = 'The DataKeel Standard';
+// The cases the evidence answer names: CI/CD across three environments, and access controls from day one.
+const evidenceIds = ['labor-cost-finance-microsoft-fabric', 'hospital-network-governed-lakehouse'];
+const path = standardUrl();
+const page = await getPage('standard');
+const cases = (await getPublished('caseStudies')).filter((c) => evidenceIds.includes(c.id));
+if (cases.length !== evidenceIds.length) throw new Error(`standard: evidence case studies missing or unpublished (${evidenceIds.join(', ')})`);
 ---
-<BaseLayout
-  title="The DataKeel Standard for Data Quality"
-  description="The quality checklist behind every DataKeel AI platform: tested pipelines, documented tables, data quality checks and no lock-in."
-  breadcrumbs={[{ name, url: standardUrl() }]}
->
-  <section class="section">
+<BaseLayout title={page.title} description={page.description} breadcrumbs={[{ name: page.h1, url: path }]}>
+  <section class="section" data-section="hero">
     <div class="container">
-      <h1 class="display">{name}</h1>
-      <p class="lead">This is the checklist every platform we build meets: every pipeline tested and monitored, every table documented, data quality checks before data reaches AI, and releases through automated pipelines. Your data stays in your own environment, and you own everything we build.</p>
+      <h1 class="display">{page.h1}</h1>
+      <p class="lead">{page.lead}</p>
     </div>
   </section>
+
+  <PageSection section={sectionOf(page, 'checklist')} surface ordered />
+  <PageSection section={sectionOf(page, 'location')} />
+  <PageSection section={sectionOf(page, 'security')} surface />
+  <PageSection section={sectionOf(page, 'evidence')}>
+    <ul class="case-grid standard-cases" role="list">
+      {cases.map((c) => <li><CaseCard entry={c} /></li>)}
+    </ul>
+  </PageSection>
+
   <ClosingCta />
 </BaseLayout>
+
+<style>
+  .standard-cases {
+    margin: var(--space-7) 0 0;
+    padding: 0;
+    list-style: none;
+  }
+</style>

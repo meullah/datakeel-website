@@ -4,14 +4,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
 import Faq from '../../components/Faq.astro';
 import HowWeWorkSteps from '../../components/HowWeWorkSteps.astro';
+import PageSection from '../../components/PageSection.astro';
 import { getFaqs, getPage, sectionOf } from '../../lib/content.ts';
 import { faqPageNode } from '../../lib/seo.ts';
 import { howWeWorkUrl } from '../../lib/urls.ts';
 
 const path = howWeWorkUrl();
 const page = await getPage('how-we-work');
-const ownership = sectionOf(page, 'ownership');
-const engagement = sectionOf(page, 'engagement');
 const faq = sectionOf(page, 'faq');
 const faqs = await getFaqs('how-we-work');
 ---
@@ -24,49 +23,9 @@ const faqs = await getFaqs('how-we-work');
   </section>
 
   <HowWeWorkSteps detailed />
-
-  <section class="section" aria-labelledby="ownership-heading" data-section="ownership">
-    <div class="container">
-      <h2 id="ownership-heading">{ownership.heading}</h2>
-      <p class="lead muted section-answer">{ownership.answer}</p>
-      <ul class="card-grid hww-grid" role="list">
-        {ownership.items?.map((item) => (
-          <li class="card"><h3>{item.title}</h3><p class="muted">{item.text}</p></li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <section class="section section-surface" aria-labelledby="engagement-heading" data-section="engagement">
-    <div class="container">
-      <h2 id="engagement-heading">{engagement.heading}</h2>
-      <p class="lead muted section-answer">{engagement.answer}</p>
-      <ul class="card-grid hww-grid" role="list">
-        {engagement.items?.map((item) => (
-          <li class="card"><h3>{item.title}</h3><p class="muted">{item.text}</p></li>
-        ))}
-      </ul>
-    </div>
-  </section>
-
-  <Faq items={faqs} heading={faq.heading} intro={faq.answer} />
+  <PageSection section={sectionOf(page, 'ownership')} />
+  <PageSection section={sectionOf(page, 'engagement')} surface />
+  <Faq items={faqs} heading={faq.heading} intro={faq.answer} surface={false} />
 
   <ClosingCta />
 </BaseLayout>
-
-<style>
-  .section-answer {
-    margin-top: var(--space-4);
-  }
-  .hww-grid {
-    margin-top: var(--space-7);
-    padding: 0;
-    list-style: none;
-  }
-  .hww-grid h3 {
-    margin-bottom: var(--space-2);
-  }
-  .hww-grid p {
-    margin: 0;
-  }
-</style>

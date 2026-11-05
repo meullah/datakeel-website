@@ -57,7 +57,13 @@ test('home How We Work: 01-04 with approved text, step 01 links to the Readiness
   assert.deepEqual(steps.map((li) => text(li.match(/<p class="steps-num"[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '')), ['01', '02', '03', '04']);
   assert.deepEqual(hrefs(steps[0]), ['/readiness-review/']);
   for (const li of steps.slice(1)) assert.deepEqual(hrefs(li), []);
-  assert.ok(text(steps[2]).includes('testing every change before it reaches production'));
+  // Founder-approved lines (homepage-epic5.md §5.4), pinned: they live in pages.json (how-we-work) and are shared.
+  assert.deepEqual(steps.map((li) => text(li.match(/<p class="muted"[^>]*>([\s\S]*?)<\/p>/)?.[1] ?? '')), [
+    'We look at your data and systems and give you a written plan.',
+    'We agree on the platform, the sources and what success looks like.',
+    'We build in short steps, testing every change before it reaches production.',
+    'We keep the platform healthy and help your team get value from it.',
+  ]);
 });
 
 test('home teaser, technologies and Still exploring?: approved headings, links that exist', skip, () => {

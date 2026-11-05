@@ -41,7 +41,7 @@
           {
             "title": "Design",
             "text": "We agree on the platform, the sources and what success looks like.",
-            "detail": "What you get: a platform design you sign off on, covering the architecture, the sources in scope and how we’ll measure success."
+            "detail": "What you get: a platform design we agree on together, covering the architecture, the sources in scope and how we’ll measure success."
           },
           {
             "title": "Build",
@@ -58,7 +58,7 @@
       {
         "id": "ownership",
         "heading": "Who owns the platform?",
-        "answer": "You do. You own all the code and documentation from the first day, and we can hand the platform over to your team whenever you want.",
+        "answer": "You do. You own all the code and documentation, and we can hand the platform over to your team whenever you want.",
         "items": [
           {
             "title": "Your code and documentation",
@@ -93,6 +93,91 @@
         "id": "faq",
         "heading": "Questions about how we work",
         "answer": "Short answers to what people usually ask before they start."
+      }
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "standard",
+    "title": "The DataKeel Standard for Data Quality",
+    "description": "The quality checklist behind every DataKeel AI platform: tested pipelines, documented tables, data quality checks and no lock-in.",
+    "h1": "The DataKeel Standard",
+    "lead": "This is the checklist every platform we build meets: every pipeline tested and monitored, every table documented, data quality checks before data reaches AI, and releases through automated pipelines. Your data stays in your own environment, and you own everything we build.",
+    "summary": "The engineering practices behind every DataKeel AI platform: tested and monitored pipelines, documented tables, quality checks before AI, automated releases, client ownership, data location and security.",
+    "sections": [
+      {
+        "id": "checklist",
+        "heading": "What does every platform we build include?",
+        "answer": "Five practices, on every project, whatever its size. Each one is there for a business reason, not for its own sake.",
+        "items": [
+          { "title": "Every pipeline tested and monitored", "text": "Why it matters to you: problems are caught before they reach your reports, not in a meeting." },
+          { "title": "Every table documented", "text": "Why it matters to you: anyone on your team can find the right data and know what it means." },
+          { "title": "Data quality checks before data reaches AI", "text": "Why it matters to you: reports and AI tools work from data you can trust, so their answers are ones you can act on." },
+          { "title": "Changes released through automated pipelines across separate environments", "text": "Why it matters to you: every change is tested in development and test before it reaches production, so your live reports don’t break." },
+          { "title": "You own all the code and documentation", "text": "Why it matters to you: no lock-in. You can run the platform yourself or change partners at any time." }
+        ]
+      },
+      {
+        "id": "location",
+        "heading": "Your data stays where you want it",
+        "answer": "We build the platform inside your own environment, whether that’s your cloud (Azure, Microsoft Fabric or Databricks) or your own servers, on platforms such as Cloudera. You own everything we build."
+      },
+      {
+        "id": "security",
+        "heading": "How do you keep our data safe?",
+        "answer": "With the same four practices on every project. They protect your data and make every change to the platform traceable.",
+        "items": [
+          { "title": "Access by role", "text": "People see only the data their role needs." },
+          { "title": "An audit trail of changes", "text": "Every change to the platform is recorded, so you can see who changed what, and when." },
+          { "title": "Secrets kept in a vault", "text": "Passwords and keys live in a vault such as Azure Key Vault, never in code." },
+          { "title": "Version-controlled, tested releases", "text": "Every change is stored in version control and tested before it’s released." }
+        ]
+      },
+      {
+        "id": "evidence",
+        "heading": "Where can I see the Standard in practice?",
+        "answer": "In our case studies. The labor cost platform on Microsoft Fabric releases every change through automated pipelines across development, test and production, and the hospital network lakehouse was built with access controls from day one."
+      }
+    ],
+    "reviewed": false
+  },
+  {
+    "id": "about",
+    "title": "About DataKeel AI",
+    "description": "Why DataKeel AI exists: data is the backbone of AI. Our mission, our values of quality, clarity and ownership, and how we approach the work.",
+    "h1": "About DataKeel AI",
+    "lead": "We believe data is the backbone of AI, so we build the data platform first and the AI on top. Our work is guided by three values: quality, clarity and ownership.",
+    "summary": "DataKeel AI's mission (data as the backbone of AI), its values of quality, clarity and ownership, its approach, and where it works.",
+    "sections": [
+      {
+        "id": "mission",
+        "heading": "Why does DataKeel AI exist?",
+        "answer": "Because AI is only as good as the data under it. Our mission is to build the data backbone your AI runs on: clean, governed data that every report and AI tool can trust."
+      },
+      {
+        "id": "values",
+        "heading": "What do we value?",
+        "answer": "Three things: quality, clarity and ownership. They shape how we build, how we talk and what you keep at the end.",
+        "items": [
+          { "title": "Quality", "text": "We test, monitor and document everything we build, because your decisions depend on it." },
+          { "title": "Clarity", "text": "Plain language, clear plans and no surprises. You always know what we’re doing and why." },
+          { "title": "Ownership", "text": "You own all the code and documentation, and we build so that your own team could run the platform." }
+        ]
+      },
+      {
+        "id": "approach",
+        "heading": "How do we approach the work?",
+        "answer": "Data first, then AI. We start with a short review of your data, build the platform in small tested steps, and keep it healthy after launch.",
+        "items": [
+          { "title": "We ask before we sell", "text": "Every engagement starts with a Readiness Review, so we both know if we’re the right fit." },
+          { "title": "Data before AI", "text": "We get your data clean and documented before we build AI on top of it." },
+          { "title": "Built to hand over", "text": "Every platform is tested and documented, so you’re never tied to us." }
+        ]
+      },
+      {
+        "id": "where",
+        "heading": "Where do we work?",
+        "answer": "We focus on the US and UK, and we also work with companies in the Gulf, Singapore and Australia, remotely with your team."
       }
     ],
     "reviewed": false

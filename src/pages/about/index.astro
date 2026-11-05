@@ -1,20 +1,36 @@
 ---
+// Copy lives in src/content/pages.json (about) (Story 6.4). No team size, founder profile or team photos.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { aboutUrl } from '../../lib/urls.ts';
+import PageSection from '../../components/PageSection.astro';
+import { getPage, sectionOf } from '../../lib/content.ts';
+import { aboutUrl, caseStudiesUrl, howWeWorkUrl, standardUrl } from '../../lib/urls.ts';
 
-const name = 'About DataKeel AI';
+const path = aboutUrl();
+const page = await getPage('about');
 ---
-<BaseLayout
-  title="About DataKeel AI"
-  description="Why DataKeel AI exists: data is the backbone of AI. Our mission, our values of quality, clarity and ownership, and how we approach the work."
-  breadcrumbs={[{ name, url: aboutUrl() }]}
->
-  <section class="section">
+<BaseLayout title={page.title} description={page.description} breadcrumbs={[{ name: page.h1, url: path }]}>
+  <section class="section" data-section="hero">
     <div class="container">
-      <h1 class="display">{name}</h1>
-      <p class="lead">We believe data is the backbone of AI, so we build the data platform first and the AI on top. Our work is guided by three values: quality, clarity and ownership. We build every platform so that you understand it and own it.</p>
+      <h1 class="display">{page.h1}</h1>
+      <p class="lead">{page.lead}</p>
     </div>
   </section>
+
+  <PageSection section={sectionOf(page, 'mission')} surface />
+  <PageSection section={sectionOf(page, 'values')} />
+  <PageSection section={sectionOf(page, 'approach')} surface>
+    <p class="about-links">
+      Read more: <a href={howWeWorkUrl()}>How we work</a> · <a href={standardUrl()}>The DataKeel Standard</a> · <a href={caseStudiesUrl()}>Case studies</a>
+    </p>
+  </PageSection>
+  <PageSection section={sectionOf(page, 'where')} />
+
   <ClosingCta />
 </BaseLayout>
+
+<style>
+  .about-links {
+    margin: var(--space-6) 0 0;
+  }
+</style>

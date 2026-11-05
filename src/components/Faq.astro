@@ -11,11 +11,13 @@ export type Props = {
   intro?: string;
   /** Mark the section for the reveal island (homepage). */
   reveal?: boolean;
+  /** Surface background (default); false when the section above is already a surface. */
+  surface?: boolean;
 };
 
-const { items, heading = 'Questions about the review', intro, reveal = false } = Astro.props;
+const { items, heading = 'Questions about the review', intro, reveal = false, surface = true } = Astro.props;
 ---
-<section class="section section-surface" aria-labelledby="faq-heading" data-faq data-reveal={reveal || undefined}>
+<section class:list={['section', { 'section-surface': surface }]} aria-labelledby="faq-heading" data-faq data-reveal={reveal || undefined}>
   <div class="container">
     <h2 id="faq-heading">{heading}</h2>
     {intro && <p class="lead muted faq-intro">{intro}</p>}
