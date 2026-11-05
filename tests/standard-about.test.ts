@@ -3,7 +3,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { caseStudyUrl } from '../src/lib/urls.ts';
+import { caseStudiesUrl, caseStudyUrl, howWeWorkUrl, standardUrl } from '../src/lib/urls.ts';
 
 const dist = (p: string) => fileURLToPath(new URL(`../dist/${p}/index.html`, import.meta.url));
 const skip = { skip: existsSync(dist('standard')) ? false : 'dist/ not found; run npm run build first' };
@@ -34,7 +34,8 @@ test('standard: data location, trust & security, case evidence, no certification
   assert.equal(sec.length, 4);
   assert.match(sec.join(' '), /Azure Key Vault/);
   const ev = sectionOf(main, 'evidence');
-  assert.ok(ev.includes(`href="${caseStudyUrl('labor-cost-finance-microsoft-fabric')}"`), 'Finance CI/CD case linked');
+  for (const id of ['labor-cost-finance-microsoft-fabric', 'hospital-network-governed-lakehouse'])
+    assert.ok(ev.includes(`href="${caseStudyUrl(id)}"`), `${id} linked as evidence`);
   assert.doesNotMatch(text(main), CERT);
   assert.deepEqual(surfaces(main), [false, true, false, true, false, false]);
 });
