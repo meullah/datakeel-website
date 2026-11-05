@@ -2,11 +2,15 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import ClosingCta from '../components/ClosingCta.astro';
 import Hero from '../components/Hero.astro';
+import ProblemSection from '../components/ProblemSection.astro';
+import ServiceCards from '../components/ServiceCards.astro';
 import StatStrip from '../components/StatStrip.astro';
 import { companyName, positioningLine } from '../lib/config.ts';
 ---
 <BaseLayout fullTitle={`${companyName}: The Data Backbone Your AI Runs On`} description={positioningLine} transparentHeader>
   <Hero />
   <StatStrip />
+  <ProblemSection />
+  <ServiceCards />
   <ClosingCta />
 </BaseLayout>

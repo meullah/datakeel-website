@@ -1,7 +1,7 @@
 [
-  { "id": "data-platforms", "order": 1, "name": "Data platforms on Microsoft Fabric and Databricks" },
-  { "id": "data-integration", "order": 2, "name": "Data integration" },
-  { "id": "data-quality-governance", "order": 3, "name": "Data quality and governance" },
-  { "id": "ai-ready-data", "order": 4, "name": "AI-ready data and AI use cases" },
-  { "id": "managed-data-operations", "order": 5, "name": "Managed data operations" }
+  { "id": "data-platforms", "order": 1, "name": "Data platforms on Microsoft Fabric and Databricks", "summary": "One governed home for your data, built to grow with you." },
+  { "id": "data-integration", "order": 2, "name": "Data integration", "summary": "Every source system feeding the platform automatically, on a schedule you can trust." },
+  { "id": "data-quality-governance", "order": 3, "name": "Data quality and governance", "summary": "Tested data, clear owners and access rules, so every report tells the same story." },
+  { "id": "ai-ready-data", "order": 4, "name": "AI-ready data and AI use cases", "summary": "Clean, documented data first, then AI use cases that actually work on it." },
+  { "id": "managed-data-operations", "order": 5, "name": "Managed data operations", "summary": "We keep the platform running, monitored and up to date after launch." }
 ]

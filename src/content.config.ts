@@ -26,7 +26,7 @@ const industries = defineCollection({
 
 const services = defineCollection({
   loader: file('src/content/services.json'),
-  schema: z.strictObject({ id: z.string(), order: z.number().int(), name: text }),
+  schema: z.strictObject({ id: z.string(), order: z.number().int(), name: text, summary: text }),
 });
 
 // FAQs per page (Story 4.2): src/content/faqs/{page-key}.json holds an array of { question, answer }.

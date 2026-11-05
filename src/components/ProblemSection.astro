@@ -1,0 +1,53 @@
+---
+// Homepage problem section. Copy is founder-approved (2026-11-05, homepage-epic5.md §5.2); each card opens with its answer.
+const pains = [
+  { title: 'Spreadsheets everywhere', text: 'Your key numbers live in files that people copy by hand. One wrong paste, and the whole report is off.' },
+  { title: 'Reports that disagree', text: 'Finance and operations show different numbers for the same thing. Meetings turn into arguments about whose figure is right.' },
+  { title: 'AI pilots that give wrong answers', text: 'An AI tool is only as good as the data under it. Messy data gives confident, wrong answers.' },
+  { title: 'Slow, manual reporting', text: 'Your team spends days each month collecting and fixing data. That time could go into decisions instead.' },
+];
+---
+<section class="section" aria-labelledby="problem-heading" data-section="problem">
+  <div class="container">
+    <h2 id="problem-heading">You can’t sail on chaotic data. Let’s build your keel.</h2>
+    <p class="lead muted problem-answer">Most companies don’t have an AI problem. They have a data problem that shows up as one.</p>
+    <ul class="card-grid problem-grid" role="list">
+      {pains.map((p) => (
+        <li class="card pain-card">
+          <h3>{p.title}</h3>
+          <p class="muted">{p.text}</p>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .problem-answer {
+    max-width: 720px;
+  }
+  .problem-grid {
+    margin-top: var(--space-7);
+    padding: 0;
+    list-style: none;
+  }
+  .pain-card {
+    position: relative;
+    overflow: hidden;
+    padding-left: calc(var(--space-5) + 4px);
+  }
+  /* The 4px gradient accent bar on the left edge. */
+  .pain-card::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 4px;
+    background: var(--gradient-brand);
+  }
+  .pain-card h3 {
+    margin-bottom: var(--space-2);
+  }
+  .pain-card p {
+    margin: 0;
+  }
+</style>

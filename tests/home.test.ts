@@ -86,3 +86,46 @@ test('home stats strip: right after the hero, heading, answer line, every homepa
   assert.deepEqual(shown.map(key), homepageStats.map(key));
   for (const li of items) assert.match(li, /class="stat\b/);
 });
+
+const sectionOf = (key: string) => [...html.matchAll(/<section\b[^>]*>[\s\S]*?<\/section>/g)].map((m) => m[0]).find((sec) => sec.includes(`data-section="${key}"`)) ?? '';
+const services: { id: string; order: number; name: string; summary: string }[] = JSON.parse(readFileSync(new URL('../src/content/services.json', import.meta.url), 'utf8'));
+
+test('home: sections in the fixed order so far, and headings go h1 → h2 → h3', skip, () => {
+  const main = html.match(/<main\b[\s\S]*<\/main>/)?.[0] ?? '';
+  const order = [...main.matchAll(/data-section="([^"]+)"/g)].map((m) => m[1]).filter((k) => k !== 'hero');
+  assert.deepEqual(order.slice(0, 3), ['stats', 'problem', 'services']);
+  const levels = [...main.matchAll(/<h([1-6])\b/g)].map((m) => Number(m[1]));
+  assert.equal(levels[0], 1);
+  for (let i = 1; i < levels.length; i++) assert.ok(levels[i] <= levels[i - 1] + 1, `heading jumps to h${levels[i]}`);
+});
+
+test('home problem section: approved h2, answer line, four pain cards with the accent bar', skip, () => {
+  const s = sectionOf('problem');
+  assert.ok(s, 'problem section missing');
+  assert.equal(text(s.match(/<h2\b[\s\S]*?<\/h2>/)?.[0] ?? ''), 'You can’t sail on chaotic data. Let’s build your keel.');
+  assert.match(text(s), /Most companies don’t have an AI problem\. They have a data problem that shows up as one\./);
+  const cards = [...s.matchAll(/<li\b[^>]*class="[^"]*\bpain-card\b[\s\S]*?<\/li>/g)].map((m) => m[0]);
+  assert.deepEqual(cards.map((c) => text(c.match(/<h3\b[\s\S]*?<\/h3>/)?.[0] ?? '')), [
+    'Spreadsheets everywhere',
+    'Reports that disagree',
+    'AI pilots that give wrong answers',
+    'Slow, manual reporting',
+  ]);
+  for (const c of cards) assert.doesNotMatch(c, /<a\b/, 'pain cards are not links');
+});
+
+test('home services: one card per services.json entry, name + summary, one link to /what-we-do/', skip, () => {
+  const s = sectionOf('services');
+  assert.ok(s, 'services section missing');
+  assert.equal(text(s.match(/<h2\b[\s\S]*?<\/h2>/)?.[0] ?? ''), 'What we do');
+  const cards = [...s.matchAll(/<li\b[^>]*class="[^"]*\bservice-card\b[\s\S]*?<\/li>/g)].map((m) => m[0]);
+  assert.ok(cards.length > 0, 'no service cards');
+  assert.equal(cards.length, services.length);
+  const sorted = [...services].sort((a, b) => a.order - b.order);
+  cards.forEach((c, i) => {
+    const links = [...c.matchAll(/<a\b[^>]*href="([^"]+)"/g)].map((m) => m[1]);
+    assert.deepEqual(links, ['/what-we-do/']);
+    assert.equal(text(c.match(/<h3\b[\s\S]*?<\/h3>/)?.[0] ?? ''), sorted[i].name);
+    assert.ok(text(c).includes(sorted[i].summary), sorted[i].id);
+  });
+});
