@@ -132,4 +132,35 @@ const caseStudies = defineCollection({
   }),
 });
 
-export const collections = { caseStudies, departments, faqs, industries, pages, services };
+// Guide authors (Story 8.1). `organization` is the company itself (founder decision 2026-11-05, until a named
+// person is approved); a `person` gets a Person node with jobTitle and bio.
+const authors = defineCollection({
+  loader: file('src/content/authors.json'),
+  schema: z.discriminatedUnion('kind', [
+    z.strictObject({ id: z.string(), kind: z.literal('organization'), name: text, bio: text }),
+    z.strictObject({ id: z.string(), kind: z.literal('person'), name: text, jobTitle: text, bio: text }),
+  ]),
+});
+
+// Evergreen Guides: one buyer question each. `related` needs at least 3 internal links (the build fails otherwise).
+const guides = defineCollection({
+  loader: glob({ pattern: '*.md', base: 'src/content/guides' }),
+  schema: z.strictObject({
+    title: text,
+    seoTitle: text.max(60),
+    description: text.max(155),
+    /** One-line answer for the index card and llms.txt. */
+    summary: text,
+    author: reference('authors'),
+    published: z.coerce.date(),
+    updated: z.coerce.date(),
+    draft: z.boolean(),
+    related: z
+      .array(z.strictObject({ label: text, href: z.string().regex(/^\/(?!\/)([a-z0-9-]+\/)*$/, 'internal path like /what-we-do/') }))
+      .min(3),
+    /** false until the founder approves the copy (planning-artifacts/content/epic6-8-copy-review.md). */
+    reviewed: z.boolean(),
+  }),
+});
+
+export const collections = { authors, caseStudies, departments, faqs, guides, industries, pages, services };

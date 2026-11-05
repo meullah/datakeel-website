@@ -1,20 +1,50 @@
 ---
+// Guides index (Story 8.1): one card per published Guide, newest first.
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ClosingCta from '../../components/ClosingCta.astro';
-import { guidesUrl } from '../../lib/urls.ts';
+import { getPublished } from '../../lib/content.ts';
+import { guideUrl, guidesUrl } from '../../lib/urls.ts';
 
 const name = 'Guides';
+const guides = (await getPublished('guides')).sort((a, b) => b.data.updated.getTime() - a.data.updated.getTime() || a.data.title.localeCompare(b.data.title));
 ---
 <BaseLayout
   title="Guides: Data Platforms and AI Readiness"
   description="Plain-English guides to the questions buyers ask about data platforms, lakehouses, Microsoft Fabric, Databricks and getting data ready for AI."
   breadcrumbs={[{ name, url: guidesUrl() }]}
 >
-  <section class="section">
+  <section class="section" data-section="hero">
     <div class="container">
       <h1 class="display">{name}</h1>
-      <p class="lead">We write plain-English answers to the questions people ask before they invest in data and AI, such as how to make your data AI-ready, what a lakehouse is, and how Microsoft Fabric and Databricks compare.</p>
+      <p class="lead">Plain-English answers to the questions people ask before they invest in data and AI, such as how to make your data AI-ready and what a lakehouse is.</p>
+    </div>
+  </section>
+  <section class="section section-surface" aria-labelledby="guides-heading" data-section="guides">
+    <div class="container">
+      <h2 id="guides-heading" class="visually-hidden">All guides</h2>
+      <ul class="card-grid guides-grid" role="list">
+        {guides.map((g) => (
+          <li class="card card-interactive card-stretch" data-guide-card>
+            <h3><a href={guideUrl(g.id)}>{g.data.title}</a></h3>
+            <p class="muted">{g.data.summary}</p>
+          </li>
+        ))}
+      </ul>
     </div>
   </section>
   <ClosingCta />
 </BaseLayout>
+
+<style>
+  .guides-grid {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .guides-grid h3 {
+    margin-bottom: var(--space-2);
+  }
+  .guides-grid p {
+    margin: 0;
+  }
+</style>

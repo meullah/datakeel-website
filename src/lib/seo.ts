@@ -57,6 +57,31 @@ export const websiteNode = (): GraphNode => ({
   publisher: { '@id': ORGANIZATION_ID },
 });
 
+const isoDate = (d: Date) => d.toISOString().slice(0, 10);
+
+export type Author = { id: string; kind: 'organization' | 'person'; name: string; bio: string; jobTitle?: string };
+export const personId = (authorId: string) => `${siteUrl}/#person-${authorId}`;
+
+/** A Person node for a person author, working for the Organization; none for the company itself. */
+export const personNode = (a: Author): GraphNode | undefined =>
+  a.kind === 'person'
+    ? { '@type': 'Person', '@id': personId(a.id), name: a.name, jobTitle: a.jobTitle, description: a.bio, worksFor: { '@id': ORGANIZATION_ID } }
+    : undefined;
+
+/** A Guide's Article node; the author is the Person, or the Organization itself. */
+export const articleNode = (g: { title: string; description: string; published: Date; updated: Date; path: string; author: Author }): GraphNode => ({
+  '@type': 'Article',
+  '@id': `${absoluteUrl(g.path)}#article`,
+  headline: g.title,
+  description: g.description,
+  datePublished: isoDate(g.published),
+  dateModified: isoDate(g.updated),
+  author: { '@id': g.author.kind === 'person' ? personId(g.author.id) : ORGANIZATION_ID },
+  publisher: { '@id': ORGANIZATION_ID },
+  mainEntityOfPage: { '@id': webPageId(g.path) },
+  inLanguage: 'en',
+});
+
 /** Crumbs exclude Home; it is always prepended. */
 export const breadcrumbNode = (crumbs: Crumb[], path: string): GraphNode => ({
   '@type': 'BreadcrumbList',

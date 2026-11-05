@@ -1,0 +1,101 @@
+---
+// A Guide (Story 8.1): author line, updated date, "In this guide" (the h2s), answer-first body, related links, closing CTA.
+import { getEntry, render } from 'astro:content';
+import ReadingLayout from '../../layouts/ReadingLayout.astro';
+import ClosingCta from '../../components/ClosingCta.astro';
+import { getPublished } from '../../lib/content.ts';
+import { articleNode, personNode } from '../../lib/seo.ts';
+import { guideUrl, guidesUrl } from '../../lib/urls.ts';
+
+export async function getStaticPaths() {
+  return (await getPublished('guides')).map((entry) => ({ params: { id: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { data } = entry;
+const path = guideUrl(entry.id);
+const author = await getEntry(data.author);
+if (!author) throw new Error(`guides/${entry.id}: unknown author "${data.author.id}"`);
+const { Content, headings } = await render(entry);
+const toc = headings.filter((h) => h.depth === 2);
+const person = personNode(author.data);
+const dateFmt = new Intl.DateTimeFormat('en-US', { dateStyle: 'long', timeZone: 'UTC' });
+const iso = (d: Date) => d.toISOString().slice(0, 10);
+---
+<ReadingLayout
+  fullTitle={data.seoTitle}
+  description={data.description}
+  breadcrumbs={[{ name: 'Guides', url: guidesUrl() }, { name: data.title, url: path }]}
+  graph={[articleNode({ ...data, path, author: author.data }), ...(person ? [person] : [])]}
+>
+  <article class="guide">
+    <header class="guide-head">
+      <h1>{data.title}</h1>
+      <p class="small muted guide-meta" data-guide-meta>
+        By {author.data.name}{author.data.kind === 'person' && <>, {author.data.jobTitle}</>} · Updated <time datetime={iso(data.updated)}>{dateFmt.format(data.updated)}</time>
+      </p>
+    </header>
+
+    <nav class="guide-toc" aria-labelledby="toc-heading" data-guide-toc>
+      <p id="toc-heading" class="guide-toc-title">In this guide</p>
+      <ol>
+        {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+      </ol>
+    </nav>
+
+    <div class="guide-body">
+      <Content />
+    </div>
+
+    <aside class="guide-related" aria-labelledby="related-heading" data-guide-related>
+      <h2 id="related-heading">Related</h2>
+      <ul>
+        {data.related.map((r) => <li><a href={r.href}>{r.label}</a></li>)}
+      </ul>
+    </aside>
+  </article>
+
+  <ClosingCta slot="after" />
+</ReadingLayout>
+
+<style>
+  .guide {
+    padding-block: var(--space-8) var(--space-7);
+  }
+  .guide-meta {
+    margin-top: var(--space-4);
+  }
+  .guide-toc {
+    margin-block: var(--space-6);
+    padding: var(--space-5);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .guide-toc-title {
+    margin: 0 0 var(--space-3);
+    font-weight: 600;
+  }
+  .guide-toc ol {
+    margin: 0;
+    padding-left: var(--space-5);
+  }
+  .guide-toc li + li {
+    margin-top: var(--space-2);
+  }
+  .guide-body :global(h2) {
+    margin-top: var(--space-7);
+    scroll-margin-top: calc(var(--header-height) + var(--space-4));
+  }
+  .guide-body :global(li + li) {
+    margin-top: var(--space-2);
+  }
+  .guide-related {
+    margin-top: var(--space-7);
+    padding-top: var(--space-5);
+    border-top: 1px solid var(--color-border);
+  }
+  .guide-related ul {
+    padding-left: var(--space-5);
+  }
+</style>

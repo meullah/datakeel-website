@@ -7,13 +7,14 @@ const isPublished = (e: { data: object }) => !('draft' in e.data && e.data.draft
 // Runs once per build. Every page renders the header, which calls getIndustries(), so any page build fails on a broken rule.
 let checked: Promise<void> | undefined;
 async function runChecks() {
-  const [cases, industries, services, faqs, departments, pages] = await Promise.all([
+  const [cases, industries, services, faqs, departments, pages, guides] = await Promise.all([
     getCollection('caseStudies', isPublished),
     getCollection('industries'),
     getCollection('services'),
     getCollection('faqs'),
     getCollection('departments'),
     getCollection('pages'),
+    getCollection('guides', isPublished),
   ]);
   assertNoMarkers(cases, 'caseStudies');
   assertNoMarkers(industries, 'industries');
@@ -21,6 +22,7 @@ async function runChecks() {
   assertNoMarkers(faqs, 'faqs');
   assertNoMarkers(departments, 'departments');
   assertNoMarkers(pages, 'pages');
+  assertNoMarkers(guides, 'guides');
   const caseIds = new Set(cases.map((c) => c.id));
   assertCaseRefs(services, caseIds, 'services');
   assertCaseRefs(departments.filter((d) => d.data.show), caseIds, 'departments');

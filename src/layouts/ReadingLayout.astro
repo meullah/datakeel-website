@@ -1,5 +1,5 @@
 ---
-// BaseLayout plus the 720px reading column.
+// BaseLayout plus the 720px reading column; slot "after" renders full width below it (e.g. the closing band).
 // ponytail: header/footer slots are not forwarded; BaseLayout's defaults apply. Forward them if a reading page ever needs custom chrome.
 import BaseLayout, { type Props as BaseProps } from './BaseLayout.astro';
 
@@ -7,4 +7,5 @@ export type Props = BaseProps;
 ---
 <BaseLayout {...Astro.props}>
   <div class="reading"><slot /></div>
+  <slot name="after" />
 </BaseLayout>
