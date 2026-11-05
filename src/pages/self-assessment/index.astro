@@ -68,7 +68,7 @@ const total = assessment.questions.length;
           </fieldset>
         ))}
 
-        <p class="sa-error" aria-live="assertive" data-sa-error></p>
+        <p class="sa-error" id="sa-error" aria-live="assertive" data-sa-error></p>
         <div class="sa-nav" data-sa-nav hidden>
           <button type="button" class="btn btn-ghost" data-sa-back>Back</button>
           <button type="button" class="btn btn-ghost" data-sa-skip hidden>Skip</button>
@@ -212,8 +212,8 @@ const total = assessment.questions.length;
     margin: 0;
     color: var(--color-error);
   }
-  .sa-error:empty {
-    display: none;
+  .sa-error {
+    min-height: 1.5em;
   }
   .sa-nav,
   .sa-actions {
@@ -224,6 +224,9 @@ const total = assessment.questions.length;
   }
   .sa-nav [data-sa-next] {
     margin-left: auto;
+  }
+  .sa-snapshot {
+    overflow-wrap: anywhere;
   }
   .sa-snapshot h2:focus {
     outline: none;

@@ -151,3 +151,20 @@
   --tone-gold: 255 190 96;
   --tone-silver: 214 218 224;
 }
+
+/* Paper is white and browsers drop backgrounds when printing, so dark-theme pages print with the light text colors. */
+@media print {
+  [data-theme="dark"] {
+    color-scheme: light;
+    --color-background: #FFFFFF;
+    --color-surface: #FFFFFF;
+    --color-card: #FFFFFF;
+    --color-border: #E1E1DC;
+    --color-card-border: #E6E5E0;
+    --color-text: #14161B;
+    --color-text-muted: #5B616C;
+    --color-accent-text: #CC3800;
+    --color-error: #B42318;
+    --color-success: #1E7A4C;
+  }
+}

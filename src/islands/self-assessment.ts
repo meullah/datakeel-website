@@ -28,6 +28,14 @@ if (form && snapshot) {
     rangeValue.textContent = text;
   };
 
+  const clearError = () => {
+    error.textContent = '';
+    for (const r of form.querySelectorAll('input[aria-invalid]')) {
+      r.removeAttribute('aria-invalid');
+      r.removeAttribute('aria-describedby');
+    }
+  };
+
   const show = (i: number, focus: boolean) => {
     current = i;
     steps.forEach((s, n) => (s.hidden = n !== i));
@@ -36,7 +44,7 @@ if (form && snapshot) {
     back.hidden = i === 0;
     skip.hidden = steps[i].dataset.saType !== 'text';
     next.textContent = i === steps.length - 1 ? 'See my snapshot' : 'Next';
-    error.textContent = '';
+    clearError();
     if (focus) steps[i].focus();
   };
 
@@ -84,8 +92,14 @@ if (form && snapshot) {
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     if (!answered(steps[current])) {
-      error.textContent = 'Pick an answer to continue.';
-      steps[current].querySelector<HTMLInputElement>('input')?.focus();
+      clearError(); // a repeat message must change to be announced again
+      const radios = [...steps[current].querySelectorAll<HTMLInputElement>('input')];
+      for (const r of radios) {
+        r.setAttribute('aria-invalid', 'true');
+        r.setAttribute('aria-describedby', error.id);
+      }
+      requestAnimationFrame(() => (error.textContent = 'Pick an answer to continue.'));
+      radios[0]?.focus();
       return;
     }
     if (current < steps.length - 1) show(current + 1, true);
@@ -97,5 +111,7 @@ if (form && snapshot) {
     const done = () => delete document.body.dataset.printing;
     addEventListener('afterprint', done, { once: true });
     window.print();
+    // Some mobile browsers never fire afterprint; print() returns once the dialog closes there, so clear soon after.
+    setTimeout(done, 1000);
   });
 }

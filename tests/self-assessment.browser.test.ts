@@ -69,11 +69,14 @@ test('one question at a time, announced progress, required answers, Back keeps a
     assert.ok(!(await page.isVisible('[data-sa-back]')));
     await next(page);
     assert.deepEqual(await visibleSteps(page), [0], 'no answer, no move');
-    assert.equal(await page.textContent('[data-sa-error]'), 'Pick an answer to continue.');
+    await page.waitForFunction(() => document.querySelector('[data-sa-error]')?.textContent === 'Pick an answer to continue.');
+    assert.equal(await page.getAttribute('input[name="reports"]', 'aria-invalid'), 'true');
+    assert.equal(await page.getAttribute('input[name="reports"]', 'aria-describedby'), 'sa-error');
     await pick(page, 'reports', 'stitched');
     await next(page);
     assert.equal(await status(page), 'Question 2 of 5');
     assert.equal(await page.textContent('[data-sa-error]'), '');
+    assert.equal(await page.getAttribute('input[name="reports"]', 'aria-invalid'), null);
     await page.click('[data-sa-back]');
     assert.equal(await status(page), 'Question 1 of 5');
     assert.ok(await page.isChecked('input[name="reports"][value="stitched"]'), 'answer kept');
@@ -116,16 +119,18 @@ test('Snapshot after skipping Q5: time line, level, recommendations, label, CTA;
     assert.deepEqual(offsite, []);
   }));
 
-test('goal is quoted back as text; zero hours hides the time line', () =>
+test('goal is quoted back as text (long words wrap at 360px); zero hours hides the time line', () =>
   withPage(async (page) => {
     await answerFour(page, { reports: 'dashboard', hours: 0, agree: 'always', systems: '1-3' });
-    await page.fill('input[name="goal"]', '<img src=x onerror=alert(1)> Hiring for peak season');
+    const goal = `<img src=x onerror=alert(1)> Hiring for peak season ${'a'.repeat(120)}`;
+    await page.fill('input[name="goal"]', goal);
     await page.click('[data-sa-next]');
-    assert.equal(await page.textContent('[data-sa-goal-text]'), '<img src=x onerror=alert(1)> Hiring for peak season');
+    assert.equal(await page.textContent('[data-sa-goal-text]'), goal);
+    assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false, 'no overflow');
     assert.equal(await page.$('[data-sa-goal-text] img'), null);
     assert.ok(!(await page.isVisible('[data-sa-time]')));
     assert.equal(await page.textContent('[data-sa-level]'), 'Ready');
-  }));
+  }, { width: 360 }));
 
 test('print: only the Snapshot prints, and the flag clears afterwards', () =>
   withPage(async (page) => {
@@ -145,6 +150,8 @@ test('print: only the Snapshot prints, and the flag clears afterwards', () =>
     assert.equal(await shown('[data-closing-cta]'), false);
     assert.equal(await shown('[data-sa-snapshot]'), true);
     assert.equal(await shown('.sa-actions'), false);
+    await page.evaluate(() => (document.documentElement.dataset.theme = 'dark'));
+    assert.equal(await page.$eval('[data-sa-level-text]', (e) => getComputedStyle(e).color), 'rgb(20, 22, 27)', 'dark theme prints dark text');
     await page.evaluate(() => delete document.body.dataset.printing);
     assert.equal(await shown('header'), true, 'normal print without the flag');
   }));
