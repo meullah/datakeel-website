@@ -233,7 +233,7 @@
     "description": "How DataKeel AI handles personal information sent through this website, what we collect, why, and the choices you have.",
     "h1": "Privacy policy",
     "lead": "This policy explains what personal information we collect when you use this website or contact us, why we collect it, how we look after it and the choices you have.",
-    "summary": "What personal information the site collects (form details, plus cookieless visit statistics and hosting logs), the processors involved (Web3Forms, Cloudflare Web Analytics, GitHub Pages), no cookies, and your rights under UK/EU, US, Singapore, Australian and Gulf privacy laws.",
+    "summary": "What personal information the site collects (form details, plus cookieless visit statistics and hosting logs), the processors involved (Web3Forms, Cloudflare Web Analytics, GitHub Pages, Hostinger Email), no cookies, and your rights under UK/EU, US, Singapore, Australian and Gulf privacy laws.",
     "sections": [
       {
         "id": "who",
@@ -290,8 +290,8 @@
             "text": "Hosts this website."
           },
           {
-            "title": "Our email provider",
-            "text": "Stores the messages we receive and send."
+            "title": "Hostinger Email",
+            "text": "Hosts our hello@datakeelai.com mailbox, which stores the messages we receive and send."
           }
         ]
       },
@@ -344,7 +344,7 @@
       }
     ],
     "reviewed": true,
-    "updated": "2026-11-05"
+    "updated": "2026-11-06"
   },
   {
     "id": "terms",
