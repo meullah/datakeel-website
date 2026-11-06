@@ -2,6 +2,12 @@
 
 How the site is published, how to launch it on datakeelai.com, and what to check every month.
 
+## Email
+- hello@datakeelai.com is a Hostinger Email mailbox (Starter plan, 1 mailbox), with info@ as an alias. Webmail: https://mail.hostinger.com.
+- DNS at Hostinger: MX `mx1/mx2.hostinger.com`, SPF `v=spf1 include:_spf.mail.hostinger.com ~all`, DKIM `hostingermail-a/-b/-c._domainkey` CNAMEs, DMARC `v=DMARC1; p=none`. mail-tester.com score 9.5/10 on 2026-11-06.
+- After 2-4 weeks of clean sending, raise DMARC to `p=quarantine`.
+- Email signature: `email-signature/signature.html` (outside this repo); its logo is served from `/email/datakeel-ai-logo.png` in this site.
+
 ## Publishing
 - Every push to `main` runs `.github/workflows/deploy.yml`: `npm ci`, `astro check`, `npm test` (unit + browser tests, builds first), then the GitHub Pages build and deploy. Any failing step stops the deploy, so the live site never changes.
 - Before a change: run `npx astro check`, `npm test` and `npm run audit` locally (the audit adds Lighthouse and axe in both themes).
@@ -14,7 +20,7 @@ Do these in order. Until step 3, the github.io address shows unstyled pages, bec
 1. **Sign-off (9.1)**
    - Every copy item in `_bmad-output/planning-artifacts/content/epic6-8-copy-review.md` approved; each `reviewed: false` set to `true`.
    - Lawyer-reviewed Privacy and Terms in `src/content/pages.json` (open points in `deferred-work.md`); the draft notice disappears when `reviewed` is `true`.
-   - hello@datakeelai.com receives email; `web3formsKey` in `src/lib/config.ts` swapped for a key tied to hello@; the Web3Forms form's website set to datakeelai.com.
+   - hello@datakeelai.com receives email (done 2026-11-06, Hostinger Email). In the Web3Forms dashboard, the form delivers to hello@ and its allowed website is datakeelai.com.
    - Optional: LinkedIn and Upwork URLs in `profileUrls`.
    - Click through the three key flows on a phone and a desktop (Chrome, Edge, Safari, Firefox, mobile Safari/Chrome):
      - **Sara:** home → How We Work → a case study → Readiness Review → send the form.
@@ -36,8 +42,8 @@ Do these in order. Until step 3, the github.io address shows unstyled pages, bec
    | AAAA | `@` | 2606:50c0:8003::153 |
    | CNAME | `www` | meullah.github.io |
 
-   Then in the repo: Settings → Pages → Custom domain → `datakeelai.com` → Save. When the certificate is issued (minutes to a day), tick **Enforce HTTPS**. Check that http://datakeelai.com, https://www.datakeelai.com and http://www.datakeelai.com all end at https://datakeelai.com/.
-4. **Analytics (8.4):** Cloudflare dashboard → Web Analytics → Add a site → `datakeelai.com` → copy the token into `cloudflareAnalyticsToken` in `src/lib/config.ts` → push. The beacon loads only on datakeelai.com and sets no cookies.
+   Done 2026-11-05. Then in the repo: Settings → Pages → Custom domain → `datakeelai.com` → Save. When the certificate is issued (minutes to a day), tick **Enforce HTTPS**. Check that http://datakeelai.com, https://www.datakeelai.com and http://www.datakeelai.com all end at https://datakeelai.com/.
+4. **Analytics (8.4):** done 2026-11-06. Cloudflare Web Analytics site `datakeelai.com` (manual JS snippet, DNS stays at Hostinger); token in `cloudflareAnalyticsToken`. The beacon loads only on datakeelai.com and sets no cookies.
 5. **Search engines (9.4):**
    - Google Search Console → Add property → Domain → `datakeelai.com` → add its TXT record in Hostinger (Name `@`) → Verify → Sitemaps → submit `https://datakeelai.com/sitemap-index.xml`.
    - Bing Webmaster Tools → Add site → import from Search Console (or verify by DNS) → submit the same sitemap.
