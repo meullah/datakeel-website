@@ -8,9 +8,9 @@ export const email = 'hello@datakeelai.com';
 // Web3Forms public access key (safe in client code). Temporary: delivers to the founder's personal inbox until
 // hello@datakeelai.com is live; swap for a key tied to hello@ before launch (deferred-work.md).
 export const web3formsKey = 'df4be7b4-9a4c-4661-943f-16b0bc963d67';
-// Cloudflare Web Analytics site token (public; cookieless, no consent banner). Empty = no beacon. The founder adds it
-// in Epic 9 after creating the site in Cloudflare. The beacon loads only in production builds served on this host.
-export const cloudflareAnalyticsToken = '';
+// Cloudflare Web Analytics site token (public; cookieless, no consent banner). Empty = no beacon.
+// Site token from Cloudflare Web Analytics (added 2026-11-06). The beacon loads only in production builds served on this host.
+export const cloudflareAnalyticsToken = 'a35e9116953c46348bec8de34b98b602';
 export const analyticsHost = 'datakeelai.com';
 // Where both forms post; a later CRM swap changes only this.
 export const formEndpoint = 'https://api.web3forms.com/submit';
